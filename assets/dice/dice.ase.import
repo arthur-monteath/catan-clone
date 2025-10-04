@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bxe2c2giijjx1"
+path="res://.godot/imported/dice.ase-e1ebf0b6f30b887a8767465452c5fd49.res"
+
+[deps]
+
+source_file="res://assets/dice/dice.ase"
+dest_files=["res://.godot/imported/dice.ase-e1ebf0b6f30b887a8767465452c5fd49.res"]
+
+[params]
+

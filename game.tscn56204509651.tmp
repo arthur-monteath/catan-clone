@@ -1,0 +1,46 @@
+[gd_scene load_steps=12 format=3 uid="uid://be2fp4tuhaso0"]
+
+[ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://board.gd" id="1_e2o6t"]
+[ext_resource type="Script" uid="uid://ct68henogcw0q" path="res://main.gd" id="1_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/tiles/desert.png" id="2_feb5d"]
+[ext_resource type="Texture2D" uid="uid://34ej43vr0l7h" path="res://assets/tiles/lumber.png" id="3_fc0e3"]
+[ext_resource type="Texture2D" uid="uid://o18pbrdgyip2" path="res://assets/tiles/brick.png" id="4_eow3j"]
+[ext_resource type="Texture2D" uid="uid://dpo1tsm4hi7rh" path="res://assets/tiles/ore.png" id="5_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/tiles/grain.png" id="6_vef74"]
+[ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://assets/tiles/wool.png" id="7_j5wjh"]
+[ext_resource type="PackedScene" uid="uid://dpu4hqktjqg0w" path="res://road.tscn" id="9_vef74"]
+
+[sub_resource type="Gradient" id="Gradient_j5wjh"]
+colors = PackedColorArray(0.17254902, 0.67058825, 1, 1, 0, 0.3372549, 0.7882353, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vef74"]
+gradient = SubResource("Gradient_j5wjh")
+width = 576
+height = 324
+fill = 1
+fill_from = Vector2(0.5109034, 0.53582555)
+fill_to = Vector2(1, 1)
+
+[node name="Root" type="Node"]
+script = ExtResource("1_j5wjh")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+
+[node name="Sprite2D" type="Sprite2D" parent="Camera2D"]
+texture = SubResource("GradientTexture2D_vef74")
+
+[node name="Board" type="Node2D" parent="."]
+script = ExtResource("1_e2o6t")
+textures = Dictionary[int, Texture2D]({
+0: ExtResource("4_eow3j"),
+1: ExtResource("3_fc0e3"),
+2: ExtResource("5_j5wjh"),
+3: ExtResource("6_vef74"),
+4: ExtResource("7_j5wjh"),
+5: ExtResource("2_feb5d")
+})
+
+[node name="Road" parent="Board" instance=ExtResource("9_vef74")]
+width = 8.0
+default_color = Color(1, 1, 1, 1)

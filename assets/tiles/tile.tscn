@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://dtvr5obijngj"]
+
+[ext_resource type="Script" uid="uid://c550qcbfp3yii" path="res://assets/tiles/tile.gd" id="1_iwhfu"]
+[ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/tiles/art/desert.png" id="2_1ne16"]
+[ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="3_obqv1"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_iwhfu"]
+font_size = 32
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_offset = Vector2(2, 2)
+
+[node name="Tile" type="Node2D"]
+rotation = 1.5707964
+script = ExtResource("1_iwhfu")
+
+[node name="Hex" type="Polygon2D" parent="."]
+texture = ExtResource("2_1ne16")
+texture_offset = Vector2(32, 32)
+texture_rotation = 1.5707964
+polygon = PackedVector2Array(32, 0, 16, 27.712812, -16, 27.712812, -32, 3.9187403e-15, -16, -27.712812, 16, -27.712812)
+script = ExtResource("3_obqv1")
+radius = 32
+points_num = 6
+
+[node name="Number" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -31.999998
+offset_top = 28.000002
+offset_right = 24.000002
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -1.5707964
+size_flags_horizontal = 0
+size_flags_vertical = 8
+text = "0"
+label_settings = SubResource("LabelSettings_iwhfu")
+horizontal_alignment = 1
+vertical_alignment = 1

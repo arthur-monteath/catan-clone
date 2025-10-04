@@ -1,0 +1,139 @@
+[gd_scene load_steps=18 format=3 uid="uid://be2fp4tuhaso0"]
+
+[ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://board.gd" id="1_e2o6t"]
+[ext_resource type="Script" uid="uid://ct68henogcw0q" path="res://main.gd" id="1_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/tiles/art/desert.png" id="2_feb5d"]
+[ext_resource type="Texture2D" uid="uid://34ej43vr0l7h" path="res://assets/tiles/art/lumber.png" id="3_fc0e3"]
+[ext_resource type="Texture2D" uid="uid://o18pbrdgyip2" path="res://assets/tiles/art/brick.png" id="4_eow3j"]
+[ext_resource type="Texture2D" uid="uid://dpo1tsm4hi7rh" path="res://assets/tiles/art/ore.png" id="5_j5wjh"]
+[ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/tiles/art/grain.png" id="6_vef74"]
+[ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://assets/tiles/art/wool.png" id="7_j5wjh"]
+[ext_resource type="PackedScene" uid="uid://dpu4hqktjqg0w" path="res://road.tscn" id="9_vef74"]
+[ext_resource type="Texture2D" uid="uid://dmj41lyg0mur0" path="res://assets/dice/dice_faces.png" id="11_mfdv2"]
+
+[sub_resource type="Gradient" id="Gradient_j5wjh"]
+colors = PackedColorArray(0.17254902, 0.67058825, 1, 1, 0, 0.3372549, 0.7882353, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vef74"]
+gradient = SubResource("Gradient_j5wjh")
+width = 576
+height = 324
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_hve3p"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.5555556, 0.6231884, 1)
+colors = PackedColorArray(0.16078432, 0.6156863, 0.12156863, 1, 0.5027697, 0.7360863, 0.3706299, 1, 0.8755618, 0.8673321, 0.6421272, 1, 0.9332319, 0.88763565, 0.68412715, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mfdv2"]
+gradient = SubResource("Gradient_hve3p")
+width = 336
+height = 336
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hve3p"]
+bg_color = Color(0.12156863, 0.14117648, 0.20392157, 0.42745098)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.16470589, 0.27058825, 0.39607844, 0.5058824)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hve3p"]
+font_size = 32
+
+[node name="Main" type="Node"]
+script = ExtResource("1_j5wjh")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+
+[node name="Ocean" type="Sprite2D" parent="Camera2D"]
+texture = SubResource("GradientTexture2D_vef74")
+
+[node name="Land" type="Polygon2D" parent="Camera2D"]
+texture_filter = 1
+texture = SubResource("GradientTexture2D_mfdv2")
+texture_offset = Vector2(168, 168)
+polygon = PackedVector2Array(168, 0, 84, 145.49226, -84, 145.49226, -168, 2.0573387e-14, -84, -145.49226, 84, -145.49226)
+script = ExtResource("1_80nbo")
+radius = 168
+points_num = 6
+
+[node name="Board" type="Node2D" parent="."]
+texture_filter = 1
+script = ExtResource("1_e2o6t")
+textures = Dictionary[int, Texture2D]({
+0: ExtResource("4_eow3j"),
+1: ExtResource("3_fc0e3"),
+2: ExtResource("5_j5wjh"),
+3: ExtResource("6_vef74"),
+4: ExtResource("7_j5wjh"),
+5: ExtResource("2_feb5d")
+})
+
+[node name="Road" parent="Board" instance=ExtResource("9_vef74")]
+width = 8.0
+default_color = Color(1, 1, 1, 1)
+
+[node name="TurnTimer" type="Timer" parent="."]
+wait_time = 4.0
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hve3p")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="TurnLabel" type="Label" parent="CanvasLayer/PanelContainer/MarginContainer"]
+layout_mode = 2
+text = "player_1's Turn"
+label_settings = SubResource("LabelSettings_hve3p")
+
+[node name="DiceButton" type="Button" parent="CanvasLayer"]
+texture_filter = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -209.0
+offset_top = -172.0
+offset_right = -32.0
+offset_bottom = -32.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_hve3p")
+text = "Click to Roll Dice!
+
+
+
+"
+
+[node name="Dice" type="Sprite2D" parent="CanvasLayer/DiceButton"]
+texture_filter = 1
+position = Vector2(50, 84)
+texture = ExtResource("11_mfdv2")
+hframes = 6
+
+[node name="Dice2" type="Sprite2D" parent="CanvasLayer/DiceButton"]
+texture_filter = 1
+position = Vector2(128, 84)
+texture = ExtResource("11_mfdv2")
+hframes = 6
+
+[connection signal="timeout" from="TurnTimer" to="." method="_on_turn_timer_timeout"]
+[connection signal="pressed" from="CanvasLayer/DiceButton" to="." method="_on_dice_button_pressed"]
