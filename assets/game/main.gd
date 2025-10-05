@@ -11,7 +11,6 @@ class Player:
 	var name: String
 	var color: Color
 	var resources: Dictionary[Res, int]
-	
 
 var players: Array[Player]
 var turn = 0

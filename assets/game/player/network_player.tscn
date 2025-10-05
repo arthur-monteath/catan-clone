@@ -1,0 +1,57 @@
+[gd_scene load_steps=4 format=3 uid="uid://by1q5dsk0j4se"]
+
+[ext_resource type="Script" uid="uid://djfjiqgkrxevb" path="res://assets/game/player/network_player.gd" id="1_e0wq5"]
+[ext_resource type="Texture2D" uid="uid://olilj3bm2tqg" path="res://assets/icon.svg" id="2_fesle"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fesle"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8, 0, 0, 1)
+
+[node name="NetworkPlayer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e0wq5")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -40.0
+offset_right = 208.0
+offset_bottom = 40.0
+grow_vertical = 2
+
+[node name="Outline" type="PanelContainer" parent="Panel"]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fesle")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBox" type="HBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Image" type="TextureRect" parent="Panel/Margin/HBox"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+texture = ExtResource("2_fesle")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="Panel/Margin/HBox"]
+layout_mode = 2
+text = "thucatrindade1"
