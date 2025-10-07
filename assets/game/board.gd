@@ -88,13 +88,14 @@ func _ready() -> void:
 		
 		add_child(t)
 
-var mouse = get_global_mouse_position()
-func _unhandled_input(event: InputEvent) -> void:
-	mouse = get_global_mouse_position()
-	if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
-		settlements.set(get_point(mouse), main.turn)
-		roads.set(get_edge(mouse), main.turn)
-	queue_redraw()
+#var mouse = get_global_mouse_position()
+#func _unhandled_input(event: InputEvent) -> void:
+	#if !multiplayer.is_server() and multiplayer.is_server():
+		#mouse = get_global_mouse_position()
+		#if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+			#settlements.set(get_point(mouse), main.turn)
+			#roads.set(get_edge(mouse), main.turn)
+		#queue_redraw()
 
 func _draw() -> void:
 	for road in roads:

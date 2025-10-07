@@ -1,7 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://by1q5dsk0j4se"]
+[gd_scene load_steps=5 format=3 uid="uid://by1q5dsk0j4se"]
 
 [ext_resource type="Script" uid="uid://djfjiqgkrxevb" path="res://assets/game/player/network_player.gd" id="1_e0wq5"]
 [ext_resource type="Texture2D" uid="uid://olilj3bm2tqg" path="res://assets/icon.svg" id="2_fesle"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_txluh"]
+bg_color = Color(0.09052665, 0.15168375, 0.22504804, 0.39215687)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fesle"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -10,6 +17,10 @@ border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
 border_color = Color(0.8, 0, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="NetworkPlayer" type="Control"]
 layout_mode = 3
@@ -29,9 +40,9 @@ offset_top = -40.0
 offset_right = 208.0
 offset_bottom = 40.0
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_txluh")
 
 [node name="Outline" type="PanelContainer" parent="Panel"]
-visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fesle")
 

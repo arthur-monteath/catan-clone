@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://cwv4tga2lnu8k"]
+
+[ext_resource type="Script" uid="uid://colmkt7p7em8a" path="res://assets/ui/resources/resources_ui.gd" id="1_by3tl"]
+[ext_resource type="Texture2D" uid="uid://dpo1tsm4hi7rh" path="res://assets/tiles/art/ore.png" id="2_e5lbv"]
+[ext_resource type="Texture2D" uid="uid://34ej43vr0l7h" path="res://assets/tiles/art/lumber.png" id="2_syfbg"]
+[ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/tiles/art/grain.png" id="3_fc5qo"]
+[ext_resource type="Texture2D" uid="uid://o18pbrdgyip2" path="res://assets/tiles/art/brick.png" id="5_nq8qt"]
+[ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://assets/tiles/art/wool.png" id="6_fc5qo"]
+
+[node name="Resources" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_by3tl")
+res = Dictionary[int, Texture]({
+0: ExtResource("2_e5lbv"),
+1: ExtResource("3_fc5qo"),
+2: ExtResource("2_syfbg"),
+3: ExtResource("5_nq8qt"),
+4: ExtResource("6_fc5qo")
+})
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Grid" type="GridContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 3
