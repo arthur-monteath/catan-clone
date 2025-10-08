@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://by1q5dsk0j4se"]
+[gd_scene load_steps=6 format=3 uid="uid://by1q5dsk0j4se"]
 
 [ext_resource type="Script" uid="uid://djfjiqgkrxevb" path="res://assets/game/player/network_player.gd" id="1_e0wq5"]
 [ext_resource type="Texture2D" uid="uid://olilj3bm2tqg" path="res://assets/icon.svg" id="2_fesle"]
@@ -22,6 +22,11 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_fesle"]
+properties/0/path = NodePath(".:visible")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="NetworkPlayer" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -43,6 +48,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_txluh")
 
 [node name="Outline" type="PanelContainer" parent="Panel"]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fesle")
 
@@ -66,3 +72,7 @@ expand_mode = 1
 [node name="Label" type="Label" parent="Panel/Margin/HBox"]
 layout_mode = 2
 text = "thucatrindade1"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Panel"]
+root_path = NodePath("../Outline")
+replication_config = SubResource("SceneReplicationConfig_fesle")

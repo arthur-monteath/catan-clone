@@ -2,13 +2,17 @@ extends Node2D
 class_name Board
 
 enum TileType {
-	BRICK,
-	LUMBER,
-	ORE,
-	GRAIN,
-	WOOL,
+	BRICK = Main.Res.BRICK,
+	LUMBER = Main.Res.LUMBER,
+	ORE = Main.Res.ORE,
+	GRAIN = Main.Res.GRAIN,
+	WOOL = Main.Res.WOOL,
 	DESERT
 }
+
+func _tile_type_to_resource(type: TileType):
+	match type:
+		TileType.BRICK: return Main.Res.BRICK
 
 @onready var main: Node = $".."
 
@@ -37,12 +41,14 @@ class Tile:
 		set(value):
 			node.get_node("Number").text = String.num_int64(value)
 			number = value
+	var edges: Array[Vector2]
 
 func give_resource(tile: Tile):
-		for edge in edges:
+		for edge in tile.edges:
 			if roads.has(edge):
-				var resource_type
-				main.players[roads[edge]].resources.has()
+				var resource_type: Main.Res = _tile_type_to_resource(tile.type)
+				if resource_type != null:
+					main.players[roads[edge]].resources[resource_type] += 1
 
 var edges: Dictionary[Vector2, Array]
 var edge_lines: Dictionary[Vector2, Array]
@@ -53,6 +59,8 @@ var roads: Dictionary[Vector2, int]
 var settlements: Dictionary[Vector2, int]
 
 func _ready() -> void:
+	if !multiplayer.is_server(): return
+	
 	for type in tileAmounts:
 		for i in range(tileAmounts[type]):
 			var t = Tile.new()
@@ -78,11 +86,12 @@ func _ready() -> void:
 		for point in get_points(tiles[i]):
 			points.append(point)
 		
-		var edge_dict = get_edges(tiles[i])
+		var edge_dict = get_edge_lines(tiles[i])
 		for edge in edge_dict:
 			if not edges.has(edge):
 				edge_lines[edge] = edge_dict[edge]
 				edges[edge] = [tiles[i]]
+				tiles[i].edges.append(edge)
 			else:
 				edges[edge].append(tiles[i])
 		
@@ -166,7 +175,7 @@ func get_point(pos: Vector2):
 	if found_point: return found_point
 	return null
 
-func get_edges(tile: Tile):
+func get_edge_lines(tile: Tile) -> Dictionary[Vector2, Array]:
 	var e: Dictionary[Vector2, Array]
 	var p = get_points(tile)
 	
@@ -188,7 +197,7 @@ func get_edge(pos: Vector2):
 			found_edge = edge
 	if found_edge: return found_edge
 	return null
-
+	
 func get_tile(pos: Vector2) -> Tile:
 	var lowest_distance = INF
 	var found_tile
