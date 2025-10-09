@@ -1,6 +1,14 @@
 extends Node
 class_name Main
 
+enum State {
+	lobby,
+	rolling,
+	building,
+}
+
+var game_state: State = State.lobby
+
 enum Res {
 	ORE,
 	GRAIN,
@@ -34,10 +42,16 @@ func _on_server_started():
 	if multiplayer.is_server():
 		start_button.show()
 	
-func _on_player_join(id: int):
+func _on_player_join(_id: int):
 	pass
 
-func _process(delta: float) -> void:
+#@rpc("any_peer", "call_local", "reliable")
+#func is_my_turn() -> bool:
+	#if multiplayer.is_server() and game_state != State.lobby:
+		#return multiplayer.get_remote_sender_id() == players[turn].id
+	#return false
+
+func _process(_delta: float) -> void:
 	if !multiplayer.is_server(): return
 	var timer = !turn_timer.is_stopped()
 	if turn_bar.visible != timer:
@@ -46,20 +60,19 @@ func _process(delta: float) -> void:
 	if timer:
 		turn_bar.value = turn_timer.time_left / turn_timer.wait_time
 
-func _input(event: InputEvent) -> void:
-	pass
+#func _input(event: InputEvent) -> void:
 
 func _process_dice(dice: Array[int]):
 	var value: int = dice[0] + dice[1]
 	for tile in board.tiles:
 		if tile.number == value:
 			board.give_resource(tile)
+	update_resources_ui()
 
-@onready var dice_button: Button = $CanvasLayer/DiceButton
-@onready var d1 = dice_button.get_node("Dice")
-@onready var d2 = dice_button.get_node("Dice2")
+@onready var dice_area: Control = $CanvasLayer/Dice
+@onready var d1 = dice_area.get_node("Sprite1")
+@onready var d2 = dice_area.get_node("Sprite2")
 
-var dice: Array[int] = [0,0]
 var dice_delay := 0.1
 var dice_spinning := false
 
@@ -71,6 +84,7 @@ func _press_dice_request() -> void:
 	if not multiplayer.is_server(): return
 	if dice_spinning: return
 	dice_spinning = true
+	var dice: Array[int]
 	for i in range(1,6):
 		dice = [randi()%6, randi()%6]
 		_spin_dice.rpc_id(0, i, dice)
@@ -94,16 +108,17 @@ var colors = [
 func start_game():
 	if multiplayer.is_server():
 		start_button.hide()
-		dice_button.show()
 		var counter = 1
 		for p in player_list.get_children():
 			var player = Player.new()
 			player.node = p
 			player.id = p.name
 			player.name = "Player " + str(counter)
+			print("New Player: " + player.name + " node: " + str(player.node))
 			counter += 1
 			player.color = colors[randi_range(0,colors.size()-1)]
 			players.append(player)
+		board.generate_map()
 		on_turn_start()
 
 func update_resources_ui():
@@ -111,9 +126,18 @@ func update_resources_ui():
 		resources_panel.set_resources.rpc_id(player.id, player.resources)
 
 func on_turn_start():
+	game_state = State.rolling
+	for peer in multiplayer.get_peers():
+		board.set_is_my_turn.rpc_id(peer, players[turn].id == peer)
 	_set_player_outline(players[turn], true)
+	_update_player_specific_ui.rpc(players[turn].id)
 	turn_timer.start()
-	
+
+@rpc("authority", "reliable", "call_local")
+func _update_player_specific_ui(id: int):
+	var _is_my_turn: bool = multiplayer.get_unique_id() == id
+	dice_area.get_child(0).visible = _is_my_turn
+
 func end_turn():
 	_set_player_outline(players[turn], false)
 	turn += 1
@@ -121,7 +145,7 @@ func end_turn():
 	on_turn_start()
 	
 func _set_player_outline(player: Player, value: bool):
-	player.node.get_node("Panel/Outline").visible = value
+	player.node.set_outline.rpc(value)
 	
 func _on_turn_timer_timeout() -> void: end_turn()
 

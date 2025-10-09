@@ -13,6 +13,11 @@ enum TileType {
 func _tile_type_to_resource(type: TileType):
 	match type:
 		TileType.BRICK: return Main.Res.BRICK
+		TileType.LUMBER: return Main.Res.LUMBER
+		TileType.ORE: return Main.Res.ORE
+		TileType.GRAIN: return Main.Res.GRAIN
+		TileType.WOOL: return Main.Res.WOOL
+		TileType.DESERT: return null
 
 @onready var main: Node = $".."
 
@@ -50,6 +55,18 @@ func give_resource(tile: Tile):
 				if resource_type != null:
 					main.players[roads[edge]].resources[resource_type] += 1
 
+#var player: Main.Player
+#@rpc("authority", "reliable", "call_local")
+#func set_local_player():
+	#for p in players:
+		#if p.id == multiplayer.get_unique_id():
+			#player = p
+
+var is_my_turn: bool = false
+@rpc("authority", "reliable", "call_local")
+func set_is_my_turn(value: bool):
+	is_my_turn = value
+
 var edges: Dictionary[Vector2, Array]
 var edge_lines: Dictionary[Vector2, Array]
 var points: Array[Vector2]
@@ -58,20 +75,28 @@ var tiles: Array[Tile]
 var roads: Dictionary[Vector2, int]
 var settlements: Dictionary[Vector2, int]
 
-func _ready() -> void:
+func generate_map() -> void:
 	if !multiplayer.is_server(): return
 	
+	var tile_types: Array = []
 	for type in tileAmounts:
-		for i in range(tileAmounts[type]):
-			var t = Tile.new()
-			t.type = type
-			tiles.append(t)
-	tiles.shuffle()
+		for _i in range(tileAmounts[type]):
+			tile_types.append(int(type))
+	tile_types.shuffle()
 	
-	var number_tokens: Array[int]
+	var number_tokens: Array[int] = []
 	number_tokens.append_array(range(2,13))
 	number_tokens.append_array(range(3,12))
 	number_tokens.shuffle()
+	
+	propagate_map.rpc(tile_types, number_tokens)
+
+@rpc("authority", "reliable", "call_local")
+func propagate_map(tile_types, number_tokens):
+	for type in tile_types:
+		var t = Tile.new()
+		t.type = type
+		tiles.append(t)
 	
 	for i in range(0, len(tiles)):
 		var t = tile_prefab.instantiate()
@@ -97,18 +122,26 @@ func _ready() -> void:
 		
 		add_child(t)
 
-#var mouse = get_global_mouse_position()
-#func _unhandled_input(event: InputEvent) -> void:
-	#if !multiplayer.is_server() and multiplayer.is_server():
-		#mouse = get_global_mouse_position()
-		#if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
-			#settlements.set(get_point(mouse), main.turn)
-			#roads.set(get_edge(mouse), main.turn)
-		#queue_redraw()
+var road_preview: Vector2
+var build_mode: bool = false
+func _unhandled_input(event: InputEvent) -> void:
+	if build_mode:
+		var mouse = get_global_mouse_position()
+		road_preview = get_edge(mouse)
+		if is_my_turn:
+			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+				settlements.set(get_point(mouse), main.turn)
+				roads.set(get_edge(mouse), main.turn)
+	queue_redraw()
 
 func _draw() -> void:
+	if build_mode and edge_lines.has(road_preview):
+		var line = edge_lines[road_preview]
+		if line != null:
+			draw_line(line[0], line[1], Color.RED, 4)
+	
 	for road in roads:
-		draw_line(edge_lines[road][0], edge_lines[road][1], main.players[roads[road]].color, 4)
+		draw_line(edge_lines[road][0], edge_lines[road][1], Color.RED, 4) #main.players[roads[road]].color
 	
 	for settlement in settlements:
 		draw_circle(settlement, 8, main.players[settlements[settlement]].color, true)
