@@ -2,12 +2,14 @@ extends Node
 class_name Main
 
 enum State {
-	lobby,
-	rolling,
-	building,
+	LOBBY,
+	FIRST_SETTLEMENT,
+	SECOND_SETTLEMENT,
+	ROLLING,
+	BUILDING,
 }
 
-var game_state: State = State.lobby
+@export var game_state: State = State.LOBBY
 
 enum Res {
 	ORE,
@@ -47,7 +49,7 @@ func _on_player_join(_id: int):
 
 #@rpc("any_peer", "call_local", "reliable")
 #func is_my_turn() -> bool:
-	#if multiplayer.is_server() and game_state != State.lobby:
+	#if multiplayer.is_server() and game_state != State.LOBBY:
 		#return multiplayer.get_remote_sender_id() == players[turn].id
 	#return false
 
@@ -82,6 +84,7 @@ func _on_dice_button_pressed() -> void:
 @rpc("any_peer", "reliable", "call_local")
 func _press_dice_request() -> void:
 	if not multiplayer.is_server(): return
+	_set_dice_area.rpc(false)
 	if dice_spinning: return
 	dice_spinning = true
 	var dice: Array[int]
@@ -117,8 +120,10 @@ func start_game():
 			print("New Player: " + player.name + " node: " + str(player.node))
 			counter += 1
 			player.color = colors[randi_range(0,colors.size()-1)]
+			board.set_color.rpc_id(player.id, player.color)
 			players.append(player)
 		board.generate_map()
+		game_state = State.FIRST_SETTLEMENT
 		on_turn_start()
 
 func update_resources_ui():
@@ -126,9 +131,9 @@ func update_resources_ui():
 		resources_panel.set_resources.rpc_id(player.id, player.resources)
 
 func on_turn_start():
-	game_state = State.rolling
-	for peer in multiplayer.get_peers():
+	for peer in multiplayer.get_peers(): # Does not include the server
 		board.set_is_my_turn.rpc_id(peer, players[turn].id == peer)
+	board.set_is_my_turn.rpc_id(1, players[turn].id == multiplayer.get_unique_id())
 	_set_player_outline(players[turn], true)
 	_update_player_specific_ui.rpc(players[turn].id)
 	turn_timer.start()
@@ -136,7 +141,12 @@ func on_turn_start():
 @rpc("authority", "reliable", "call_local")
 func _update_player_specific_ui(id: int):
 	var _is_my_turn: bool = multiplayer.get_unique_id() == id
-	dice_area.get_child(0).visible = _is_my_turn
+	if game_state == State.ROLLING:
+		_set_dice_area(_is_my_turn)
+	
+@rpc("authority", "reliable", "call_local")
+func _set_dice_area(value: bool):
+	dice_area.get_child(0).visible = value
 
 func end_turn():
 	_set_player_outline(players[turn], false)

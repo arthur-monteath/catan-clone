@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://be2fp4tuhaso0"]
+[gd_scene load_steps=24 format=3 uid="uid://be2fp4tuhaso0"]
 
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board.gd" id="1_e2o6t"]
@@ -67,6 +67,11 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath("TurnBar:visible")
 properties/1/spawn = true
 properties/1/replication_mode = 2
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_h4r37"]
+properties/0/path = NodePath(".:game_state")
+properties/0/spawn = true
+properties/0/replication_mode = 2
 
 [node name="Main" type="Node"]
 script = ExtResource("1_j5wjh")
@@ -207,12 +212,63 @@ text = "Start"
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="CanvasLayer"]
 replication_config = SubResource("SceneReplicationConfig_y3ud2")
 
+[node name="ActionUI" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/ActionUI"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -20.0
+offset_right = -32.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/ActionUI/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/ActionUI/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="BuildButton" type="Button" parent="CanvasLayer/ActionUI/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Build"
+
+[node name="List" type="VBoxContainer" parent="CanvasLayer/ActionUI/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://by1q5dsk0j4se")
 spawn_path = NodePath("../CanvasLayer/PlayerList")
 script = ExtResource("12_dcmux")
 network_player = ExtResource("13_0fu4a")
 
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_h4r37")
+
 [connection signal="timeout" from="TurnTimer" to="." method="_on_turn_timer_timeout"]
 [connection signal="pressed" from="CanvasLayer/Dice/DiceButton" to="." method="_on_dice_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/StartButton" to="." method="start_game"]
+[connection signal="pressed" from="CanvasLayer/ActionUI/PanelContainer/MarginContainer/VBoxContainer/BuildButton" to="Board" method="_on_build_button_pressed"]

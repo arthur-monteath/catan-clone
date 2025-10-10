@@ -55,6 +55,10 @@ func give_resource(tile: Tile):
 				if resource_type != null:
 					main.players[roads[edge]].resources[resource_type] += 1
 
+var color: Color
+@rpc("authority", "reliable", "call_local")
+func set_color(c: Color):
+	color = c
 #var player: Main.Player
 #@rpc("authority", "reliable", "call_local")
 #func set_local_player():
@@ -62,10 +66,13 @@ func give_resource(tile: Tile):
 		#if p.id == multiplayer.get_unique_id():
 			#player = p
 
+@onready var action_ui: Control = $"../CanvasLayer/ActionUI"
 var is_my_turn: bool = false
 @rpc("authority", "reliable", "call_local")
 func set_is_my_turn(value: bool):
 	is_my_turn = value
+	action_ui.visible = value
+	if !value: build_mode = false
 
 var edges: Dictionary[Vector2, Array]
 var edge_lines: Dictionary[Vector2, Array]
@@ -122,32 +129,49 @@ func propagate_map(tile_types, number_tokens):
 		
 		add_child(t)
 
-var road_preview: Vector2
+@rpc("any_peer", "reliable", "call_local")
+func request_settlement(pos: Vector2):
+	if multiplayer.is_server():
+		if main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT:
+			build_settlement.rpc(settlements.set(pos, multiplayer.get_remote_sender_id()))
+
+@rpc("authority", "reliable", "call_local")
+func build_settlement(pos: Vector2, id: int):
+	settlements.set(pos, id)
+
+var preview_pos: Vector2
 var build_mode: bool = false
-func _unhandled_input(event: InputEvent) -> void:
-	if build_mode:
+func _unhandled_input(_event: InputEvent) -> void:
+	if main.game_state == Main.State.FIRST_SETTLEMENT and is_my_turn:
 		var mouse = get_global_mouse_position()
-		road_preview = get_edge(mouse)
+		preview_pos = get_point(mouse)
+		if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
+			request_settlement.rpc_id(1, preview_pos)
+		return
+	if build_mode:
 		if is_my_turn:
+			var mouse = get_global_mouse_position()
+			preview_pos = get_edge(mouse)
 			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
 				settlements.set(get_point(mouse), main.turn)
 				roads.set(get_edge(mouse), main.turn)
 	queue_redraw()
 
 func _draw() -> void:
-	if build_mode and edge_lines.has(road_preview):
-		var line = edge_lines[road_preview]
+	if build_mode and edge_lines.has(preview_pos):
+		var line = edge_lines[preview_pos]
 		if line != null:
-			draw_line(line[0], line[1], Color.RED, 4)
+			draw_line(line[0], line[1], color, 4)
 	
 	for road in roads:
-		draw_line(edge_lines[road][0], edge_lines[road][1], Color.RED, 4) #main.players[roads[road]].color
+		draw_line(edge_lines[road][0], edge_lines[road][1], color, 4) #main.players[roads[road]].color
 	
 	for settlement in settlements:
 		draw_circle(settlement, 8, main.players[settlements[settlement]].color, true)
 
-var grid_size: int = 5
+#region Hex Grid
 
+var grid_size: int = 5
 var hex_radius: float = 36
 var hex_apothem: float = hex_radius * sqrt(3.0) / 2.0
 var height_diff: float = hex_radius + hex_apothem
@@ -240,3 +264,8 @@ func get_tile(pos: Vector2) -> Tile:
 			lowest_distance = dist
 			found_tile = tile
 	return found_tile
+
+#endregion
+
+func _on_build_button_pressed() -> void:
+	build_mode = !build_mode

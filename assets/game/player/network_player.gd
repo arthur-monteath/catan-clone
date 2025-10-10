@@ -8,5 +8,7 @@ func _enter_tree() -> void:
 func set_outline(value: bool):
 	$Panel/Outline.visible = value
 	
-func _input(event: InputEvent) -> void:
-	if !is_multiplayer_authority(): return
+#func set_message(text: String):
+	
+#func _input(event: InputEvent) -> void:
+	#if !is_multiplayer_authority(): return
