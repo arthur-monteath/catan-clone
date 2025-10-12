@@ -24,6 +24,7 @@ func _tile_type_to_resource(type: TileType):
 
 const TILE: PackedScene = preload("uid://dtvr5obijngj")
 const SETTLEMENT: PackedScene = preload("uid://be4lgt7hs4inj")
+const ROAD: PackedScene = preload("uid://be4lgt7hs4inj")
 
 var tileAmounts: Dictionary[TileType, int] = {
 	TileType.LUMBER: 4,
@@ -130,11 +131,23 @@ func propagate_map(tile_types, number_tokens):
 		
 		add_child(t)
 
+#region Structure Building
+func request_structure(pos: Vector2, structure: Structure):
+	match structure:
+		Structure.SETTLEMENT:
+			request_settlement.rpc_id(1, pos)
+		Structure.ROAD:
+			request_road.rpc_id(1, pos)
+
+#region Build Settlement
 signal on_settlement_built
 @rpc("any_peer", "reliable", "call_local")
 func request_settlement(pos: Vector2):
 	if multiplayer.is_server():
-		if main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT:
+		var free_settlement: bool = main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT
+		var can_pay: bool = false
+		var can_place: bool = points.has(pos) and !settlements.has(pos)
+		if (free_settlement or can_pay) and can_place:
 			build_settlement.rpc(pos, main.get_player_client_info_by_id(multiplayer.get_remote_sender_id()))
 			emit_signal("on_settlement_built", pos)
 
@@ -146,20 +159,50 @@ func build_settlement(pos: Vector2, player: Dictionary):
 	sprite.self_modulate = player.color
 	settlements.set(pos, player)
 	add_child(settlement)
+#endregion
+
+#region Build Road
+signal on_road_built
+@rpc("any_peer", "reliable", "call_local")
+func request_road(pos: Vector2):
+	if multiplayer.is_server():
+		var free_road: bool = main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT
+		var can_pay: bool = false
+		var can_place: bool = points.has(pos) and !settlements.has(pos)
+		if (free_road or can_pay) and can_place:
+			build_road.rpc(pos, main.get_player_client_info_by_id(multiplayer.get_remote_sender_id()))
+			emit_signal("on_road_built", pos)
+
+@rpc("authority", "reliable", "call_local")
+func build_road(pos: Vector2, player: Dictionary):
+	var road = ROAD.instantiate()
+	road.position = pos
+	var sprite: Sprite2D = road.get_node("Sprite2D")
+	sprite.self_modulate = player.color
+	roads.set(pos, player)
+	add_child(road)
+#endregion
+
+enum Structure {
+	SETTLEMENT,
+	ROAD,
+}
+
+var selected_structure: Structure = Structure.SETTLEMENT
+#endregion
 
 var preview_pos: Vector2 = Vector2.INF
 var build_mode: bool = false
 func _unhandled_input(_event: InputEvent) -> void:
 	if !is_my_turn: return
 	var mouse = get_global_mouse_position()
-	preview_pos = get_key_unnocupied(mouse)
 	match main.game_state:
-		Main.State.FIRST_SETTLEMENT:
-			preview_pos = get_point(preview_pos)
+		Main.State.FIRST_SETTLEMENT or Main.State.SECOND_SETTLEMENT:
+			if selected_structure == Structure.SETTLEMENT:
+				preview_pos = get_point(mouse)
+			else: preview_pos = get_edge(mouse)
 			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
-				request_settlement.rpc_id(1, preview_pos)
-		Main.State.SECOND_SETTLEMENT:
-			pass
+				request_structure(preview_pos, selected_structure)
 		Main.State.BUILDING:
 			if build_mode:
 				if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):

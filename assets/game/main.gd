@@ -208,7 +208,7 @@ func _on_turn_timer_timeout() -> void: end_turn()
 func _on_settlement_built(_pos: Vector2) -> void:
 	match game_state:
 		State.FIRST_SETTLEMENT:
-			end_turn()
+			pass
 		State.SECOND_SETTLEMENT:
 			game_state = State.ROLLING
 			end_turn()
