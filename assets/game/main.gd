@@ -122,9 +122,25 @@ func start_game():
 			player.color = colors[randi_range(0,colors.size()-1)]
 			board.set_color.rpc_id(player.id, player.color)
 			players.append(player)
+		# connect board server-side signals
+		board.on_settlement_built.connect(_on_settlement_built)
 		board.generate_map()
 		game_state = State.FIRST_SETTLEMENT
 		on_turn_start()
+
+func get_player_by_id(id: int):
+	for player in players:
+		if player.id == id: return player
+
+func get_player_client_info_by_id(id: int):
+	for player in players:
+		if player.id == id:
+			var dict = {
+				"id": player.id,
+				"color": player.color,
+				"name": player.name,
+			}
+			return dict
 
 func update_resources_ui():
 	for player in players:
@@ -141,17 +157,40 @@ func on_turn_start():
 @rpc("authority", "reliable", "call_local")
 func _update_player_specific_ui(id: int):
 	var _is_my_turn: bool = multiplayer.get_unique_id() == id
-	if game_state == State.ROLLING:
-		_set_dice_area(_is_my_turn)
+	match game_state:
+		State.FIRST_SETTLEMENT:
+			_send_client_message.rpc_id(id, "Place your first settlement!")
+		State.SECOND_SETTLEMENT:
+			_send_client_message.rpc_id(id, "Place your second settlement!\nRemember, this one will immediately give you resources.")
+		State.ROLLING:
+			_set_dice_area(_is_my_turn)
+	
+@onready var message_box: Panel = $CanvasLayer/MessageBox
+@onready var message_label: Label = $CanvasLayer/MessageBox/PanelContainer/MarginContainer/Label
+
+@rpc("authority", "reliable", "call_local")
+func _send_client_message(message: String):
+	message_label.text = message
+	message_box.show()
 	
 @rpc("authority", "reliable", "call_local")
 func _set_dice_area(value: bool):
 	dice_area.get_child(0).visible = value
 
+var turn_increment: int = 1
 func end_turn():
 	_set_player_outline(players[turn], false)
-	turn += 1
-	if turn >= len(players): turn = 0
+	turn += turn_increment
+	if turn >= len(players) or turn < 0:
+		match game_state:
+			State.FIRST_SETTLEMENT:
+				game_state = State.SECOND_SETTLEMENT
+				turn_increment = -1
+				turn -= 1
+			State.SECOND_SETTLEMENT:
+				game_state = State.ROLLING
+				turn_increment = 1
+				turn = 0
 	on_turn_start()
 	
 func _set_player_outline(player: Player, value: bool):
@@ -165,3 +204,15 @@ func _on_turn_timer_timeout() -> void: end_turn()
 		#player.name = "Player " + String.num_int64(i+1)
 		#player.color = colors[i]
 		#players.append(player)
+
+func _on_settlement_built(_pos: Vector2) -> void:
+	match game_state:
+		State.FIRST_SETTLEMENT:
+			end_turn()
+		State.SECOND_SETTLEMENT:
+			game_state = State.ROLLING
+			end_turn()
+
+func _on_message_box_gui_input(event: InputEvent) -> void:
+	if event.is_pressed():
+		message_box.hide()

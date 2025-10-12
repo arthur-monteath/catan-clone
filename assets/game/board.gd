@@ -20,9 +20,10 @@ func _tile_type_to_resource(type: TileType):
 		TileType.DESERT: return null
 
 @onready var main: Node = $".."
-
 @export var textures: Dictionary[TileType, Texture2D]
-var tile_prefab: PackedScene = preload("res://assets/tiles/tile.tscn")
+
+const TILE: PackedScene = preload("uid://dtvr5obijngj")
+const SETTLEMENT: PackedScene = preload("uid://be4lgt7hs4inj")
 
 var tileAmounts: Dictionary[TileType, int] = {
 	TileType.LUMBER: 4,
@@ -80,7 +81,7 @@ var points: Array[Vector2]
 
 var tiles: Array[Tile]
 var roads: Dictionary[Vector2, int]
-var settlements: Dictionary[Vector2, int]
+var settlements: Dictionary[Vector2, Dictionary]
 
 func generate_map() -> void:
 	if !multiplayer.is_server(): return
@@ -106,7 +107,7 @@ func propagate_map(tile_types, number_tokens):
 		tiles.append(t)
 	
 	for i in range(0, len(tiles)):
-		var t = tile_prefab.instantiate()
+		var t = TILE.instantiate()
 		tiles[i].node = t
 		t.get_node("Hex").texture = textures[tiles[i].type]
 	
@@ -129,45 +130,57 @@ func propagate_map(tile_types, number_tokens):
 		
 		add_child(t)
 
+signal on_settlement_built
 @rpc("any_peer", "reliable", "call_local")
 func request_settlement(pos: Vector2):
 	if multiplayer.is_server():
 		if main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT:
-			build_settlement.rpc(settlements.set(pos, multiplayer.get_remote_sender_id()))
+			build_settlement.rpc(pos, main.get_player_client_info_by_id(multiplayer.get_remote_sender_id()))
+			emit_signal("on_settlement_built", pos)
 
 @rpc("authority", "reliable", "call_local")
-func build_settlement(pos: Vector2, id: int):
-	settlements.set(pos, id)
+func build_settlement(pos: Vector2, player: Dictionary):
+	var settlement = SETTLEMENT.instantiate()
+	settlement.position = pos
+	var sprite: Sprite2D = settlement.get_node("Sprite2D")
+	sprite.self_modulate = player.color
+	settlements.set(pos, player)
+	add_child(settlement)
 
-var preview_pos: Vector2
+var preview_pos: Vector2 = Vector2.INF
 var build_mode: bool = false
 func _unhandled_input(_event: InputEvent) -> void:
-	if main.game_state == Main.State.FIRST_SETTLEMENT and is_my_turn:
-		var mouse = get_global_mouse_position()
-		preview_pos = get_point(mouse)
-		if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
-			request_settlement.rpc_id(1, preview_pos)
-		return
-	if build_mode:
-		if is_my_turn:
-			var mouse = get_global_mouse_position()
-			preview_pos = get_edge(mouse)
-			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)):
-				settlements.set(get_point(mouse), main.turn)
-				roads.set(get_edge(mouse), main.turn)
+	if !is_my_turn: return
+	var mouse = get_global_mouse_position()
+	preview_pos = get_key_unnocupied(mouse)
+	match main.game_state:
+		Main.State.FIRST_SETTLEMENT:
+			preview_pos = get_point(preview_pos)
+			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
+				request_settlement.rpc_id(1, preview_pos)
+		Main.State.SECOND_SETTLEMENT:
+			pass
+		Main.State.BUILDING:
+			if build_mode:
+				if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
+					settlements.set(get_point(mouse), main.turn)
+					roads.set(get_edge(mouse), main.turn)
 	queue_redraw()
 
 func _draw() -> void:
-	if build_mode and edge_lines.has(preview_pos):
+	if edge_lines.has(preview_pos):
 		var line = edge_lines[preview_pos]
 		if line != null:
 			draw_line(line[0], line[1], color, 4)
+			
+	if points.has(preview_pos):
+		draw_circle(preview_pos, 8, color)
 	
 	for road in roads:
 		draw_line(edge_lines[road][0], edge_lines[road][1], color, 4) #main.players[roads[road]].color
 	
 	for settlement in settlements:
-		draw_circle(settlement, 8, main.players[settlements[settlement]].color, true)
+		draw_circle(settlement, 8, settlements[settlement].color, true)
 
 #region Hex Grid
 
@@ -221,7 +234,7 @@ func get_points(tile: Tile):
 		p.append(tile.pos + get_direction_vector(dir))
 	return p
 
-func get_point(pos: Vector2):
+func get_point(pos: Vector2, max_dist: float = 20.0) -> Vector2:
 	var lowest_distance = INF
 	var found_point: Vector2
 	for point: Vector2 in points:
@@ -229,8 +242,9 @@ func get_point(pos: Vector2):
 		if dist < lowest_distance:
 			lowest_distance = dist
 			found_point = point
+	if lowest_distance > max_dist: return Vector2.INF
 	if found_point: return found_point
-	return null
+	return Vector2.INF
 
 func get_edge_lines(tile: Tile) -> Dictionary[Vector2, Array]:
 	var e: Dictionary[Vector2, Array]
@@ -244,7 +258,7 @@ func get_edge_lines(tile: Tile) -> Dictionary[Vector2, Array]:
 	
 	return e
 
-func get_edge(pos: Vector2):
+func get_edge(pos: Vector2) -> Vector2:
 	var lowest_distance = INF
 	var found_edge: Vector2
 	for edge: Vector2 in edges:
@@ -252,8 +266,9 @@ func get_edge(pos: Vector2):
 		if dist < lowest_distance:
 			lowest_distance = dist
 			found_edge = edge
+	if lowest_distance > 12: return Vector2.INF
 	if found_edge: return found_edge
-	return null
+	return Vector2.INF
 	
 func get_tile(pos: Vector2) -> Tile:
 	var lowest_distance = INF
@@ -264,6 +279,20 @@ func get_tile(pos: Vector2) -> Tile:
 			lowest_distance = dist
 			found_tile = tile
 	return found_tile
+
+func get_key(pos: Vector2) -> Vector2:
+	var point: Vector2 = get_point(pos)
+	var edge: Vector2 = get_edge(pos)
+	if point != Vector2.INF: return point
+	if edge != Vector2.INF: return edge
+	return Vector2.INF
+	
+func get_key_unnocupied(pos: Vector2) -> Vector2:
+	var point: Vector2 = get_point(pos)
+	var edge: Vector2 = get_edge(pos)
+	if !settlements.has(point) and point != Vector2.INF: return point
+	if edge != Vector2.INF: return edge
+	return Vector2.INF
 
 #endregion
 
