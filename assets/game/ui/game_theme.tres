@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://cquy46qi6nrmx"]
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://cquy46qi6nrmx"]
 
 [ext_resource type="Texture2D" uid="uid://dwwuwhy2g2tyt" path="res://assets/game/ui/ui_dialog.png" id="1_6lmd4"]
 
@@ -12,9 +12,11 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 region_rect = Rect2(0, 0, 16, 16)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6lmd4"]
+
 [resource]
 Button/styles/disabled = SubResource("StyleBoxTexture_ca5rk")
-Button/styles/focus = SubResource("StyleBoxTexture_ca5rk")
+Button/styles/focus = SubResource("StyleBoxEmpty_6lmd4")
 Button/styles/hover = SubResource("StyleBoxTexture_ca5rk")
 Button/styles/hover_pressed = SubResource("StyleBoxTexture_ca5rk")
 Button/styles/normal = SubResource("StyleBoxTexture_ca5rk")

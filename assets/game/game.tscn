@@ -193,7 +193,7 @@ position = Vector2(1071, 560)
 texture = ExtResource("11_mfdv2")
 hframes = 6
 
-[node name="MultiplayerUI" parent="RootUI" instance=ExtResource("11_1ryvc")]
+[node name="MultiplayerUI" parent="RootUI" groups=["MultiplayerUI"] instance=ExtResource("11_1ryvc")]
 unique_name_in_owner = true
 
 [node name="PlayerList" type="VBoxContainer" parent="RootUI"]

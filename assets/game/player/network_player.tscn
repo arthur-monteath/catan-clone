@@ -10,7 +10,7 @@ border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color(0.8, 0, 0, 1)
+border_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -45,7 +45,6 @@ theme = ExtResource("1_txluh")
 
 [node name="Outline" type="PanelContainer" parent="Panel"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme = ExtResource("1_txluh")
 theme_override_styles/panel = SubResource("StyleBoxFlat_fesle")

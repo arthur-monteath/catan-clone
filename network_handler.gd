@@ -7,23 +7,31 @@ var peer: ENetMultiplayerPeer
 
 signal server_started
 
-var player_info: Dictionary
+var _server_player_info: Dictionary[int, Dictionary]
 
 @rpc("any_peer", "reliable", "call_local")
-func add_player_info(info, id: int = multiplayer.get_remote_sender_id()):
-	if !player_info.has(id): player_info.set(id, info)
+func update_player_information_server_rpc(info: Dictionary):
+	if !multiplayer.is_server(): return
+	_server_player_info[multiplayer.get_remote_sender_id()] = info
+	_send_clients_player_information.rpc(_server_player_info)
 
-func start_server(info) -> void:
+@rpc("authority", "reliable", "call_local")
+func _send_clients_player_information(server_info):
+	for child: NetworkPlayer in get_tree().current_scene.get_node("%PlayerList").get_children():
+		if server_info.has(int(child.name)):
+			var info = server_info[int(child.name)]
+			child.setup_player_info.rpc(info.name, info.color)
+
+func start_server() -> void:
 	peer = ENetMultiplayerPeer.new()
 	var err := peer.create_server(PORT, MAX_CLIENTS)
 	if err != OK: push_error("Server failed: %s" % err); return
 	multiplayer.multiplayer_peer = peer
-	player_info[1] = info
+	#player_info[1] = info
 	emit_signal("server_started")
 
-func start_client(ip: String, info) -> void:
+func start_client(ip: String) -> void:
 	peer = ENetMultiplayerPeer.new()
 	var err := peer.create_client(ip, PORT)
 	if err != OK: push_error("Client failed: %s" % err); return
 	multiplayer.multiplayer_peer = peer
-	print(multiplayer.is_server())
