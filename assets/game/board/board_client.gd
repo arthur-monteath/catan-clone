@@ -1,5 +1,5 @@
+class_name BoardClient
 extends Node2D
-class_name Board
 
 enum TileType {
 	BRICK = Main.Res.BRICK,

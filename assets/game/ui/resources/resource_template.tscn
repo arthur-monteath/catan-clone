@@ -1,16 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://dbuvbml0vr4ip"]
+[gd_scene load_steps=3 format=3 uid="uid://dbuvbml0vr4ip"]
 
 [ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/tiles/art/grain.png" id="1_5yr4d"]
+[ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="1_ycvde"]
 
 [node name="ResourceTemplate" type="HBoxContainer"]
+theme = ExtResource("1_ycvde")
 theme_override_constants/separation = 8
 
 [node name="Image" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+theme = ExtResource("1_ycvde")
 texture = ExtResource("1_5yr4d")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
+theme = ExtResource("1_ycvde")
 text = "0"

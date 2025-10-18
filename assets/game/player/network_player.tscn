@@ -1,14 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://by1q5dsk0j4se"]
 
 [ext_resource type="Script" uid="uid://djfjiqgkrxevb" path="res://assets/game/player/network_player.gd" id="1_e0wq5"]
+[ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="1_txluh"]
 [ext_resource type="Texture2D" uid="uid://olilj3bm2tqg" path="res://assets/icon.svg" id="2_fesle"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_txluh"]
-bg_color = Color(0.09052665, 0.15168375, 0.22504804, 0.39215687)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fesle"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -28,12 +22,14 @@ properties/0/spawn = true
 properties/0/replication_mode = 1
 
 [node name="NetworkPlayer" type="Control"]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_txluh")
 script = ExtResource("1_e0wq5")
 
 [node name="Panel" type="PanelContainer" parent="."]
@@ -45,15 +41,18 @@ offset_top = -40.0
 offset_right = 208.0
 offset_bottom = 40.0
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_txluh")
+theme = ExtResource("1_txluh")
 
 [node name="Outline" type="PanelContainer" parent="Panel"]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
+theme = ExtResource("1_txluh")
 theme_override_styles/panel = SubResource("StyleBoxFlat_fesle")
 
 [node name="Margin" type="MarginContainer" parent="Panel"]
 layout_mode = 2
+theme = ExtResource("1_txluh")
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
@@ -61,16 +60,21 @@ theme_override_constants/margin_bottom = 8
 
 [node name="HBox" type="HBoxContainer" parent="Panel/Margin"]
 layout_mode = 2
+theme = ExtResource("1_txluh")
 theme_override_constants/separation = 8
 
-[node name="Image" type="TextureRect" parent="Panel/Margin/HBox"]
+[node name="PlayerImage" type="TextureRect" parent="Panel/Margin/HBox"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+theme = ExtResource("1_txluh")
 texture = ExtResource("2_fesle")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="Panel/Margin/HBox"]
+[node name="PlayerLabel" type="Label" parent="Panel/Margin/HBox"]
+unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_txluh")
 text = "thucatrindade1"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Panel"]

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dihrcf515sxka"]
+[gd_scene load_steps=3 format=3 uid="uid://dihrcf515sxka"]
 
-[ext_resource type="Script" uid="uid://bkambsqo0mvv3" path="res://assets/ui/multiplayer/multiplayer_ui.gd" id="1_luirv"]
+[ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="1_cbfqa"]
+[ext_resource type="Script" uid="uid://bkambsqo0mvv3" path="res://assets/game/ui/multiplayer/multiplayer_ui.gd" id="1_luirv"]
 
 [node name="MultiplayerUI" type="Control"]
 layout_mode = 3
@@ -11,6 +12,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_cbfqa")
 script = ExtResource("1_luirv")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -26,22 +28,39 @@ offset_right = 22.0
 offset_bottom = 33.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_cbfqa")
 theme_override_constants/separation = 8
 
 [node name="HostButton" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(220, 80)
 layout_mode = 2
+theme = ExtResource("1_cbfqa")
 theme_override_font_sizes/font_size = 32
 text = "Host"
 
 [node name="JoinButton" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(220, 80)
 layout_mode = 2
+theme = ExtResource("1_cbfqa")
 theme_override_font_sizes/font_size = 32
 text = "Join"
 
-[node name="IpLine" type="LineEdit" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+theme = ExtResource("1_cbfqa")
+theme_override_constants/separation = 8
+
+[node name="PlayerName" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_cbfqa")
+
+[node name="PlayerColorPicker" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+theme = ExtResource("1_cbfqa")
 
 [connection signal="pressed" from="VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]

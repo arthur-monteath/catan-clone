@@ -1,26 +1,26 @@
-[gd_scene load_steps=25 format=3 uid="uid://be2fp4tuhaso0"]
+[gd_scene load_steps=22 format=3 uid="uid://be2fp4tuhaso0"]
 
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="1_80nbo"]
-[ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board/board_server.gd" id="1_e2o6t"]
+[ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board_server.gd" id="1_e2o6t"]
 [ext_resource type="Script" uid="uid://ct68henogcw0q" path="res://assets/game/main.gd" id="1_j5wjh"]
 [ext_resource type="Script" uid="uid://c7vmt5xpdpsc1" path="res://assets/game/turn_manager.gd" id="2_faf0w"]
-[ext_resource type="Texture2D" uid="uid://b4fvv2sx4p01o" path="res://assets/game/ocean.png" id="3_1ryvc"]
-[ext_resource type="Texture2D" uid="uid://df8wectmf10hk" path="res://assets/game/land.png" id="5_dcmux"]
-[ext_resource type="Script" uid="uid://dnwjj5gjp8bye" path="res://assets/game/ui/root_ui.gd" id="5_k08a3"]
-[ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="8_0fu4a"]
-[ext_resource type="PackedScene" uid="uid://dihrcf515sxka" path="res://assets/game/ui/multiplayer/multiplayer_ui.tscn" id="11_1ryvc"]
+[ext_resource type="Script" uid="uid://dnwjj5gjp8bye" path="res://assets/game/root_ui.gd" id="5_k08a3"]
+[ext_resource type="PackedScene" uid="uid://dihrcf515sxka" path="res://assets/ui/multiplayer/multiplayer_ui.tscn" id="11_1ryvc"]
 [ext_resource type="Texture2D" uid="uid://dmj41lyg0mur0" path="res://assets/dice/dice_faces.png" id="11_mfdv2"]
-[ext_resource type="Script" uid="uid://evbhvjxn7kpo" path="res://assets/game/player/player_spawner.gd" id="12_dcmux"]
-[ext_resource type="PackedScene" uid="uid://cwv4tga2lnu8k" path="res://assets/game/ui/resources/resources_ui.tscn" id="12_y3ud2"]
+[ext_resource type="Script" uid="uid://evbhvjxn7kpo" path="res://assets/game/player_spawner.gd" id="12_dcmux"]
+[ext_resource type="PackedScene" uid="uid://cwv4tga2lnu8k" path="res://assets/ui/resources/resources_ui.tscn" id="12_y3ud2"]
 [ext_resource type="PackedScene" uid="uid://by1q5dsk0j4se" path="res://assets/game/player/network_player.tscn" id="13_0fu4a"]
 
-[sub_resource type="Gradient" id="Gradient_1ryvc"]
-colors = PackedColorArray(0.09019608, 0.1254902, 0.21960784, 1, 0.09019608, 0.1254902, 0.21960784, 1)
+[sub_resource type="Gradient" id="Gradient_j5wjh"]
+colors = PackedColorArray(0.17254902, 0.67058825, 1, 1, 0, 0.3372549, 0.7882353, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_dcmux"]
-gradient = SubResource("Gradient_1ryvc")
-width = 572
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_vef74"]
+gradient = SubResource("Gradient_j5wjh")
+width = 576
 height = 324
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 1)
 
 [sub_resource type="Gradient" id="Gradient_hve3p"]
 interpolation_mode = 2
@@ -95,18 +95,12 @@ wait_time = 32.0
 script = ExtResource("2_faf0w")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-texture_filter = 1
 zoom = Vector2(2, 2)
 
-[node name="Sprite2D" type="Sprite2D" parent="Camera2D"]
-texture = SubResource("GradientTexture2D_dcmux")
-
 [node name="Ocean" type="Sprite2D" parent="Camera2D"]
-position = Vector2(-16, 0)
-texture = ExtResource("3_1ryvc")
+texture = SubResource("GradientTexture2D_vef74")
 
 [node name="Land" type="Polygon2D" parent="Camera2D"]
-visible = false
 texture_filter = 1
 texture = SubResource("GradientTexture2D_mfdv2")
 texture_offset = Vector2(168, 168)
@@ -114,10 +108,6 @@ polygon = PackedVector2Array(168, 0, 84, 145.49226, -84, 145.49226, -168, 2.0573
 script = ExtResource("1_80nbo")
 radius = 168
 points_num = 6
-
-[node name="Land2" type="Sprite2D" parent="Camera2D"]
-position = Vector2(-24, 0)
-texture = ExtResource("5_dcmux")
 
 [node name="Board" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -129,7 +119,6 @@ unique_name_in_owner = true
 script = ExtResource("5_k08a3")
 
 [node name="TurnBar" type="ProgressBar" parent="RootUI"]
-unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(256, 8)
 anchors_preset = 5
@@ -140,7 +129,6 @@ offset_top = 8.0
 offset_right = 58.0
 offset_bottom = 16.0
 grow_horizontal = 2
-theme = ExtResource("8_0fu4a")
 theme_override_styles/background = SubResource("StyleBoxFlat_0fu4a")
 theme_override_styles/fill = SubResource("StyleBoxFlat_y3ud2")
 max_value = 1.0
@@ -153,7 +141,6 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-theme = ExtResource("8_0fu4a")
 
 [node name="DiceButton" type="Button" parent="RootUI/DiceArea"]
 unique_name_in_owner = true
@@ -171,7 +158,6 @@ offset_right = 1080.0
 offset_bottom = 576.0
 grow_horizontal = 0
 grow_vertical = 0
-theme = ExtResource("8_0fu4a")
 theme_override_styles/normal = SubResource("StyleBoxFlat_hve3p")
 text = "Click to Roll Dice!
 
@@ -194,10 +180,8 @@ texture = ExtResource("11_mfdv2")
 hframes = 6
 
 [node name="MultiplayerUI" parent="RootUI" instance=ExtResource("11_1ryvc")]
-unique_name_in_owner = true
 
 [node name="PlayerList" type="VBoxContainer" parent="RootUI"]
-unique_name_in_owner = true
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
@@ -206,13 +190,10 @@ offset_top = -20.0
 offset_right = 72.0
 offset_bottom = 20.0
 grow_vertical = 2
-theme = ExtResource("8_0fu4a")
 theme_override_constants/separation = 88
 alignment = 1
 
-[node name="ResourcesPanel" parent="RootUI" instance=ExtResource("12_y3ud2")]
-unique_name_in_owner = true
-texture_filter = 1
+[node name="Resources" parent="RootUI" instance=ExtResource("12_y3ud2")]
 anchors_preset = 0
 anchor_left = 0.0
 anchor_top = 0.0
@@ -224,10 +205,8 @@ offset_right = 32.0
 offset_bottom = 32.0
 grow_horizontal = 1
 grow_vertical = 1
-theme = ExtResource("8_0fu4a")
 
 [node name="StartButton" type="Button" parent="RootUI"]
-unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(220, 80)
 anchors_preset = 8
@@ -241,7 +220,6 @@ offset_right = 41.5
 offset_bottom = 26.5
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("8_0fu4a")
 theme_override_font_sizes/font_size = 32
 text = "Start"
 
@@ -261,7 +239,6 @@ offset_top = -20.0
 offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
-theme = ExtResource("8_0fu4a")
 
 [node name="PanelContainer" type="PanelContainer" parent="RootUI/ActionUI"]
 layout_mode = 1
@@ -276,11 +253,9 @@ offset_right = -32.0
 offset_bottom = 20.0
 grow_horizontal = 0
 grow_vertical = 2
-theme = ExtResource("8_0fu4a")
 
 [node name="MarginContainer" type="MarginContainer" parent="RootUI/ActionUI/PanelContainer"]
 layout_mode = 2
-theme = ExtResource("8_0fu4a")
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
@@ -288,18 +263,15 @@ theme_override_constants/margin_bottom = 8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="RootUI/ActionUI/PanelContainer/MarginContainer"]
 layout_mode = 2
-theme = ExtResource("8_0fu4a")
 
 [node name="BuildButton" type="Button" parent="RootUI/ActionUI/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("8_0fu4a")
 theme_override_font_sizes/font_size = 32
 text = "Build"
 
 [node name="List" type="VBoxContainer" parent="RootUI/ActionUI/PanelContainer/MarginContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
-theme = ExtResource("8_0fu4a")
 
 [node name="MessageBox" type="Panel" parent="RootUI"]
 unique_name_in_owner = true
@@ -309,7 +281,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("8_0fu4a")
 
 [node name="PanelContainer" type="PanelContainer" parent="RootUI/MessageBox"]
 layout_mode = 1
@@ -324,12 +295,10 @@ offset_right = 48.5
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("8_0fu4a")
 theme_override_styles/panel = SubResource("StyleBoxFlat_h4r37")
 
 [node name="MarginContainer" type="MarginContainer" parent="RootUI/MessageBox/PanelContainer"]
 layout_mode = 2
-theme = ExtResource("8_0fu4a")
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
@@ -338,7 +307,6 @@ theme_override_constants/margin_bottom = 16
 [node name="MessageLabel" type="Label" parent="RootUI/MessageBox/PanelContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme = ExtResource("8_0fu4a")
 text = "MessageBox"
 label_settings = SubResource("LabelSettings_n5fxh")
 
