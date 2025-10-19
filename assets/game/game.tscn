@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://be2fp4tuhaso0"]
+[gd_scene load_steps=32 format=3 uid="uid://be2fp4tuhaso0"]
 
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board/board_server.gd" id="1_e2o6t"]
@@ -7,12 +7,19 @@
 [ext_resource type="Texture2D" uid="uid://b4fvv2sx4p01o" path="res://assets/game/ocean.png" id="3_1ryvc"]
 [ext_resource type="Texture2D" uid="uid://df8wectmf10hk" path="res://assets/game/land.png" id="5_dcmux"]
 [ext_resource type="Script" uid="uid://dnwjj5gjp8bye" path="res://assets/game/ui/root_ui.gd" id="5_k08a3"]
+[ext_resource type="Script" uid="uid://bqq7e5btewd8e" path="res://assets/game/board/board_client.gd" id="7_y3ud2"]
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="8_0fu4a"]
+[ext_resource type="Texture2D" uid="uid://dpo1tsm4hi7rh" path="res://assets/tiles/art/ore.png" id="8_8gxh0"]
+[ext_resource type="Texture2D" uid="uid://o18pbrdgyip2" path="res://assets/tiles/art/brick.png" id="9_l2nmn"]
+[ext_resource type="Texture2D" uid="uid://34ej43vr0l7h" path="res://assets/tiles/art/lumber.png" id="10_ccg75"]
 [ext_resource type="PackedScene" uid="uid://dihrcf515sxka" path="res://assets/game/ui/multiplayer/multiplayer_ui.tscn" id="11_1ryvc"]
 [ext_resource type="Texture2D" uid="uid://dmj41lyg0mur0" path="res://assets/dice/dice_faces.png" id="11_mfdv2"]
+[ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/tiles/art/grain.png" id="11_xesfy"]
+[ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://assets/tiles/art/wool.png" id="12_6w1bh"]
 [ext_resource type="Script" uid="uid://evbhvjxn7kpo" path="res://assets/game/player/player_spawner.gd" id="12_dcmux"]
 [ext_resource type="PackedScene" uid="uid://cwv4tga2lnu8k" path="res://assets/game/ui/resources/resources_ui.tscn" id="12_y3ud2"]
 [ext_resource type="PackedScene" uid="uid://by1q5dsk0j4se" path="res://assets/game/player/network_player.tscn" id="13_0fu4a"]
+[ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/tiles/art/desert.png" id="13_p100d"]
 
 [sub_resource type="Gradient" id="Gradient_1ryvc"]
 colors = PackedColorArray(0.09019608, 0.1254902, 0.21960784, 1, 0.09019608, 0.1254902, 0.21960784, 1)
@@ -64,17 +71,8 @@ properties/1/path = NodePath("TurnBar:visible")
 properties/1/spawn = true
 properties/1/replication_mode = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h4r37"]
-bg_color = Color(0, 0.10757561, 0.23812965, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.07067649, 0.050477907, 0.24157438, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gxh0"]
+bg_color = Color(0, 0.037333336, 0.08, 0.7254902)
 
 [sub_resource type="LabelSettings" id="LabelSettings_n5fxh"]
 font_size = 24
@@ -123,6 +121,18 @@ texture = ExtResource("5_dcmux")
 unique_name_in_owner = true
 texture_filter = 1
 script = ExtResource("1_e2o6t")
+
+[node name="BoardClient" type="Node2D" parent="Board"]
+script = ExtResource("7_y3ud2")
+textures = Dictionary[int, Texture2D]({
+0: ExtResource("8_8gxh0"),
+1: ExtResource("11_xesfy"),
+2: ExtResource("10_ccg75"),
+3: ExtResource("9_l2nmn"),
+4: ExtResource("12_6w1bh"),
+5: ExtResource("13_p100d")
+})
+metadata/_custom_type_script = "uid://bqq7e5btewd8e"
 
 [node name="RootUI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
@@ -304,12 +314,14 @@ theme = ExtResource("8_0fu4a")
 [node name="MessageBox" type="Panel" parent="RootUI"]
 unique_name_in_owner = true
 visible = false
+texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("8_0fu4a")
+theme_override_styles/panel = SubResource("StyleBoxFlat_8gxh0")
 
 [node name="PanelContainer" type="PanelContainer" parent="RootUI/MessageBox"]
 layout_mode = 1
@@ -325,7 +337,6 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("8_0fu4a")
-theme_override_styles/panel = SubResource("StyleBoxFlat_h4r37")
 
 [node name="MarginContainer" type="MarginContainer" parent="RootUI/MessageBox/PanelContainer"]
 layout_mode = 2

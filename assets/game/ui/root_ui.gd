@@ -13,7 +13,7 @@ func set_dice_spin(i: int, dice: Array[int]):
 @onready var dice1 = %Dice2
 @onready var dice2 = %Dice1
 @rpc("authority", "reliable", "call_local")
-func send_player_specific_ui(args: Dictionary):
+func set_player_specific_ui(args: Dictionary):
 	if args.has("message"):
 		_send_client_message(args.message)
 	if args.has("dice_enabled"):

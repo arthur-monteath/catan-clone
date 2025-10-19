@@ -34,7 +34,7 @@ var players: Array[Player]
 @onready var player_list: VBoxContainer = %PlayerList
 
 @onready var turn_manager: TurnManager = %TurnManager
-@onready var board: BoardServer = %Board
+@onready var board: Board = %Board
 @onready var root_ui: RootUI = %RootUI
 @onready var start_button: Button = %StartButton
 
@@ -115,9 +115,9 @@ func start_game():
 func _on_turn_start(turn: int):
 	var player: Player = players[turn]
 	var id = player.id
-	for peer in multiplayer.get_peers(): # Does not include the server
-		board.set_is_my_turn.rpc_id(peer, id == peer)
-	board.set_is_my_turn.rpc_id(1, id == multiplayer.get_unique_id())
+	#for peer in multiplayer.get_peers(): # Does not include the server
+		#board.set_is_my_turn.rpc_id(peer, id == peer)
+	#board.set_is_my_turn.rpc_id(1, id == multiplayer.get_unique_id())
 	
 	player.node.set_outline.rpc(true)
 	match game_state:
