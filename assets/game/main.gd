@@ -60,6 +60,9 @@ func _on_player_join(_id: int):
 
 #func _input(event: InputEvent) -> void:
 
+func buy(requester: int, structure: Board.Structure) -> bool:
+	return true
+
 func _process_dice(dice: Array[int]):
 	var value: int = dice[0] + dice[1]
 	for tile in board.tiles:
@@ -85,23 +88,15 @@ func _press_dice_request() -> void:
 		await get_tree().create_timer(dice_delay).timeout
 	_process_dice(dice)
 
-var colors = [
-	Color.ORANGE_RED,
-	Color.LAWN_GREEN,
-	Color.DEEP_SKY_BLUE,
-]
-
 func start_game():
 	if !multiplayer.is_server(): return
 	start_button.hide()
-	var counter = 1
-	for p in player_list.get_children():
+	for p: NetworkPlayer in player_list.get_children():
 		var player = Player.new()
 		player.node = p
 		player.id = p.name
-		player.name = "Player " + str(counter)
-		counter += 1
-		player.color = colors[randi_range(0,colors.size()-1)]
+		player.name = p.player_name
+		player.color = p.player_color
 		players.append(player)
 	# connect board server-side signals
 	board.on_settlement_built.connect(_on_settlement_built)
@@ -115,9 +110,6 @@ func start_game():
 func _on_turn_start(turn: int):
 	var player: Player = players[turn]
 	var id = player.id
-	#for peer in multiplayer.get_peers(): # Does not include the server
-		#board.set_is_my_turn.rpc_id(peer, id == peer)
-	#board.set_is_my_turn.rpc_id(1, id == multiplayer.get_unique_id())
 	
 	player.node.set_outline.rpc(true)
 	match game_state:

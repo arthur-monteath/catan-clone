@@ -42,7 +42,7 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fu4a"]
-bg_color = Color(0.06937886, 0.13257176, 0.24099618, 1)
+bg_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -352,6 +352,7 @@ layout_mode = 2
 theme = ExtResource("8_0fu4a")
 text = "MessageBox"
 label_settings = SubResource("LabelSettings_n5fxh")
+horizontal_alignment = 1
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://by1q5dsk0j4se")

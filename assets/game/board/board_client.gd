@@ -1,7 +1,7 @@
 class_name BoardClient
 extends Node2D
 
-#@onready var main: Main = get_tree().current_scene
+@onready var main: Main = get_tree().current_scene
 @onready var board: Board = get_parent()
 @export var textures: Dictionary[Board.TileType, Texture2D]
 
@@ -16,10 +16,18 @@ const ROAD: PackedScene = preload("uid://be4lgt7hs4inj")
 		#if p.id == multiplayer.get_unique_id():
 			#player = p
 
-@onready var action_ui: Control = $"../CanvasLayer/ActionUI" # TODO: Figure out where to go with this
+var points: Array[Vector2]
+var edges: Array[Vector2]
+var edge_lines: Dictionary[Vector2, Array]
+
+var roads: Dictionary[Vector2, Dictionary]
+var settlements: Dictionary[Vector2, Dictionary]
+
+@onready var action_ui: Control = $"../../RootUI/ActionUI" # TODO: Figure out where to go with this
 var is_my_turn: bool = false
 @rpc("authority", "reliable", "call_local")
 func set_is_my_turn(value: bool):
+	print("set is ", value)
 	is_my_turn = value
 	action_ui.visible = value
 	if !value: build_mode = false
@@ -33,6 +41,17 @@ func propagate_map(tile_types, number_tokens):
 		
 		var pos = board.get_hex_position(i)
 		t.global_position = pos
+		
+		for point in board.get_points(pos):
+			points.append(point)
+		
+		var edge_dict = board.get_edge_lines(pos)
+		for edge in edge_dict.keys():
+			if not edges.has(edge):
+				edge_lines[edge] = edge_dict[edge]
+				edges.append(edge)
+			#else:
+				#edges[edge].append(t)
 		
 		add_child(t)
 
@@ -50,6 +69,7 @@ func place_settlement(pos: Vector2, info: Dictionary):
 	settlement.position = pos
 	var sprite: Sprite2D = settlement.get_node("Sprite2D")
 	sprite.self_modulate = info.color
+	settlements[pos] = info
 	add_child(settlement)
 
 @rpc("authority", "reliable", "call_local")
@@ -58,6 +78,7 @@ func place_road(pos: Vector2, info: Dictionary):
 	road.position = pos
 	var sprite: Sprite2D = road.get_node("Sprite2D")
 	sprite.self_modulate = info.color
+	roads[pos] = info
 	add_child(road)
 #endregion
 
@@ -69,34 +90,40 @@ var build_mode: bool = false
 func _unhandled_input(_event: InputEvent) -> void:
 	if !is_my_turn: return
 	var mouse = get_global_mouse_position()
-	#match main.game_state:
-		#Main.State.FIRST_SETTLEMENT or Main.State.SECOND_SETTLEMENT:
-			#if selected_structure == Structure.SETTLEMENT:
-				#preview_pos = get_point(mouse)
-			#else: preview_pos = get_edge(mouse)
-			#if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
-				#request_structure(preview_pos, selected_structure)
-		#Main.State.BUILDING:
-			#if build_mode:
-				#if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
-					#settlements.set(get_point(mouse), main.turn)
-					#roads.set(get_edge(mouse), main.turn)
+	match main.game_state:
+		Main.State.FIRST_SETTLEMENT:
+			if selected_structure == Board.Structure.SETTLEMENT:
+				preview_pos = board.get_point(mouse)
+			else: preview_pos = board.get_edge(mouse)
+			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
+				request_structure(preview_pos, selected_structure)
+		Main.State.BUILDING:
+			if build_mode:
+				if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
+					settlements.set(board.get_point(mouse), main.turn)
+					roads.set(board.get_edge(mouse), main.turn)
 	queue_redraw()
 
-#func _draw() -> void:
-	#if edge_lines.has(preview_pos):
-		#var line = edge_lines[preview_pos]
-		#if line != null:
-			#draw_line(line[0], line[1], color, 4)
-			#
-	#if points.has(preview_pos):
-		#draw_circle(preview_pos, 8, color)
-	#
-	#for road in roads:
-		#draw_line(edge_lines[road][0], edge_lines[road][1], color, 4) #main.players[roads[road]].color
-	#
+func _draw() -> void:
+	
+	if edges.has(preview_pos):
+		var color = NetworkHandler.get_player_color()
+		var line = edge_lines[preview_pos]
+		if line != null:
+			draw_line(line[0], line[1], color, 4)
+			
+	if points.has(preview_pos):
+		var color = NetworkHandler.get_player_color()
+		draw_circle(preview_pos, 8, color)
+	
+#region Debug
+	for road in roads:
+		var color = NetworkHandler.get_player_color()
+		draw_line(edge_lines[road][0], edge_lines[road][1], color, 4) #main.players[roads[road]].color
+	
 	#for settlement in settlements:
 		#draw_circle(settlement, 8, settlements[settlement].color, true)
+#endregion
 
 func _on_build_button_pressed() -> void:
 	build_mode = !build_mode

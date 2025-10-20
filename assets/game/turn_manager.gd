@@ -21,6 +21,10 @@ func _process(_delta: float) -> void:
 	if timer:
 		turn_bar.value = time_left / wait_time
 
+func is_my_turn(id: int) -> bool:
+	if !multiplayer.is_server(): return false
+	return id == main.players[turn].id
+
 func start_turn():
 	if !multiplayer.is_server(): return
 	emit_signal("on_turn_start", turn)

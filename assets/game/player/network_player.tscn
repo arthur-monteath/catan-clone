@@ -45,7 +45,6 @@ theme = ExtResource("1_txluh")
 
 [node name="Outline" type="PanelContainer" parent="Panel"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme = ExtResource("1_txluh")
 theme_override_styles/panel = SubResource("StyleBoxFlat_fesle")
@@ -75,7 +74,6 @@ expand_mode = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_txluh")
-text = "thucatrindade1"
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Panel"]
 root_path = NodePath("../Outline")

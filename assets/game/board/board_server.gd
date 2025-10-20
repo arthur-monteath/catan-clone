@@ -24,10 +24,22 @@ var _settlements: Dictionary[Vector2, Dictionary]:
 #	id: int
 #	color: Color
 
+@onready var turn_manager: TurnManager = %TurnManager
+
+var is_my_turn: bool = false
+func _ready() -> void:
+	if multiplayer.is_server():
+		turn_manager.on_turn_start.connect(_set_turn)
+
+func _set_turn(_turn):
+	for peer in multiplayer.get_peers():
+		client.set_is_my_turn.rpc_id(peer, turn_manager.is_my_turn(peer))
+	client.set_is_my_turn.rpc_id(1, turn_manager.is_my_turn(multiplayer.get_unique_id()))
+
 func generate_map() -> void:
 	if !multiplayer.is_server(): return
 	
-	var tile_types: Array = []
+	var tile_types: Array[TileType] = []
 	for type in tileAmounts:
 		for _i in range(tileAmounts[type]):
 			tile_types.append(int(type))
@@ -38,10 +50,25 @@ func generate_map() -> void:
 	number_tokens.append_array(range(3,12))
 	number_tokens.shuffle()
 	
-	for type in tile_types:
-		var t = Tile.new()
-		t.type = type
+	for i in range(0, len(tile_types)):
+		var t: Tile = Tile.new()
+		t.type = tile_types[i]
 		_tiles.append(t)
+		
+		var pos = get_hex_position(i)
+		t.pos = pos
+	
+		for point in get_points(pos):
+			_points.append(point)
+		
+		var edge_dict = get_edge_lines(pos)
+		for edge in edge_dict.keys():
+			if not _edges.has(edge):
+				_edge_lines[edge] = edge_dict[edge]
+				_edges[edge] = [_tiles[i]]
+				_tiles[i].edges.append(edge)
+			else:
+				_edges[edge].append(_tiles[i])
 	
 	client.propagate_map.rpc(tile_types, number_tokens)
 
@@ -76,16 +103,8 @@ var tileAmounts: Dictionary[TileType, int] = {
 class Tile:
 	var node: Node2D
 	var type: TileType
-	var pos: Vector2:
-		get: return pos
-		set(value):
-			node.global_position = value
-			pos = value
-	var number: int:
-		get: return number
-		set(value):
-			node.get_node("Number").text = String.num_int64(value)
-			number = value
+	var pos: Vector2
+	var number: int
 	var edges: Array[Vector2]
 #endregion
 
@@ -205,9 +224,9 @@ func get_point(pos: Vector2, max_dist: float = 20.0) -> Vector2:
 	if found_point: return found_point
 	return Vector2.INF
 
-func get_edge_lines(tile: Tile) -> Dictionary[Vector2, Array]:
+func get_edge_lines(pos: Vector2) -> Dictionary[Vector2, Array]:
 	var e: Dictionary[Vector2, Array]
-	var p = get_points(tile.pos)
+	var p = get_points(pos)
 	
 	for i in range(p.size()):
 		var a: Vector2 = p[i]
