@@ -62,6 +62,7 @@ custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 theme = ExtResource("1_cbfqa")
 color = Color(1, 1, 1, 1)
+edit_intensity = false
 
 [connection signal="pressed" from="VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]

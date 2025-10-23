@@ -100,6 +100,8 @@ var tileAmounts: Dictionary[TileType, int] = {
 	TileType.DESERT: 1,
 }
 
+# TODO - MAKE KEYS RELIABLE THROUGH Vector2i
+
 class Tile:
 	var node: Node2D
 	var type: TileType

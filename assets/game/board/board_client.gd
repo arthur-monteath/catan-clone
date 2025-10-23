@@ -27,7 +27,6 @@ var settlements: Dictionary[Vector2, Dictionary]
 var is_my_turn: bool = false
 @rpc("authority", "reliable", "call_local")
 func set_is_my_turn(value: bool):
-	print("set is ", value)
 	is_my_turn = value
 	action_ui.visible = value
 	if !value: build_mode = false
@@ -90,8 +89,10 @@ var build_mode: bool = false
 func _unhandled_input(_event: InputEvent) -> void:
 	if !is_my_turn: return
 	var mouse = get_global_mouse_position()
+	print("state: ", main.game_state)
 	match main.game_state:
 		Main.State.FIRST_SETTLEMENT:
+			print("selection")
 			if selected_structure == Board.Structure.SETTLEMENT:
 				preview_pos = board.get_point(mouse)
 			else: preview_pos = board.get_edge(mouse)
@@ -105,16 +106,15 @@ func _unhandled_input(_event: InputEvent) -> void:
 	queue_redraw()
 
 func _draw() -> void:
-	
 	if edges.has(preview_pos):
 		var color = NetworkHandler.get_player_color()
 		var line = edge_lines[preview_pos]
 		if line != null:
-			draw_line(line[0], line[1], color, 4)
+			draw_line(line[0], line[1], color, 2)
 			
 	if points.has(preview_pos):
-		var color = NetworkHandler.get_player_color()
-		draw_circle(preview_pos, 8, color)
+		#var color = NetworkHandler.get_player_color()
+		draw_circle(preview_pos, 4, Color.WHITE)
 	
 #region Debug
 	for road in roads:

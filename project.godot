@@ -18,6 +18,7 @@ config/icon="res://assets/icon.svg"
 [autoload]
 
 NetworkHandler="*res://network_handler.gd"
+Shaker="*res://addons/shaker/src/Shaker.gd"
 
 [display]
 
@@ -26,7 +27,7 @@ window/stretch/mode="viewport"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
+enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg", "res://addons/shaker/plugin.cfg")
 
 [global_group]
 

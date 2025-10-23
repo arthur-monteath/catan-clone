@@ -46,3 +46,7 @@ func end_turn():
 				turn_increment = 1
 				turn = 0
 	start_turn()
+
+
+func _on_end_turn_pressed() -> void:
+	end_turn()

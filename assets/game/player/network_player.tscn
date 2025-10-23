@@ -45,6 +45,7 @@ theme = ExtResource("1_txluh")
 
 [node name="Outline" type="PanelContainer" parent="Panel"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme = ExtResource("1_txluh")
 theme_override_styles/panel = SubResource("StyleBoxFlat_fesle")

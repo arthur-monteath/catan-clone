@@ -1,9 +1,113 @@
-[gd_scene load_steps=2 format=3 uid="uid://be4lgt7hs4inj"]
+[gd_scene load_steps=17 format=3 uid="uid://be4lgt7hs4inj"]
 
 [ext_resource type="Texture2D" uid="uid://dg30mxsxddq1i" path="res://assets/game/structures/settlement.png" id="1_0mwnw"]
+[ext_resource type="Script" uid="uid://be8cxug0qewuf" path="res://addons/shaker/src/Vector2/shaker_component2D.gd" id="2_afnu1"]
+[ext_resource type="Script" uid="uid://b5xe0r01pq405" path="res://addons/shaker/data/Vector2/BaseShakerType2D.gd" id="2_mjsu1"]
+[ext_resource type="Script" uid="uid://dvq271w1r8fr2" path="res://addons/shaker/data/Single/BaseShakerType1D.gd" id="3_yvabg"]
+[ext_resource type="Script" uid="uid://d2isay3vvq3on" path="res://addons/shaker/data/Vector2/ShakerTypeSineWave2D.gd" id="4_5kwsq"]
+[ext_resource type="Script" uid="uid://bdcxjnn815gah" path="res://addons/shaker/data/Vector2/ShakerTypeCurve2D.gd" id="5_sjo0g"]
+[ext_resource type="Script" uid="uid://tmac7isln8xf" path="res://addons/shaker/data/Vector2/ShakerPreset2D.gd" id="6_k3bgg"]
+[ext_resource type="Texture2D" uid="uid://d4nhhqjglkno1" path="res://assets/game/smoke.png" id="8_yvabg"]
+[ext_resource type="Script" uid="uid://bqu2ijmnk0wic" path="res://assets/game/structures/auto_play_particle.gd" id="9_5kwsq"]
+
+[sub_resource type="Curve" id="Curve_yvabg"]
+_data = [Vector2(0, 1), 0.0, 0.03068685, 0, 0, Vector2(1, 0), -3.0735958, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5kwsq"]
+curve = SubResource("Curve_yvabg")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yvabg"]
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+angle_min = -360.0
+angle_max = 360.00003
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 70.0
+initial_velocity_max = 90.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.2351742e-06
+linear_accel_max = -2.2351742e-06
+damping_min = 1.0
+damping_max = 1.0
+scale_min = 0.25
+scale_max = 0.79999995
+scale_curve = SubResource("CurveTexture_5kwsq")
+hue_variation_min = -2.2351742e-08
+hue_variation_max = -2.2351742e-08
+
+[sub_resource type="Resource" id="Resource_8ylxx"]
+script = ExtResource("4_5kwsq")
+phase = Vector2(2.5, 1)
+fade_out = 8.8766144e-05
+metadata/_custom_type_script = "uid://d2isay3vvq3on"
+
+[sub_resource type="Curve" id="Curve_8c3od"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_w0pdi"]
+script = ExtResource("5_sjo0g")
+curve_x = SubResource("Curve_8c3od")
+curve_y = SubResource("Curve_8c3od")
+loop = false
+amplitude = Vector2(0.5, 0.5)
+fade_out = 0.40342173
+metadata/_custom_type_script = "uid://bdcxjnn815gah"
+
+[sub_resource type="Resource" id="Resource_yg8pk"]
+script = ExtResource("6_k3bgg")
+ScaleShake = Array[ExtResource("2_mjsu1")]([SubResource("Resource_8ylxx"), SubResource("Resource_w0pdi")])
+metadata/_custom_type_script = "uid://tmac7isln8xf"
 
 [node name="Settlement" type="Node2D"]
+position = Vector2(-1.1920929e-07, -5.9604645e-08)
+scale = Vector2(1.000003, 0.99999934)
+
+[node name="Particles" type="GPUParticles2D" parent="."]
+texture_filter = 1
+emitting = false
+amount = 16
+texture = ExtResource("8_yvabg")
+lifetime = 0.35000000000000003
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_yvabg")
+script = ExtResource("9_5kwsq")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("1_0mwnw")
+metadata/_aseprite_wizard_interface_config_ = {
+"layer_section": false,
+"pending_changes": {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"scale": "1.0",
+"slice": "",
+"source": "",
+"source_uid": -1
+}
+}
+
+[node name="ShakerComponent2D" type="Node2D" parent="."]
+script = ExtResource("2_afnu1")
+AutoPlay = true
+duration = 0.2
+fade_in = 1e-05
+fade_out = 0.19484055
+shakerPreset = SubResource("Resource_yg8pk")
+metadata/_custom_type_script = "uid://be8cxug0qewuf"
+
+[connection signal="shake_finished" from="ShakerComponent2D" to="Particles" method="start"]
