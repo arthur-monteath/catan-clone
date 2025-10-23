@@ -7,7 +7,7 @@ extends Node2D
 
 const TILE: PackedScene = preload("uid://dtvr5obijngj")
 const SETTLEMENT: PackedScene = preload("uid://be4lgt7hs4inj")
-const ROAD: PackedScene = preload("uid://be4lgt7hs4inj")
+const ROAD: PackedScene = preload("uid://ltem0vjldnni")
 
 #var player: Main.Player
 #@rpc("authority", "reliable", "call_local")
@@ -75,13 +75,15 @@ func place_settlement(pos: Vector2, info: Dictionary):
 func place_road(pos: Vector2, info: Dictionary):
 	var road = ROAD.instantiate()
 	road.position = pos
-	var sprite: Sprite2D = road.get_node("Sprite2D")
-	sprite.self_modulate = info.color
+	var line: Line2D = road.get_node("Line2D")
+	line.add_point(edge_lines[pos][0] - road.global_position,0)
+	line.add_point(edge_lines[pos][1] - road.global_position,1)
+	line.self_modulate = info.color
 	roads[pos] = info
 	add_child(road)
 #endregion
 
-var selected_structure: Board.Structure = Board.Structure.SETTLEMENT
+var selected_structure: Board.Structure = Board.Structure.ROAD
 #endregion
 
 var preview_pos: Vector2 = Vector2.INF
@@ -95,7 +97,7 @@ func _unhandled_input(_event: InputEvent) -> void:
 			print("selection")
 			if selected_structure == Board.Structure.SETTLEMENT:
 				preview_pos = board.get_point(mouse)
-			else: preview_pos = board.get_edge(mouse)
+			elif selected_structure == Board.Structure.ROAD: preview_pos = board.get_edge(mouse)
 			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
 				request_structure(preview_pos, selected_structure)
 		Main.State.BUILDING:
