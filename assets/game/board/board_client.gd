@@ -76,8 +76,12 @@ func place_road(pos: Vector2, info: Dictionary):
 	var road = ROAD.instantiate()
 	road.position = pos
 	var line: Line2D = road.get_node("Line2D")
-	line.add_point(edge_lines[pos][0] - road.global_position,0)
-	line.add_point(edge_lines[pos][1] - road.global_position,1)
+	var point1: Vector2 = edge_lines[pos][0] - road.global_position
+	var point2: Vector2 = edge_lines[pos][1] - road.global_position
+	var point3: Vector2 = point1 + (point2 - point1).normalized() * 12
+	var point4: Vector2 = point2 + (point1 - point2).normalized() * 12
+	line.add_point(point3, 0)
+	line.add_point(point4, 1)
 	line.self_modulate = info.color
 	roads[pos] = info
 	add_child(road)
@@ -95,45 +99,84 @@ var build_mode: bool = false
 func _unhandled_input(_event: InputEvent) -> void:
 	if !is_my_turn: return
 	var mouse = get_global_mouse_position()
+	#print("This is me, id ", multiplayer.get_unique_id(), " with the state ", main.game_state)
 	match main.game_state:
 		Main.State.FIRST_SETTLEMENT:
 			if selected_structure == Board.Structure.SETTLEMENT:
-				preview_pos = board.get_point(mouse)
-			elif selected_structure == Board.Structure.ROAD: preview_pos = board.get_edge(mouse)
+				preview_pos = get_point(mouse)
+			elif selected_structure == Board.Structure.ROAD: preview_pos = get_edge(mouse)
 			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
 				request_structure(preview_pos, selected_structure)
 		Main.State.SECOND_SETTLEMENT:
 			if selected_structure == Board.Structure.SETTLEMENT:
-				preview_pos = board.get_point(mouse)
-			elif selected_structure == Board.Structure.ROAD: preview_pos = board.get_edge(mouse)
+				preview_pos = get_point(mouse)
+			elif selected_structure == Board.Structure.ROAD: preview_pos = get_edge(mouse)
 			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
 				request_structure(preview_pos, selected_structure)
 		Main.State.BUILDING:
 			if build_mode:
 				if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
-					settlements.set(board.get_point(mouse), main.turn)
-					roads.set(board.get_edge(mouse), main.turn)
+					settlements.set(get_point(mouse), main.turn)
+					roads.set(get_edge(mouse), main.turn)
 	queue_redraw()
 
 func _draw() -> void:
+	#region Structure Preview
 	if edges.has(preview_pos):
 		var color = NetworkHandler.get_player_color()
 		var line = edge_lines[preview_pos]
+		var point1: Vector2 = line[0]
+		var point2: Vector2 = line[1]
+		var point3: Vector2 = point1 + (point2 - point1).normalized() * 12
+		var point4: Vector2 = point2 + (point1 - point2).normalized() * 12
 		if line != null:
-			draw_line(line[0], line[1], color, 2)
+			draw_line(point3, point4, color, 2)
 			
 	if points.has(preview_pos):
 		#var color = NetworkHandler.get_player_color()
 		draw_circle(preview_pos, 4, Color.WHITE)
+	#endregion
 	
-#region Debug
+	#region Debug
 	#for road in roads:
 		#var color = NetworkHandler.get_player_color()
 		#draw_line(edge_lines[road][0], edge_lines[road][1], color, 4) #main.players[roads[road]].color
 	
 	#for settlement in settlements:
 		#draw_circle(settlement, 8, settlements[settlement].color, true)
+	
+	#var point1: Vector2 = Vector2(-64,64)
+	#var point2: Vector2 = Vector2(64,-64)
+	#var point3 = point1 + (point2 - point1).normalized() * 12
+	#var point4 = point2 + (point1 - point2).normalized() * 12
+	#draw_line(point3, point4, Color.RED, 4)
+	#draw_circle(point1, 2, Color.RED)
+	#draw_circle(point2, 2, Color.RED)
 #endregion
+
+func get_point(pos: Vector2, max_dist: float = 20.0) -> Vector2:
+	var lowest_distance = INF
+	var found_point: Vector2
+	for point: Vector2 in points:
+		var dist = pos.distance_to(point)
+		if dist < lowest_distance:
+			lowest_distance = dist
+			found_point = point
+	if lowest_distance > max_dist: return Vector2.INF
+	if found_point: return found_point
+	return Vector2.INF
+
+func get_edge(pos: Vector2) -> Vector2:
+	var lowest_distance = INF
+	var found_edge: Vector2
+	for edge: Vector2 in edges:
+		var dist = pos.distance_to(edge)
+		if dist < lowest_distance:
+			lowest_distance = dist
+			found_edge = edge
+	if lowest_distance > 12: return Vector2.INF
+	if found_edge: return found_edge
+	return Vector2.INF
 
 func _on_build_button_pressed() -> void:
 	build_mode = !build_mode

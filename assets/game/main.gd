@@ -9,10 +9,7 @@ enum State {
 	BUILDING,
 }
 
-@export var game_state: State = State.LOBBY:
-	get: return game_state
-	set(new_state): if multiplayer.is_server(): game_state = new_state
-	
+@export var game_state: State = State.LOBBY
 
 enum Res {
 	ORE,

@@ -337,6 +337,7 @@ offset_right = 48.5
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 theme = ExtResource("8_0fu4a")
 
 [node name="MarginContainer" type="MarginContainer" parent="RootUI/MessageBox/PanelContainer"]

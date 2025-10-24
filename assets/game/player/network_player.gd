@@ -15,7 +15,7 @@ func _enter_tree() -> void:
 #func _ready():
 	#print("(READY)Player ID: ", multiplayer.get_unique_id(), " | name: ", player_name, " color: ", player_color)
 
-@rpc("authority", "reliable", "call_local")
+@rpc("any_peer", "reliable", "call_local")
 func setup_player_info(new_name: String, color: Color) -> void:
 	player_name = new_name
 	get_node("%PlayerLabel").text = new_name
