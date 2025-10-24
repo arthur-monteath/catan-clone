@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6mvlxpwik28m"
-path="res://.godot/imported/desert.png-04d5bf3440fe70500e8903c64f384bc7.ctex"
+uid="uid://dpo1tsm4hi7rh"
+path="res://.godot/imported/ore.png-73fd250cbf5ed6bd6a7f47387ad572e2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/art/desert.png"
-dest_files=["res://.godot/imported/desert.png-04d5bf3440fe70500e8903c64f384bc7.ctex"]
+source_file="res://assets/game/board/tiles/art/ore.png"
+dest_files=["res://.godot/imported/ore.png-73fd250cbf5ed6bd6a7f47387ad572e2.ctex"]
 
 [params]
 

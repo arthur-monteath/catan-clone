@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://cwv4tga2lnu8k"]
 
 [ext_resource type="Script" uid="uid://colmkt7p7em8a" path="res://assets/game/ui/resources/resources_ui.gd" id="1_by3tl"]
-[ext_resource type="Texture2D" uid="uid://dpo1tsm4hi7rh" path="res://assets/tiles/art/ore.png" id="2_e5lbv"]
-[ext_resource type="Texture2D" uid="uid://34ej43vr0l7h" path="res://assets/tiles/art/lumber.png" id="2_syfbg"]
-[ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/tiles/art/grain.png" id="3_fc5qo"]
-[ext_resource type="Texture2D" uid="uid://o18pbrdgyip2" path="res://assets/tiles/art/brick.png" id="5_nq8qt"]
-[ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://assets/tiles/art/wool.png" id="6_fc5qo"]
+[ext_resource type="Texture2D" uid="uid://dpo1tsm4hi7rh" path="res://assets/game/board/tiles/art/ore.png" id="2_e5lbv"]
+[ext_resource type="Texture2D" uid="uid://34ej43vr0l7h" path="res://assets/game/board/tiles/art/lumber.png" id="2_syfbg"]
+[ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/game/board/tiles/art/grain.png" id="3_fc5qo"]
+[ext_resource type="Texture2D" uid="uid://o18pbrdgyip2" path="res://assets/game/board/tiles/art/brick.png" id="5_nq8qt"]
+[ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://assets/game/board/tiles/art/wool.png" id="6_fc5qo"]
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="7_pkrj0"]
 
 [node name="Resources" type="Control"]

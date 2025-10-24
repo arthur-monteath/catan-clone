@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://34ej43vr0l7h"
-path="res://.godot/imported/lumber.png-1b61244f2ae744837698573797c7b947.ctex"
+uid="uid://b6mvlxpwik28m"
+path="res://.godot/imported/desert.png-b85a8ae10d65cecdf7dae6c16da74069.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/art/lumber.png"
-dest_files=["res://.godot/imported/lumber.png-1b61244f2ae744837698573797c7b947.ctex"]
+source_file="res://assets/game/board/tiles/art/desert.png"
+dest_files=["res://.godot/imported/desert.png-b85a8ae10d65cecdf7dae6c16da74069.ctex"]
 
 [params]
 

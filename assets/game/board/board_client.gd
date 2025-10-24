@@ -3,6 +3,7 @@ extends Node2D
 
 @onready var main: Main = get_tree().current_scene
 @onready var board: Board = get_parent()
+@onready var robber: Node2D = %Robber
 @export var textures: Dictionary[Board.TileType, Texture2D]
 
 const TILE: PackedScene = preload("uid://dtvr5obijngj")
@@ -36,10 +37,15 @@ func propagate_map(tile_types, number_tokens):
 	for i in range(0, len(tile_types)):
 		var t = TILE.instantiate()
 		t.get_node("Hex").texture = textures[tile_types[i]]
-		t.get_node("Number").text = String.num_int64(number_tokens.pop_front())
 		
 		var pos = board.get_hex_position(i)
 		t.global_position = pos
+		
+		if tile_types[i] == Board.TileType.DESERT:
+			robber.position = t.global_position
+			robber.visible = true
+		else:
+			t.get_node("Number").text = String.num_int64(number_tokens.pop_front())
 		
 		for point in board.get_points(pos):
 			points.append(point)

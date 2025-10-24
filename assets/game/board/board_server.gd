@@ -47,7 +47,9 @@ func generate_map() -> void:
 	
 	var number_tokens: Array[int] = []
 	number_tokens.append_array(range(2,13))
+	number_tokens.erase(7)
 	number_tokens.append_array(range(3,12))
+	number_tokens.erase(7)
 	number_tokens.shuffle()
 	
 	for i in range(0, len(tile_types)):

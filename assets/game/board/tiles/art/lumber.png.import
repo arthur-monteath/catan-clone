@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpyu3swdqn4k3"
-path="res://.godot/imported/wool.png-6a4e79cd0ecee8b5d7d20c2f5cad2d95.ctex"
+uid="uid://34ej43vr0l7h"
+path="res://.godot/imported/lumber.png-d557f05f15d5fb3e47996e4837521108.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/art/wool.png"
-dest_files=["res://.godot/imported/wool.png-6a4e79cd0ecee8b5d7d20c2f5cad2d95.ctex"]
+source_file="res://assets/game/board/tiles/art/lumber.png"
+dest_files=["res://.godot/imported/lumber.png-d557f05f15d5fb3e47996e4837521108.ctex"]
 
 [params]
 

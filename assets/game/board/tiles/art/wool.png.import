@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpo1tsm4hi7rh"
-path="res://.godot/imported/ore.png-3a7675c3cfec11b28352b02c595c4815.ctex"
+uid="uid://cpyu3swdqn4k3"
+path="res://.godot/imported/wool.png-a4dce7d0c121557b14a369b00788b431.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/art/ore.png"
-dest_files=["res://.godot/imported/ore.png-3a7675c3cfec11b28352b02c595c4815.ctex"]
+source_file="res://assets/game/board/tiles/art/wool.png"
+dest_files=["res://.godot/imported/wool.png-a4dce7d0c121557b14a369b00788b431.ctex"]
 
 [params]
 

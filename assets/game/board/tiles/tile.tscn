@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dtvr5obijngj"]
 
-[ext_resource type="Script" uid="uid://c550qcbfp3yii" path="res://assets/tiles/tile.gd" id="1_iwhfu"]
-[ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/tiles/art/desert.png" id="2_1ne16"]
+[ext_resource type="Script" uid="uid://c550qcbfp3yii" path="res://assets/game/board/tiles/tile.gd" id="1_iwhfu"]
+[ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/game/board/tiles/art/desert.png" id="2_1ne16"]
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="3_obqv1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_iwhfu"]
@@ -38,7 +38,6 @@ grow_vertical = 2
 rotation = -1.5707964
 size_flags_horizontal = 0
 size_flags_vertical = 8
-text = "0"
 label_settings = SubResource("LabelSettings_iwhfu")
 horizontal_alignment = 1
 vertical_alignment = 1

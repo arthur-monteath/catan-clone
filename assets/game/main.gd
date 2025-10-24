@@ -163,7 +163,6 @@ func _on_turn_start(turn: int):
 				"dice_enabled": true
 			})
 			root_ui.set_player_specific_ui.rpc({
-				"message": "The setup phase is done!\nMay the games begin!",
 				"dice_visible": true
 			})
 

@@ -44,6 +44,9 @@ func end_turn():
 				turn = len(main.players)-1
 			Main.State.SECOND_SETTLEMENT:
 				main.game_state = Main.State.ROLLING
+				main.root_ui.set_player_specific_ui.rpc({
+					"message": "The setup phase is done!\nMay the games begin!",
+				})
 				turn_increment = 1
 				turn = 0
 			_:
