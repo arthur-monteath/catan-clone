@@ -380,6 +380,6 @@ replication_config = SubResource("SceneReplicationConfig_h4r37")
 
 [connection signal="pressed" from="RootUI/DiceArea/DiceButton" to="." method="_on_dice_button_pressed"]
 [connection signal="pressed" from="RootUI/StartButton" to="." method="start_game"]
-[connection signal="pressed" from="RootUI/ActionUI/PanelContainer/MarginContainer/VBoxContainer/BuildButton" to="Board" method="_on_build_button_pressed"]
+[connection signal="pressed" from="RootUI/ActionUI/PanelContainer/MarginContainer/VBoxContainer/BuildButton" to="Board/BoardClient" method="_on_build_button_pressed"]
 [connection signal="gui_input" from="RootUI/MessageBox" to="RootUI" method="_on_message_box_gui_input"]
 [connection signal="pressed" from="RootUI/Button" to="TurnManager" method="_on_end_turn_pressed"]
