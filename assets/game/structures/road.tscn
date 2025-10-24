@@ -1,8 +1,88 @@
-[gd_scene load_steps=2 format=3 uid="uid://ltem0vjldnni"]
+[gd_scene load_steps=17 format=3 uid="uid://ltem0vjldnni"]
 
 [ext_resource type="Texture2D" uid="uid://dolrfcws1hupa" path="res://assets/game/structures/road.png" id="1_ddock"]
+[ext_resource type="Texture2D" uid="uid://d4nhhqjglkno1" path="res://assets/game/smoke.png" id="1_p0ctb"]
+[ext_resource type="Script" uid="uid://bqu2ijmnk0wic" path="res://assets/game/structures/auto_play_particle.gd" id="2_e1gft"]
+[ext_resource type="Script" uid="uid://be8cxug0qewuf" path="res://addons/shaker/src/Vector2/shaker_component2D.gd" id="3_akn7h"]
+[ext_resource type="Script" uid="uid://b5xe0r01pq405" path="res://addons/shaker/data/Vector2/BaseShakerType2D.gd" id="4_rcwq3"]
+[ext_resource type="Script" uid="uid://dvq271w1r8fr2" path="res://addons/shaker/data/Single/BaseShakerType1D.gd" id="5_cfdg6"]
+[ext_resource type="Script" uid="uid://d2isay3vvq3on" path="res://addons/shaker/data/Vector2/ShakerTypeSineWave2D.gd" id="6_t0inl"]
+[ext_resource type="Script" uid="uid://bdcxjnn815gah" path="res://addons/shaker/data/Vector2/ShakerTypeCurve2D.gd" id="7_ydqto"]
+[ext_resource type="Script" uid="uid://tmac7isln8xf" path="res://addons/shaker/data/Vector2/ShakerPreset2D.gd" id="8_2xkhl"]
+
+[sub_resource type="Curve" id="Curve_bcy8e"]
+_data = [Vector2(0, 1), 0.0, 0.03068685, 0, 0, Vector2(1, 0), -3.0735958, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5kwsq"]
+curve = SubResource("Curve_bcy8e")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_chtub"]
+particle_flag_disable_z = true
+particle_flag_damping_as_friction = true
+angle_min = -360.0
+angle_max = 360.00003
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 70.0
+initial_velocity_max = 90.0
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -2.2351742e-06
+linear_accel_max = -2.2351742e-06
+damping_min = 1.0
+damping_max = 1.0
+scale_min = 0.25
+scale_max = 0.79999995
+scale_curve = SubResource("CurveTexture_5kwsq")
+hue_variation_min = -2.2351742e-08
+hue_variation_max = -2.2351742e-08
+
+[sub_resource type="Resource" id="Resource_8ylxx"]
+script = ExtResource("6_t0inl")
+phase = Vector2(2.5, 1)
+fade_out = 8.8766144e-05
+metadata/_custom_type_script = "uid://d2isay3vvq3on"
+
+[sub_resource type="Curve" id="Curve_8c3od"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Resource" id="Resource_w0pdi"]
+script = ExtResource("7_ydqto")
+curve_x = SubResource("Curve_8c3od")
+curve_y = SubResource("Curve_8c3od")
+loop = false
+amplitude = Vector2(0.5, 0.5)
+fade_out = 0.40342173
+metadata/_custom_type_script = "uid://bdcxjnn815gah"
+
+[sub_resource type="Resource" id="Resource_pt1rq"]
+script = ExtResource("8_2xkhl")
+ScaleShake = Array[ExtResource("4_rcwq3")]([SubResource("Resource_8ylxx"), SubResource("Resource_w0pdi")])
+metadata/_custom_type_script = "uid://tmac7isln8xf"
 
 [node name="Road" type="Node2D"]
+scale = Vector2(0.9999996, 1.0000013)
+
+[node name="Particles" type="GPUParticles2D" parent="."]
+texture_filter = 1
+emitting = false
+amount = 16
+texture = ExtResource("1_p0ctb")
+lifetime = 0.35000000000000003
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_chtub")
+script = ExtResource("2_e1gft")
+
+[node name="ShakerComponent2D" type="Node2D" parent="."]
+script = ExtResource("3_akn7h")
+AutoPlay = true
+duration = 0.2
+fade_in = 1e-05
+fade_out = 0.19484055
+shakerPreset = SubResource("Resource_pt1rq")
+metadata/_custom_type_script = "uid://be8cxug0qewuf"
 
 [node name="Line2D" type="Line2D" parent="."]
 texture_filter = 1
@@ -12,3 +92,5 @@ texture = ExtResource("1_ddock")
 texture_mode = 1
 begin_cap_mode = 1
 end_cap_mode = 1
+
+[connection signal="shake_finished" from="ShakerComponent2D" to="Particles" method="start"]

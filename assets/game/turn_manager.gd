@@ -28,7 +28,8 @@ func is_my_turn(id: int) -> bool:
 func start_turn():
 	if !multiplayer.is_server(): return
 	emit_signal("on_turn_start", turn)
-	start()
+	if not (main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT):
+		start()
 
 var turn_increment: int = 1
 func end_turn():

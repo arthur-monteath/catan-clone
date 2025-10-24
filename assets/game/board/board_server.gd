@@ -126,9 +126,9 @@ func request_road(pos: Vector2):
 		var requester = multiplayer.get_remote_sender_id()
 		var can_place: bool = _edges.has(pos) and !_roads.has(pos)
 		if can_place and main.buy(requester, Structure.ROAD):
-			var player_info = main.get_player_client_info_by_id(multiplayer.get_remote_sender_id())
+			var player_info = main.get_player_client_info_by_id(requester)
 			_set_road(pos, player_info)
-			emit_signal("on_road_built", pos)
+			emit_signal("on_road_built", pos, requester)
 
 @rpc("any_peer", "reliable", "call_local")
 func request_settlement(pos: Vector2):
@@ -137,9 +137,9 @@ func request_settlement(pos: Vector2):
 		#var free_settlement: bool = main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT
 		var can_place: bool = _points.has(pos) and !_settlements.has(pos)
 		if can_place and main.buy(requester, Structure.SETTLEMENT):
-			var player_info = main.get_player_client_info_by_id(multiplayer.get_remote_sender_id())
+			var player_info = main.get_player_client_info_by_id(requester)
 			_set_settlement(pos, player_info)
-			emit_signal("on_settlement_built", pos)
+			emit_signal("on_settlement_built", pos, requester)
 
 func _set_road(pos: Vector2, player: Dictionary):
 	var info = { "id": player.id, "color": player.color }
@@ -153,13 +153,13 @@ func _set_settlement(pos: Vector2, player: Dictionary):
 
 #endregion
 
-func get_resource_information(tile: Tile) -> Dictionary:
+func get_tile_resources(tile: Tile) -> Dictionary:
 	var resource_type: Main.Res = _tile_type_to_resource(tile.type)
 	if resource_type == null: return {}
 	var info = {}
 	for point in get_points(tile.pos):
 		if _settlements.has(point):
-			info[_settlements[point].id] = resource_type
+			info[_settlements[point].id] = { resource_type: 1 }
 	return info
 
 #region Hex Grid

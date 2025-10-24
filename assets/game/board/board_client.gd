@@ -83,7 +83,11 @@ func place_road(pos: Vector2, info: Dictionary):
 	add_child(road)
 #endregion
 
-var selected_structure: Board.Structure = Board.Structure.ROAD
+@rpc("authority", "reliable", "call_local")
+func set_client_selected_structure(structure: Board.Structure):
+	selected_structure = structure
+
+var selected_structure: Board.Structure = Board.Structure.SETTLEMENT
 #endregion
 
 var preview_pos: Vector2 = Vector2.INF
@@ -91,10 +95,14 @@ var build_mode: bool = false
 func _unhandled_input(_event: InputEvent) -> void:
 	if !is_my_turn: return
 	var mouse = get_global_mouse_position()
-	print("state: ", main.game_state)
 	match main.game_state:
 		Main.State.FIRST_SETTLEMENT:
-			print("selection")
+			if selected_structure == Board.Structure.SETTLEMENT:
+				preview_pos = board.get_point(mouse)
+			elif selected_structure == Board.Structure.ROAD: preview_pos = board.get_edge(mouse)
+			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
+				request_structure(preview_pos, selected_structure)
+		Main.State.SECOND_SETTLEMENT:
 			if selected_structure == Board.Structure.SETTLEMENT:
 				preview_pos = board.get_point(mouse)
 			elif selected_structure == Board.Structure.ROAD: preview_pos = board.get_edge(mouse)
@@ -119,9 +127,9 @@ func _draw() -> void:
 		draw_circle(preview_pos, 4, Color.WHITE)
 	
 #region Debug
-	for road in roads:
-		var color = NetworkHandler.get_player_color()
-		draw_line(edge_lines[road][0], edge_lines[road][1], color, 4) #main.players[roads[road]].color
+	#for road in roads:
+		#var color = NetworkHandler.get_player_color()
+		#draw_line(edge_lines[road][0], edge_lines[road][1], color, 4) #main.players[roads[road]].color
 	
 	#for settlement in settlements:
 		#draw_circle(settlement, 8, settlements[settlement].color, true)

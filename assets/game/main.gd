@@ -22,6 +22,11 @@ enum Res {
 	WOOL,
 }
 
+const STRUCTURE_COSTS: Dictionary[Board.Structure, Dictionary] = {
+	Board.Structure.SETTLEMENT: { Res.ORE: 2, Res.BRICK: 1 },
+	Board.Structure.ROAD: { Res.LUMBER: 1, Res.BRICK: 1 },
+}
+
 class Player:
 	var id: int
 	var node: Node
@@ -36,6 +41,7 @@ var players: Array[Player]
 
 @onready var turn_manager: TurnManager = %TurnManager
 @onready var board: Board = %Board
+@onready var client: BoardClient = %BoardClient
 @onready var root_ui: RootUI = %RootUI
 @onready var start_button: Button = %StartButton
 
@@ -61,14 +67,42 @@ func _on_player_join(_id: int):
 
 #func _input(event: InputEvent) -> void:
 
+func give_resources(id: int, resources_to_add: Dictionary):
+	for type in resources_to_add.keys():
+		var resources = get_player_by_id(id).resources
+		if !resources.has(type): resources[type] = resources_to_add[type]
+		else: resources[type] += resources_to_add[type]
+	update_resources_ui()
+
+func take_resources(id: int, resources_to_take: Dictionary):
+	for type in resources_to_take.keys():
+		var resources = get_player_by_id(id).resources
+		if !resources.has(type): resources[type] = resources_to_take[type]
+		else: resources[type] -= resources_to_take[type]
+	update_resources_ui()
+
+func has_resources(resources: Dictionary, cost: Dictionary) -> bool:
+	for type in cost.keys():
+		if !resources.has(type) or resources[type] < cost[type]:
+			return false
+	return true
+
 func buy(requester: int, structure: Board.Structure) -> bool:
+	var resources = get_player_by_id(requester).resources
+	var cost = STRUCTURE_COSTS[structure]
+	
+	if !has_resources(resources, cost): return false
+	take_resources(requester, cost)
+	update_resources_ui() # TODO - Why tf does this break?
 	return true
 
 func _process_dice(dice: Array[int]):
 	var value: int = dice[0] + dice[1]
 	for tile in board.tiles:
 		if tile.number == value:
-			board.give_resource(tile)
+			var resource_info: Dictionary = board.get_tile_resources(tile)
+			for id in resource_info.keys():
+				give_resources(id, resource_info[id])
 	update_resources_ui()
 
 var dice_delay := 0.1
@@ -101,6 +135,7 @@ func start_game():
 		players.append(player)
 	# connect board server-side signals
 	board.on_settlement_built.connect(_on_settlement_built)
+	board.on_road_built.connect(_on_road_built)
 	turn_manager.on_turn_start.connect(_on_turn_start)
 	turn_manager.on_turn_end.connect(_on_turn_end)
 	board.generate_map()
@@ -118,6 +153,7 @@ func _on_turn_start(turn: int):
 			root_ui.set_player_specific_ui.rpc_id(id, {
 				"message": "Place your first settlement!"
 			})
+			give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT])
 		State.SECOND_SETTLEMENT:
 			root_ui.set_player_specific_ui.rpc_id(id, {
 				"message": "Place your second settlement!\nRemember, this one will immediately give you resources."
@@ -145,6 +181,7 @@ func get_player_client_info_by_id(id: int):
 				"name": player.name,
 			}
 			return dict
+	printerr("No player found with id ", id)
 
 func update_resources_ui():
 	for player in players:
@@ -157,9 +194,26 @@ func update_resources_ui():
 		#player.color = colors[i]
 		#players.append(player)
 
-func _on_settlement_built(_pos: Vector2) -> void:
+func _on_road_built(_pos: Vector2, id: int) -> void:
 	match game_state:
 		State.FIRST_SETTLEMENT:
-			pass
+			await get_tree().create_timer(1).timeout
+			
+			turn_manager.end_turn()
+		State.SECOND_SETTLEMENT:
+			game_state = State.ROLLING
+
+func _on_settlement_built(_pos: Vector2, id: int) -> void:
+	match game_state:
+		State.FIRST_SETTLEMENT:
+			await get_tree().create_timer(1).timeout
+			
+			root_ui.set_player_specific_ui.rpc_id(id, {
+				"message": "Place your first road!"
+			})
+			
+			give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD])
+			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)
+			
 		State.SECOND_SETTLEMENT:
 			game_state = State.ROLLING

@@ -123,6 +123,7 @@ texture_filter = 1
 script = ExtResource("1_e2o6t")
 
 [node name="BoardClient" type="Node2D" parent="Board"]
+unique_name_in_owner = true
 script = ExtResource("7_y3ud2")
 textures = Dictionary[int, Texture2D]({
 0: ExtResource("8_8gxh0"),
