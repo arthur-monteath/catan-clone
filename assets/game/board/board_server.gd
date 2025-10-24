@@ -124,7 +124,8 @@ signal on_settlement_built
 func request_road(pos: Vector2):
 	if multiplayer.is_server():
 		var requester = multiplayer.get_remote_sender_id()
-		var can_place: bool = _edges.has(pos) and !_roads.has(pos)
+		var can_place: bool = _edges.has(pos) and !_roads.has(pos)\
+		and _road_has_connection(pos)
 		if can_place and main.buy(requester, Structure.ROAD):
 			var player_info = main.get_player_client_info_by_id(requester)
 			_set_road(pos, player_info)
@@ -161,6 +162,21 @@ func _get_tile_resources(tile: Tile) -> Dictionary:
 		if _settlements.has(point):
 			info[_settlements[point].id] = { resource_type: 1 }
 	return info
+
+func _road_has_connection(pos: Vector2) -> bool:
+	var line_points = _edge_lines[pos]
+	# Check for roads
+	for road in _roads.keys():
+		var road_points = _edge_lines[road]
+		if road_points[0] == line_points[0] or\
+		road_points[0] == line_points[1] or\
+		road_points[1] == line_points[0] or\
+		road_points[1] == line_points[1]:
+			return true
+	# Check for settlements
+	for point in line_points:
+		if _settlements.has(point): return true
+	return false
 
 #region Hex Grid
 

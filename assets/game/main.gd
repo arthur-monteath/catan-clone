@@ -95,7 +95,7 @@ func buy(requester: int, structure: Board.Structure) -> bool:
 
 func _process_dice(dice: Array[int]):
 	var value: int = dice[0] + dice[1]
-	for tile in board.tiles:
+	for tile in board._tiles:
 		if tile.number == value:
 			var resource_info: Dictionary = board.get_tile_resources(tile)
 			for id in resource_info.keys():
@@ -151,13 +151,20 @@ func _on_turn_start(turn: int):
 				"message": "Place your first settlement!"
 			})
 			give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT])
+			client.set_client_selected_structure.rpc_id(id, Board.Structure.SETTLEMENT)
 		State.SECOND_SETTLEMENT:
 			root_ui.set_player_specific_ui.rpc_id(id, {
 				"message": "Place your second settlement!\nRemember, this one will immediately give you resources."
 			})
+			give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT])
+			client.set_client_selected_structure.rpc_id(id, Board.Structure.SETTLEMENT)
 		State.ROLLING:
 			root_ui.set_player_specific_ui.rpc_id(id, {
-				"show_dice": true
+				"dice_enabled": true
+			})
+			root_ui.set_player_specific_ui.rpc({
+				"message": "The setup phase is done!\nMay the games begin!",
+				"dice_visible": true
 			})
 
 func _on_turn_end(turn: int):
@@ -198,7 +205,9 @@ func _on_road_built(_pos: Vector2, id: int) -> void:
 			
 			turn_manager.end_turn()
 		State.SECOND_SETTLEMENT:
-			game_state = State.ROLLING
+			await get_tree().create_timer(1).timeout
+			
+			turn_manager.end_turn()
 
 func _on_settlement_built(_pos: Vector2, id: int) -> void:
 	match game_state:
@@ -213,4 +222,11 @@ func _on_settlement_built(_pos: Vector2, id: int) -> void:
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)
 			
 		State.SECOND_SETTLEMENT:
-			game_state = State.ROLLING
+			await get_tree().create_timer(1).timeout
+			
+			root_ui.set_player_specific_ui.rpc_id(id, {
+				"message": "Place your second road!"
+			})
+			
+			give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD])
+			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)

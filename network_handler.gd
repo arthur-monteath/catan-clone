@@ -10,7 +10,9 @@ signal server_started
 var _server_player_info: Dictionary[int, Dictionary]
 
 func get_player_color() -> Color:
-	return _server_player_info[multiplayer.get_unique_id()].color
+	if _server_player_info.has(multiplayer.get_unique_id()):
+		return _server_player_info[multiplayer.get_unique_id()].color
+	return Color.WHITE
 
 @rpc("any_peer", "reliable", "call_local")
 func update_player_information_server_rpc(info: Dictionary):
