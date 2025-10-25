@@ -1,4 +1,5 @@
 extends Control
+class_name ResourcesUI
 
 @onready var grid: GridContainer = $PanelContainer/MarginContainer/Grid
 const RESOURCE_TEMPLATE = preload("uid://dbuvbml0vr4ip")
@@ -20,3 +21,7 @@ func _ready():
 func set_resources(resource_inventory: Dictionary[Main.Res, int]):
 	for resource in resource_inventory.keys():
 		resource_labels[resource].text = str(resource_inventory[resource])
+
+func get_resource_position(type: Main.Res) -> Vector2:
+	var icon: Control = resource_labels[type].get_parent().get_child(0)
+	return icon.get_global_transform().get_origin() + Vector2(16,16)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://be2fp4tuhaso0"]
+[gd_scene load_steps=44 format=3 uid="uid://be2fp4tuhaso0"]
 
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board/board_server.gd" id="1_e2o6t"]
@@ -27,7 +27,6 @@
 [ext_resource type="Script" uid="uid://dvq271w1r8fr2" path="res://addons/shaker/data/Single/BaseShakerType1D.gd" id="23_lfqfg"]
 [ext_resource type="Script" uid="uid://d2isay3vvq3on" path="res://addons/shaker/data/Vector2/ShakerTypeSineWave2D.gd" id="24_qpusx"]
 [ext_resource type="Script" uid="uid://tmac7isln8xf" path="res://addons/shaker/data/Vector2/ShakerPreset2D.gd" id="25_iwd7i"]
-[ext_resource type="Texture2D" uid="uid://qbemcwi4f22u" path="res://global-plugin.png" id="28_qpusx"]
 
 [sub_resource type="Gradient" id="Gradient_1ryvc"]
 colors = PackedColorArray(0.09019608, 0.1254902, 0.21960784, 1, 0.09019608, 0.1254902, 0.21960784, 1)
@@ -120,6 +119,7 @@ properties/0/replication_mode = 2
 
 [node name="Main" type="Node"]
 script = ExtResource("1_j5wjh")
+game_state = null
 
 [node name="TurnManager" type="Timer" parent="."]
 unique_name_in_owner = true
@@ -428,10 +428,6 @@ network_player = ExtResource("13_0fu4a")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_h4r37")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(-512, 0)
-texture = ExtResource("28_qpusx")
 
 [connection signal="pressed" from="RootUI/DiceArea/DiceButton" to="." method="_on_dice_button_pressed"]
 [connection signal="pressed" from="RootUI/StartButton" to="." method="start_game"]

@@ -1,6 +1,8 @@
 extends Node
 class_name Main
 
+# This is basically the GameHandler / Server
+
 enum State {
 	LOBBY,
 	FIRST_SETTLEMENT,
@@ -33,6 +35,8 @@ class Player:
 
 var players: Array[Player]
 
+const RESOURCE_VISUAL = preload("uid://ct8mbgdghj2nn")
+
 @onready var resources_panel: Control = %ResourcesPanel
 @onready var player_list: VBoxContainer = %PlayerList
 
@@ -41,6 +45,8 @@ var players: Array[Player]
 @onready var client: BoardClient = %BoardClient
 @onready var root_ui: RootUI = %RootUI
 @onready var start_button: Button = %StartButton
+
+@onready var SCREEN_CENTER = board.get_viewport_rect().get_center()
 
 func _ready():
 	multiplayer.peer_connected.connect(_on_player_join)
@@ -64,12 +70,43 @@ func _on_player_join(_id: int):
 
 #func _input(event: InputEvent) -> void:
 
-func give_resources(id: int, resources_to_add: Dictionary):
+func give_resources(id: int, resources_to_add: Dictionary, pos: Vector2 = Vector2.INF):
 	for type in resources_to_add.keys():
 		var resources = get_player_by_id(id).resources
-		if !resources.has(type): resources[type] = resources_to_add[type]
-		else: resources[type] += resources_to_add[type]
-	update_resources_ui()
+		var give = func():
+			if !resources.has(type): resources[type] = 1
+			else: resources[type] += 1
+			update_resources_ui()
+		if pos != Vector2.INF:
+			animate_resources({type:resources_to_add[type]}, pos, give)
+		else: for i in range(0, resources_to_add[type]): give.call()
+
+func animate_resources(resources_to_add: Dictionary, pos: Vector2, cb: Callable):
+	for type in resources_to_add.keys():
+		for i in range(0, resources_to_add[type]):
+			_client_animate_resources.rpc_id(players[turn_manager.turn].id, type, pos)
+			
+			get_tree().create_timer(1).timeout.connect(cb)
+			await get_tree().create_timer(0.05).timeout
+
+@rpc("authority", "reliable", "call_local")
+func _client_animate_resources(type: Res, pos: Vector2):
+	var resource: Sprite2D = RESOURCE_VISUAL.instantiate()
+	resource.texture = resources_panel.res[type]
+	resource.position = pos
+	var tween_pos = get_tree().create_tween()
+	tween_pos.set_ease(Tween.EASE_IN_OUT)
+	tween_pos.set_trans(Tween.TRANS_CUBIC)
+	tween_pos.tween_property(resource, "position", Vector2(randfn(0, 64), randfn(0, 64)), 0.6).as_relative()
+	tween_pos.tween_property(resource, "position", resources_panel.get_resource_position(type), 0.4)
+	
+	var tween_scale = get_tree().create_tween()
+	tween_scale.set_ease(Tween.EASE_IN_OUT)
+	tween_scale.set_trans(Tween.TRANS_CUBIC)
+	tween_scale.tween_property(resource, "scale", Vector2(1,1), 0.6).from(Vector2(0,0))
+	tween_scale.tween_property(resource, "scale", Vector2(-0.5,-0.5), 0.4).as_relative()
+	root_ui.add_child(resource)
+	tween_scale.tween_callback(resource.queue_free)
 
 func take_resources(id: int, resources_to_take: Dictionary):
 	for type in resources_to_take.keys():
@@ -147,16 +184,17 @@ func _on_turn_start(turn: int):
 	player.node.set_outline.rpc(true)
 	match game_state:
 		State.FIRST_SETTLEMENT:
+			give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT], SCREEN_CENTER)
+			client.set_client_selected_structure.rpc_id(id, Board.Structure.SETTLEMENT)
+			await get_tree().create_timer(1).timeout
 			root_ui.set_player_specific_ui.rpc_id(id, {
 				"message": "Place your first settlement!"
 			})
-			give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT])
-			client.set_client_selected_structure.rpc_id(id, Board.Structure.SETTLEMENT)
 		State.SECOND_SETTLEMENT:
 			root_ui.set_player_specific_ui.rpc_id(id, {
 				"message": "Place your second settlement!\nRemember, this one will immediately give you resources."
 			})
-			give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT])
+			give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT], SCREEN_CENTER)
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.SETTLEMENT)
 		State.ROLLING:
 			root_ui.set_player_specific_ui.rpc_id(id, {
@@ -208,7 +246,7 @@ func _on_road_built(_pos: Vector2, id: int) -> void:
 			
 			turn_manager.end_turn()
 
-func _on_settlement_built(_pos: Vector2, id: int) -> void:
+func _on_settlement_built(pos: Vector2, id: int) -> void:
 	match game_state:
 		State.FIRST_SETTLEMENT:
 			await get_tree().create_timer(1).timeout
@@ -217,11 +255,16 @@ func _on_settlement_built(_pos: Vector2, id: int) -> void:
 				"message": "Place your first road!"
 			})
 			
-			give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD])
+			give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD], SCREEN_CENTER)
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)
 			
 		State.SECOND_SETTLEMENT:
-			await get_tree().create_timer(1).timeout
+			# Give Resources
+			await get_tree().create_timer(0.2).timeout
+			var screen_pos = get_viewport().get_canvas_transform().basis_xform(pos) + SCREEN_CENTER
+			give_resources(id, _get_resources_from_settlement(Vector2(0,0)), screen_pos)
+			
+			await get_tree().create_timer(0.8).timeout
 			
 			root_ui.set_player_specific_ui.rpc_id(id, {
 				"message": "Place your second road!"
@@ -229,3 +272,6 @@ func _on_settlement_built(_pos: Vector2, id: int) -> void:
 			
 			give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD])
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)
+
+func _get_resources_from_settlement(pos: Vector2) -> Dictionary[Res, int]:
+	return { Res.ORE: 10 }
