@@ -17,12 +17,12 @@ const ROAD: PackedScene = preload("uid://ltem0vjldnni")
 		#if p.id == multiplayer.get_unique_id():
 			#player = p
 
-var points: Array[Vector2]
-var edges: Array[Vector2]
-var edge_lines: Dictionary[Vector2, Array]
+var points: Array[Vector2i]
+var edges: Array[Vector2i]
+var edge_lines: Dictionary[Vector2i, Array]
 
-var roads: Dictionary[Vector2, Dictionary]
-var settlements: Dictionary[Vector2, Dictionary]
+var roads: Dictionary[Vector2i, Dictionary]
+var settlements: Dictionary[Vector2i, Dictionary]
 
 @onready var action_ui: Control = $"../../RootUI/ActionUI" # TODO: Figure out where to go with this
 var is_my_turn: bool = false
@@ -64,12 +64,13 @@ func propagate_map(tile_types, number_tokens):
 func request_structure(pos: Vector2, structure: Board.Structure):
 	match structure:
 		Board.Structure.SETTLEMENT:
+			print_debug("Settlement requested by ", multiplayer.get_unique_id())
 			board.request_settlement.rpc_id(1, pos)
 		Board.Structure.ROAD:
 			board.request_road.rpc_id(1, pos)
 
 @rpc("authority", "reliable", "call_local")
-func place_settlement(pos: Vector2, info: Dictionary):
+func place_settlement(pos: Vector2i, info: Dictionary):
 	var settlement = SETTLEMENT.instantiate()
 	settlement.position = pos
 	var sprite: Sprite2D = settlement.get_node("Sprite2D")
@@ -78,7 +79,7 @@ func place_settlement(pos: Vector2, info: Dictionary):
 	add_child(settlement)
 
 @rpc("authority", "reliable", "call_local")
-func place_road(pos: Vector2, info: Dictionary):
+func place_road(pos: Vector2i, info: Dictionary):
 	var road = ROAD.instantiate()
 	road.position = pos
 	var line: Line2D = road.get_node("Line2D")
@@ -100,7 +101,7 @@ func set_client_selected_structure(structure: Board.Structure):
 var selected_structure: Board.Structure = Board.Structure.SETTLEMENT
 #endregion
 
-var preview_pos: Vector2 = Vector2.INF
+var preview_pos: Vector2i = Vector2i.MAX
 var build_mode: bool = false
 func _unhandled_input(_event: InputEvent) -> void:
 	if !is_my_turn: return
@@ -111,17 +112,17 @@ func _unhandled_input(_event: InputEvent) -> void:
 			if selected_structure == Board.Structure.SETTLEMENT:
 				preview_pos = get_point(mouse)
 			elif selected_structure == Board.Structure.ROAD: preview_pos = get_edge(mouse)
-			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
+			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2i.MAX):
 				request_structure(preview_pos, selected_structure)
 		Main.State.SECOND_SETTLEMENT:
 			if selected_structure == Board.Structure.SETTLEMENT:
 				preview_pos = get_point(mouse)
 			elif selected_structure == Board.Structure.ROAD: preview_pos = get_edge(mouse)
-			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
+			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2i.MAX):
 				request_structure(preview_pos, selected_structure)
 		Main.State.BUILDING:
 			if build_mode:
-				if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2.INF):
+				if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2i.MAX):
 					settlements.set(get_point(mouse), main.turn)
 					roads.set(get_edge(mouse), main.turn)
 
@@ -182,29 +183,29 @@ func _draw() -> void:
 	#draw_circle(point2, 2, Color.RED)
 #endregion
 
-func get_point(pos: Vector2, max_dist: float = 20.0) -> Vector2:
+func get_point(pos: Vector2, max_dist: float = 20.0) -> Vector2i:
 	var lowest_distance = INF
-	var found_point: Vector2
-	for point: Vector2 in points:
+	var found_point: Vector2i
+	for point: Vector2i in points:
 		var dist = pos.distance_to(point)
 		if dist < lowest_distance:
 			lowest_distance = dist
 			found_point = point
-	if lowest_distance > max_dist: return Vector2.INF
+	if lowest_distance > max_dist: return Vector2i.MAX
 	if found_point: return found_point
-	return Vector2.INF
+	return Vector2i.MAX
 
-func get_edge(pos: Vector2) -> Vector2:
+func get_edge(pos: Vector2) -> Vector2i:
 	var lowest_distance = INF
-	var found_edge: Vector2
-	for edge: Vector2 in edges:
+	var found_edge: Vector2i
+	for edge: Vector2i in edges:
 		var dist = pos.distance_to(edge)
 		if dist < lowest_distance:
 			lowest_distance = dist
 			found_edge = edge
-	if lowest_distance > 12: return Vector2.INF
+	if lowest_distance > 12: return Vector2i.MAX
 	if found_edge: return found_edge
-	return Vector2.INF
+	return Vector2i.MAX
 
 func _on_build_button_pressed() -> void:
 	build_mode = !build_mode

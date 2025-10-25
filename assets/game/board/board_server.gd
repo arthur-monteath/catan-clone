@@ -4,18 +4,18 @@ extends Node2D
 @onready var main: Main = $".."
 @onready var client: BoardClient = $BoardClient
 
-var _edges: Dictionary[Vector2, Array]
-var _edge_lines: Dictionary[Vector2, Array]
-var _points: Array[Vector2]
+var _edges: Dictionary[Vector2i, Array]
+var _edge_lines: Dictionary[Vector2i, Array]
+var _points: Array[Vector2i]
 
 var _tiles: Array[Tile]
 
-var _roads: Dictionary[Vector2, Dictionary]:
+var _roads: Dictionary[Vector2i, Dictionary]:
 	get: return _roads
 	set(value):
 		_roads = value
 		#client.update_roads.rpc(value)
-var _settlements: Dictionary[Vector2, Dictionary]:
+var _settlements: Dictionary[Vector2i, Dictionary]:
 	get: return _settlements
 	set(value):
 		_settlements = value
@@ -107,9 +107,9 @@ var tileAmounts: Dictionary[TileType, int] = {
 class Tile:
 	var node: Node2D
 	var type: TileType
-	var pos: Vector2
+	var pos: Vector2i
 	var number: int
-	var edges: Array[Vector2]
+	var edges: Array[Vector2i]
 #endregion
 
 #region Building
@@ -134,8 +134,9 @@ func request_road(pos: Vector2):
 			emit_signal("on_road_built", pos, requester)
 
 @rpc("any_peer", "reliable", "call_local")
-func request_settlement(pos: Vector2):
+func request_settlement(_pos: Vector2):
 	if multiplayer.is_server():
+		var pos: Vector2i = _pos.round()
 		var requester = multiplayer.get_remote_sender_id()
 		#var free_settlement: bool = main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT
 		var can_place: bool = _points.has(pos) and !_settlements.has(pos)
@@ -144,12 +145,12 @@ func request_settlement(pos: Vector2):
 			_set_settlement(pos, player_info)
 			emit_signal("on_settlement_built", pos, requester)
 
-func _set_road(pos: Vector2, player: Dictionary):
+func _set_road(pos: Vector2i, player: Dictionary):
 	var info = { "id": player.id, "color": player.color }
 	_roads.set(pos, info)
 	client.place_road.rpc(pos, info)
 
-func _set_settlement(pos: Vector2, player: Dictionary):
+func _set_settlement(pos: Vector2i, player: Dictionary):
 	var info = { "id": player.id, "color": player.color }
 	_settlements.set(pos, info)
 	client.place_settlement.rpc(pos, info)
@@ -166,7 +167,8 @@ func _get_tile_resources(tile: Tile) -> Dictionary:
 	return info
 
 func _road_has_connection(pos: Vector2) -> bool:
-	var line_points = _edge_lines[pos]
+	var key: Vector2i = pos.round()
+	var line_points = _edge_lines[key]
 	# Check for roads
 	for road in _roads.keys():
 		var road_points = _edge_lines[road]
@@ -226,20 +228,20 @@ func get_direction_vector(point:Dir) -> Vector2:
 		Dir.LEFT_UP: return Vector2(-HEX_APOTHEM, -HEX_RADIUS / 2.0)
 		_: return Vector2.ZERO
 
-func get_points(pos: Vector2):
-	var p = []
+func get_points(pos: Vector2) -> Array[Vector2i]:
+	var p: Array[Vector2i] = []
 	for dir in Dir.values():
-		p.append(pos + get_direction_vector(dir))
+		p.append(Vector2i(Vector2(pos + get_direction_vector(dir)).round()))
 	return p
 
-func get_edge_lines(pos: Vector2) -> Dictionary[Vector2, Array]:
-	var e: Dictionary[Vector2, Array]
+func get_edge_lines(pos: Vector2) -> Dictionary[Vector2i, Array]:
+	var e: Dictionary[Vector2i, Array]
 	var p = get_points(pos)
 	
 	for i in range(p.size()):
 		var a: Vector2 = p[i]
 		var b: Vector2 = p[(i + 1) % p.size()]
-		var mid: Vector2 = (a + b) / 2.0
+		var mid: Vector2i = ((a + b) / 2.0).round()
 		e[mid] = [a,b]
 	
 	return e
