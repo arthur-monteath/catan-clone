@@ -25,18 +25,19 @@ func _draw() -> void:
 			if !client.settlements[settlement].id == multiplayer.get_unique_id(): continue
 			for e in client.edge_lines.keys():
 				var edge: Array = client.edge_lines[e]
+				if client.roads.has(e): continue
 				if settlement.distance_to(edge[0]) < 0.1:
 					preview_edges.append(edge)
 				if settlement.distance_to(edge[1]) < 0.1:
 					preview_edges.append(edge)
 		
 		for edge in preview_edges:
-			var color = Color.from_rgba8(255,255,255,155)
+			var color = Color.from_rgba8(255,255,255,255)
 			var point1: Vector2 = edge[0]
 			var point2: Vector2 = edge[1]
 			var point3: Vector2 = point1 + (point2 - point1).normalized() * 12
 			var point4: Vector2 = point2 + (point1 - point2).normalized() * 12
-			draw_line(point3, point4, color, 2)
+			if (Time.get_ticks_msec()/500)%2: draw_line(point3, point4, color, 2)
 		
 	if client.points.has(preview) and !client.settlements.has(preview):
 		#var color = NetworkHandler.get_player_color()
