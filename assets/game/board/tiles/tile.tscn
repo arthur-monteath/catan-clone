@@ -36,6 +36,7 @@ radius = 32
 points_num = 6
 
 [node name="Number" type="Label" parent="."]
+texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://be2fp4tuhaso0"]
+[gd_scene load_steps=45 format=3 uid="uid://be2fp4tuhaso0"]
 
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board/board_server.gd" id="1_e2o6t"]
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://cwv4tga2lnu8k" path="res://assets/game/ui/resources/resources_ui.tscn" id="12_y3ud2"]
 [ext_resource type="PackedScene" uid="uid://by1q5dsk0j4se" path="res://assets/game/player/network_player.tscn" id="13_0fu4a"]
 [ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/game/board/tiles/art/desert.png" id="13_p100d"]
+[ext_resource type="Script" uid="uid://madr0j4n87b8" path="res://assets/game/overlays.gd" id="14_qpusx"]
 [ext_resource type="Script" uid="uid://b3albiqgruwbo" path="res://addons/shaker/data/Vector2/ShakerTypeNoiseShake2D.gd" id="16_lfqfg"]
 [ext_resource type="Texture2D" uid="uid://ch1tb8vwg4ph6" path="res://assets/game/robber.png" id="21_l2nmn"]
 [ext_resource type="Script" uid="uid://b5xe0r01pq405" path="res://addons/shaker/data/Vector2/BaseShakerType2D.gd" id="22_6i1ln"]
@@ -167,6 +168,9 @@ textures = Dictionary[int, Texture2D]({
 5: ExtResource("13_p100d")
 })
 metadata/_custom_type_script = "uid://bqq7e5btewd8e"
+
+[node name="Overlays" type="Node2D" parent="Board"]
+script = ExtResource("14_qpusx")
 
 [node name="Robber" type="Node2D" parent="."]
 unique_name_in_owner = true

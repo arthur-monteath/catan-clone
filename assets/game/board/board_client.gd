@@ -127,48 +127,6 @@ func _unhandled_input(_event: InputEvent) -> void:
 				if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2i.MAX):
 					settlements.set(get_point(mouse), main.turn)
 					roads.set(get_edge(mouse), main.turn)
-
-func _process(_dt):
-	queue_redraw()
-
-func _draw() -> void:
-	if !is_my_turn: return
-	#region Structure Preview
-	if edges.has(preview_pos):
-		var color = NetworkHandler.get_player_color()
-		var line = edge_lines[preview_pos]
-		var point1: Vector2 = line[0]
-		var point2: Vector2 = line[1]
-		var point3: Vector2 = point1 + (point2 - point1).normalized() * 12
-		var point4: Vector2 = point2 + (point1 - point2).normalized() * 12
-		if line != null:
-			draw_line(point3, point4, color, 2)
-	
-	if build_mode and selected_structure == Board.Structure.ROAD: #TODO - Make this better, based on edges
-		var preview_edges = []
-		for settlement in settlements.keys():
-			if !settlements[settlement].id == multiplayer.get_unique_id(): continue
-			for e in edge_lines.keys():
-				var edge: Array = edge_lines[e]
-				if settlement.distance_to(edge[0]) < 0.1:
-					preview_edges.append(edge)
-				if settlement.distance_to(edge[1]) < 0.1:
-					preview_edges.append(edge)
-		
-		for edge in preview_edges:
-			var color = Color.from_rgba8(255,255,255,155)
-			var point1: Vector2 = edge[0]
-			var point2: Vector2 = edge[1]
-			var point3: Vector2 = point1 + (point2 - point1).normalized() * 12
-			var point4: Vector2 = point2 + (point1 - point2).normalized() * 12
-			draw_line(point3, point4, color, 2)
-		
-	if points.has(preview_pos):
-		#var color = NetworkHandler.get_player_color()
-		draw_circle(preview_pos, 4, Color.WHITE)
-	#endregion
-	
-	#region Debug
 	#for road in roads:
 		#var color = NetworkHandler.get_player_color()
 		#draw_line(edge_lines[road][0], edge_lines[road][1], color, 4) #main.players[roads[road]].color
