@@ -123,12 +123,14 @@ signal on_road_built
 signal on_settlement_built
 
 @rpc("any_peer", "reliable", "call_local")
-func request_road(pos: Vector2):
+func request_road(_pos: Vector2):
 	if multiplayer.is_server():
+		var pos: Vector2i = _pos.round()
 		var requester = multiplayer.get_remote_sender_id()
-		var can_place: bool = _edges.has(pos) and !_roads.has(pos)\
-		and _road_has_connection(pos)
-		if can_place and main.buy(requester, Structure.ROAD):
+		var valid_space: bool = _edges.has(pos) and !_roads.has(pos)
+		print("Can place? ", valid_space)
+		var has_connection: bool = _road_has_connection(pos)
+		if valid_space and has_connection and main.buy(requester, Structure.ROAD):
 			var player_info = main.get_player_client_info_by_id(requester)
 			_set_road(pos, player_info)
 			emit_signal("on_road_built", pos, requester)
@@ -168,10 +170,12 @@ func _get_tile_resources(tile: Tile) -> Dictionary:
 
 func _road_has_connection(pos: Vector2) -> bool:
 	var key: Vector2i = pos.round()
-	var line_points = _edge_lines[key]
+	var _line_points: Array = _edge_lines[key]
+	var line_points = [Vector2i(_line_points[0].round()), Vector2i(_line_points[1].round())]
 	# Check for roads
 	for road in _roads.keys():
-		var road_points = _edge_lines[road]
+		var _road_points = _edge_lines[road]
+		var road_points = [Vector2i(_road_points[0].round()), Vector2i(_road_points[1].round())]
 		if road_points[0] == line_points[0] or\
 		road_points[0] == line_points[1] or\
 		road_points[1] == line_points[0] or\
@@ -234,6 +238,7 @@ func get_points(pos: Vector2) -> Array[Vector2i]:
 		p.append(Vector2i(Vector2(pos + get_direction_vector(dir)).round()))
 	return p
 
+# Returns the UNROUNDED, vector2 positions in the array
 func get_edge_lines(pos: Vector2) -> Dictionary[Vector2i, Array]:
 	var e: Dictionary[Vector2i, Array]
 	var p = get_points(pos)

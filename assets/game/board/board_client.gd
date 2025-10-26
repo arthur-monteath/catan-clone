@@ -17,6 +17,7 @@ const ROAD: PackedScene = preload("uid://ltem0vjldnni")
 		#if p.id == multiplayer.get_unique_id():
 			#player = p
 
+var tiles: Array
 var points: Array[Vector2i]
 var edges: Array[Vector2i]
 var edge_lines: Dictionary[Vector2i, Array]
@@ -59,6 +60,7 @@ func propagate_map(tile_types, number_tokens):
 			#else:
 				#edges[edge].append(t)
 		
+		tiles.append(t)
 		add_child(t)
 
 #region Structure Building
@@ -85,15 +87,16 @@ func place_road(pos: Vector2i, info: Dictionary):
 	var road = ROAD.instantiate()
 	road.position = pos
 	var line: Line2D = road.get_node("Line2D")
-	var point1: Vector2 = edge_lines[pos][0] - road.global_position
-	var point2: Vector2 = edge_lines[pos][1] - road.global_position
-	var point3: Vector2 = point1 + (point2 - point1).normalized() * 12
-	var point4: Vector2 = point2 + (point1 - point2).normalized() * 12
+	var point1: Vector2 = Vector2(edge_lines[pos][0]) - road.global_position
+	var point2: Vector2 = Vector2(edge_lines[pos][1]) - road.global_position
+	var point3: Vector2 = point1 + (point2 - point1).normalized() * 10
+	var point4: Vector2 = point2 + (point1 - point2).normalized() * 10
 	line.add_point(point3, 0)
 	line.add_point(point4, 1)
 	line.self_modulate = info.color
 	roads[pos] = info
-	add_child(road)
+	tiles.back().add_sibling(road) # Maybe do this different?
+	# or maybe set to sibling only after finishing animation
 #endregion
 
 @rpc("authority", "reliable", "call_local")
