@@ -9,7 +9,7 @@ func _draw() -> void:
 	if !client.is_my_turn: return
 	#region Structure Preview
 	var preview = client.preview_pos
-	if client.edges.has(preview):
+	if client.edges.has(preview) and !client.roads.has(preview):
 		var color = NetworkHandler.get_player_color()
 		var line = client.edge_lines[preview]
 		var point1: Vector2 = line[0]

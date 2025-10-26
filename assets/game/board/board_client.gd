@@ -89,16 +89,34 @@ func place_road(pos: Vector2i, info: Dictionary):
 	var road = ROAD.instantiate()
 	road.position = pos
 	var line: Line2D = road.get_node("Line2D")
-	var point1: Vector2 = Vector2(edge_lines[pos][0]) - road.global_position
-	var point2: Vector2 = Vector2(edge_lines[pos][1]) - road.global_position
-	var point3: Vector2 = point1 + (point2 - point1).normalized() * 10
-	var point4: Vector2 = point2 + (point1 - point2).normalized() * 10
-	line.add_point(point3, 0)
-	line.add_point(point4, 1)
+	var pointA: Vector2 = Vector2(edge_lines[pos][0]) - road.global_position
+	var pointB: Vector2 = Vector2(edge_lines[pos][1]) - road.global_position
+	
+	var dirAB := (pointB - pointA).normalized()
+	var dirBA := -dirAB
+	var start_len := 16.0
+	var end_len := 8.0
+	
+	line.clear_points()
+	line.add_point(pointA + dirAB * start_len, 0)
+	line.add_point(pointB + dirBA * start_len, 1)
+	
 	line.self_modulate = info.color
+	
 	roads[pos] = info
 	tiles.back().add_sibling(road) # Maybe do this different?
 	# or maybe set to sibling only after finishing animation
+
+	# Tween the inset length from 16 -> 8 in 0.2s, ease-in cubic
+	var tw := create_tween()
+	tw.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_method(
+		func(length: float) -> void:
+			line.set_point_position(0, pointA + dirAB * length)
+			line.set_point_position(1, pointB + dirBA * length),
+		start_len, end_len, 0.2
+	)
+
 #endregion
 
 @rpc("authority", "reliable", "call_local")
