@@ -52,9 +52,13 @@ func generate_map() -> void:
 	number_tokens.erase(7)
 	number_tokens.shuffle()
 	
+	var n_tokens = number_tokens.duplicate()
+	
 	for i in range(0, len(tile_types)):
 		var t: Tile = Tile.new()
 		t.type = tile_types[i]
+		if t.type != TileType.DESERT:
+			t.number = n_tokens.pop_front()
 		_tiles.append(t)
 		
 		var pos = get_hex_position(i)
@@ -160,13 +164,14 @@ func _set_settlement(pos: Vector2i, player: Dictionary):
 
 #endregion
 
-func _get_tile_resources(tile: Tile) -> Dictionary:
+func get_tile_resources(tile: Tile) -> Dictionary:
 	var resource_type: Main.Res = _tile_type_to_resource(tile.type)
 	if resource_type == null: return {}
 	var info = {}
 	for point in get_points(tile.pos):
 		if _settlements.has(point):
-			info[_settlements[point].id] = { resource_type: 1 }
+			if info.has(_settlements[point].id): info[_settlements[point].id][resource_type] += 1
+			else: info[_settlements[point].id] = { resource_type: 1 }
 	return info
 
 func _road_has_connection(pos: Vector2) -> bool:
@@ -190,7 +195,7 @@ func _road_has_connection(pos: Vector2) -> bool:
 func get_point_adjacent_tile_resources(settlement_pos: Vector2i) -> Dictionary[Main.Res, int]:
 	var resources: Dictionary[Main.Res, int] = {}
 	for tile in _tiles:
-		if settlement_pos in tile.points:
+		if settlement_pos in tile.points and tile.type != TileType.DESERT:
 			var type = tile.type
 			if resources.has(type): resources[type] += 1
 			else: resources[type] = 1
