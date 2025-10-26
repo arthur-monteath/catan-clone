@@ -50,6 +50,7 @@ func end_turn():
 				turn_increment = 1
 				turn = 0
 			_:
+				main.game_state = Main.State.ROLLING
 				turn = 0
 	start_turn()
 

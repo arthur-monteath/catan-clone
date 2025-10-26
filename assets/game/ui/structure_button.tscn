@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://davx3ceu4av3u"]
+
+[node name="StructureButton" type="Button"]
+text = "Settlement"

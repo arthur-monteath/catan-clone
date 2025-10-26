@@ -30,8 +30,9 @@ var is_my_turn: bool = false
 @rpc("authority", "reliable", "call_local")
 func set_is_my_turn(value: bool):
 	is_my_turn = value
-	if main.game_state != Main.State.FIRST_SETTLEMENT and main.game_state != Main.State.SECOND_SETTLEMENT:
-		action_ui.visible = value
+	if main.game_state == Main.State.ACTION and value:
+		action_ui.visible = true
+	else: action_ui.visible = false
 	if !value: build_mode = false
 
 @rpc("authority", "reliable", "call_local")
@@ -126,11 +127,13 @@ func _unhandled_input(_event: InputEvent) -> void:
 			elif selected_structure == Board.Structure.ROAD: preview_pos = get_edge(mouse)
 			if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2i.MAX):
 				request_structure(preview_pos, selected_structure)
-		Main.State.BUILDING:
+		Main.State.ACTION:
 			if build_mode:
+				if selected_structure == Board.Structure.SETTLEMENT:
+					preview_pos = get_point(mouse)
+				elif selected_structure == Board.Structure.ROAD: preview_pos = get_edge(mouse)
 				if (Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and preview_pos != Vector2i.MAX):
-					settlements.set(get_point(mouse), main.turn)
-					roads.set(get_edge(mouse), main.turn)
+					request_structure(preview_pos, selected_structure)
 	#for road in roads:
 		#var color = NetworkHandler.get_player_color()
 		#draw_line(edge_lines[road][0], edge_lines[road][1], color, 4) #main.players[roads[road]].color
@@ -171,6 +174,9 @@ func get_edge(pos: Vector2) -> Vector2i:
 	if found_edge: return found_edge
 	return Vector2i.MAX
 
-func _on_build_button_pressed() -> void:
-	build_mode = !build_mode
-	print("build mode = ", build_mode)
+func _on_action_ui_build_mode_changed(_build_mode: bool) -> void:
+	build_mode = _build_mode
+
+func _on_action_ui_on_structure_selected(structure: Board.Structure) -> void:
+	selected_structure = structure
+	build_mode = true

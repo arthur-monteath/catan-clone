@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://be2fp4tuhaso0"]
+[gd_scene load_steps=46 format=3 uid="uid://be2fp4tuhaso0"]
 
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board/board_server.gd" id="1_e2o6t"]
@@ -28,6 +28,7 @@
 [ext_resource type="Script" uid="uid://dvq271w1r8fr2" path="res://addons/shaker/data/Single/BaseShakerType1D.gd" id="23_lfqfg"]
 [ext_resource type="Script" uid="uid://d2isay3vvq3on" path="res://addons/shaker/data/Vector2/ShakerTypeSineWave2D.gd" id="24_qpusx"]
 [ext_resource type="Script" uid="uid://tmac7isln8xf" path="res://addons/shaker/data/Vector2/ShakerPreset2D.gd" id="25_iwd7i"]
+[ext_resource type="PackedScene" uid="uid://6r70bh3i3hcd" path="res://assets/game/ui/action_ui.tscn" id="27_iwd7i"]
 
 [sub_resource type="Gradient" id="Gradient_1ryvc"]
 colors = PackedColorArray(0.09019608, 0.1254902, 0.21960784, 1, 0.09019608, 0.1254902, 0.21960784, 1)
@@ -314,58 +315,9 @@ text = "Start"
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="RootUI"]
 replication_config = SubResource("SceneReplicationConfig_y3ud2")
 
-[node name="ActionUI" type="Control" parent="RootUI"]
+[node name="ActionUI" parent="RootUI" instance=ExtResource("27_iwd7i")]
+unique_name_in_owner = true
 visible = false
-layout_mode = 3
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -20.0
-offset_bottom = 20.0
-grow_horizontal = 0
-grow_vertical = 2
-theme = ExtResource("8_0fu4a")
-
-[node name="PanelContainer" type="PanelContainer" parent="RootUI/ActionUI"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -72.0
-offset_top = -20.0
-offset_right = -32.0
-offset_bottom = 20.0
-grow_horizontal = 0
-grow_vertical = 2
-theme = ExtResource("8_0fu4a")
-
-[node name="MarginContainer" type="MarginContainer" parent="RootUI/ActionUI/PanelContainer"]
-layout_mode = 2
-theme = ExtResource("8_0fu4a")
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
-
-[node name="VBoxContainer" type="VBoxContainer" parent="RootUI/ActionUI/PanelContainer/MarginContainer"]
-layout_mode = 2
-theme = ExtResource("8_0fu4a")
-
-[node name="BuildButton" type="Button" parent="RootUI/ActionUI/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("8_0fu4a")
-theme_override_font_sizes/font_size = 32
-text = "Build"
-
-[node name="List" type="VBoxContainer" parent="RootUI/ActionUI/PanelContainer/MarginContainer/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("8_0fu4a")
 
 [node name="MessageBox" type="Panel" parent="RootUI"]
 unique_name_in_owner = true
@@ -434,6 +386,7 @@ replication_config = SubResource("SceneReplicationConfig_h4r37")
 
 [connection signal="pressed" from="RootUI/DiceArea/DiceButton" to="." method="_on_dice_button_pressed"]
 [connection signal="pressed" from="RootUI/StartButton" to="." method="start_game"]
-[connection signal="pressed" from="RootUI/ActionUI/PanelContainer/MarginContainer/VBoxContainer/BuildButton" to="Board/BoardClient" method="_on_build_button_pressed"]
+[connection signal="build_mode_changed" from="RootUI/ActionUI" to="Board/BoardClient" method="_on_action_ui_build_mode_changed"]
+[connection signal="on_structure_selected" from="RootUI/ActionUI" to="Board/BoardClient" method="_on_action_ui_on_structure_selected"]
 [connection signal="gui_input" from="RootUI/MessageBox" to="RootUI" method="_on_message_box_gui_input"]
 [connection signal="pressed" from="RootUI/Button" to="TurnManager" method="_on_end_turn_pressed"]

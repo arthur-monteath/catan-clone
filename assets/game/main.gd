@@ -8,7 +8,7 @@ enum State {
 	FIRST_SETTLEMENT,
 	SECOND_SETTLEMENT,
 	ROLLING,
-	BUILDING,
+	ACTION,
 }
 
 @export var game_state: State = State.LOBBY
@@ -137,9 +137,7 @@ func _process_dice(dice: Array[int]):
 	if value == 7:
 		send_message("Bandit!")
 	else: for tile in board._tiles:
-		print("...Looking...Tile: ", tile.number)
 		if tile.number == value:
-			print("Found tile ", value)
 			var resource_info: Dictionary = board.get_tile_resources(tile)
 			for id in resource_info.keys():
 				give_resources(id, resource_info[id], get_screen_pos(tile.pos))
@@ -162,6 +160,8 @@ func _press_dice_request() -> void:
 		root_ui.set_dice_spin.rpc(i, dice)
 		await get_tree().create_timer(dice_delay).timeout
 	_process_dice(dice)
+	game_state = State.ACTION
+	board._set_turn(turn_manager.turn) # TODO - Remove this and make this rely instead on a on_game_state_change rpc sent to clients
 
 func start_game():
 	if !multiplayer.is_server(): return
