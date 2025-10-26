@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="3_obqv1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_iwhfu"]
-font_size = 32
+font_size = 24
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 4
@@ -15,6 +15,16 @@ shadow_offset = Vector2(2, 2)
 [node name="Tile" type="Node2D"]
 rotation = 1.5707964
 script = ExtResource("1_iwhfu")
+
+[node name="Outline" type="Polygon2D" parent="."]
+color = Color(1, 1, 1, 0.60784316)
+texture = ExtResource("2_1ne16")
+texture_offset = Vector2(32, 32)
+texture_rotation = 1.5707964
+polygon = PackedVector2Array(36, 0, 18, 31.176914, -18, 31.176914, -36, 4.408583e-15, -18, -31.176914, 18, -31.176914)
+script = ExtResource("3_obqv1")
+radius = 36
+points_num = 6
 
 [node name="Hex" type="Polygon2D" parent="."]
 texture = ExtResource("2_1ne16")

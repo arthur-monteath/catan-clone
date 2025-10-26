@@ -37,6 +37,7 @@ func propagate_map(tile_types, number_tokens):
 	for i in range(0, len(tile_types)):
 		var t = TILE.instantiate()
 		t.get_node("Hex").texture = textures[tile_types[i]]
+		t.get_node("Outline").texture = textures[tile_types[i]]
 		
 		var pos = board.get_hex_position(i)
 		t.global_position = pos
