@@ -64,9 +64,10 @@ func propagate_map(tile_types, number_tokens):
 func request_structure(pos: Vector2, structure: Board.Structure):
 	match structure:
 		Board.Structure.SETTLEMENT:
-			print_debug("Settlement requested by ", multiplayer.get_unique_id())
+			#print("Settlement requested by ", multiplayer.get_unique_id())
 			board.request_settlement.rpc_id(1, pos)
 		Board.Structure.ROAD:
+			#print("Road requested by ", multiplayer.get_unique_id())
 			board.request_road.rpc_id(1, pos)
 
 @rpc("authority", "reliable", "call_local")
