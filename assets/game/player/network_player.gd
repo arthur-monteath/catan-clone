@@ -5,11 +5,13 @@ extends Control
 @onready var player_image: TextureRect = %PlayerImage
 var player_color: Color = Color.WHITE
 var player_name: String = "player_0"
+var tutorial_mode: bool = true
 
 func _enter_tree() -> void:
 	var info = get_tree().current_scene.get_node("%MultiplayerUI").player_info
 	player_name = info.name
 	player_color = info.color
+	tutorial_mode = info.tutorial
 	NetworkHandler.update_player_information_server_rpc.rpc_id(1, info)
 
 #func _ready():

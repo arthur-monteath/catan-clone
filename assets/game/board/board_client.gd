@@ -30,7 +30,8 @@ var is_my_turn: bool = false
 @rpc("authority", "reliable", "call_local")
 func set_is_my_turn(value: bool):
 	is_my_turn = value
-	action_ui.visible = value
+	if main.game_state != Main.State.FIRST_SETTLEMENT and main.game_state != Main.State.SECOND_SETTLEMENT:
+		action_ui.visible = value
 	if !value: build_mode = false
 
 @rpc("authority", "reliable", "call_local")

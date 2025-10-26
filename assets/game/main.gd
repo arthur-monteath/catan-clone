@@ -31,6 +31,7 @@ class Player:
 	var node: Node
 	var name: String
 	var color: Color
+	var tutorial_mode: bool
 	var resources: Dictionary[Res, int]
 
 var players: Array[Player]
@@ -166,6 +167,7 @@ func start_game():
 		player.id = p.name
 		player.name = p.player_name
 		player.color = p.player_color
+		player.tutorial_mode = p.tutorial_mode
 		players.append(player)
 	# connect board server-side signals
 	board.on_settlement_built.connect(_on_settlement_built)
@@ -184,19 +186,26 @@ func _on_turn_start(turn: int):
 	player.node.set_outline.rpc(true)
 	match game_state:
 		State.FIRST_SETTLEMENT:
-			give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT], SCREEN_CENTER)
+			if player.tutorial_mode:
+				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT], SCREEN_CENTER)
+				await get_tree().create_timer(1).timeout
+				root_ui.set_player_specific_ui.rpc_id(id, {
+					"message": "Place your first settlement!"
+				})
+			else:
+				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT])
+				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT])
+				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.ROAD])
+				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.ROAD])
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.SETTLEMENT)
-			await get_tree().create_timer(1).timeout
-			root_ui.set_player_specific_ui.rpc_id(id, {
-				"message": "Place your first settlement!"
-			})
 		State.SECOND_SETTLEMENT:
-			give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT], SCREEN_CENTER)
+			if player.tutorial_mode:
+				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT], SCREEN_CENTER)
+				await get_tree().create_timer(1).timeout
+				root_ui.set_player_specific_ui.rpc_id(id, {
+					"message": "Place your second settlement!\nRemember, this one will immediately give you resources."
+				})
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.SETTLEMENT)
-			await get_tree().create_timer(1).timeout
-			root_ui.set_player_specific_ui.rpc_id(id, {
-				"message": "Place your second settlement!\nRemember, this one will immediately give you resources."
-			})
 		State.ROLLING:
 			root_ui.set_player_specific_ui.rpc_id(id, {
 				"dice_enabled": true
@@ -249,24 +258,25 @@ func _on_road_built(_pos: Vector2, _id: int) -> void:
 func _on_settlement_built(pos: Vector2, id: int) -> void:
 	match game_state:
 		State.FIRST_SETTLEMENT:
-			give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD], SCREEN_CENTER)
-			await get_tree().create_timer(1).timeout
-			root_ui.set_player_specific_ui.rpc_id(id, {
-				"message": "Place your first road!"
-			})
+			if get_player_by_id(id).tutorial_mode:
+				give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD], SCREEN_CENTER)
+				await get_tree().create_timer(1).timeout
+				root_ui.set_player_specific_ui.rpc_id(id, {
+					"message": "Place your first road!"
+				})
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)
 			
 		State.SECOND_SETTLEMENT:
 			await get_tree().create_timer(0.2).timeout
 			var screen_pos = get_viewport().get_canvas_transform().basis_xform(pos) + SCREEN_CENTER
 			give_resources(id, _get_resources_from_settlement(Vector2(0,0)), screen_pos)
-			await get_tree().create_timer(0.8).timeout
-			
-			root_ui.set_player_specific_ui.rpc_id(id, {
-				"message": "Place your second road!"
-			})
-			
-			give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD])
+			if get_player_by_id(id).tutorial_mode:
+				await get_tree().create_timer(0.8).timeout
+				
+				root_ui.set_player_specific_ui.rpc_id(id, {
+					"message": "Place your second road!"
+				})
+				give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD])
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)
 
 func _get_resources_from_settlement(_pos: Vector2) -> Dictionary[Res, int]:

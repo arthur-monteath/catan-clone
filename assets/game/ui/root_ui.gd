@@ -14,7 +14,7 @@ func set_dice_spin(i: int, dice: Array[int]):
 @onready var dice2 = %Dice1
 @rpc("authority", "reliable", "call_local")
 func set_player_specific_ui(args: Dictionary):
-	if args.has("message"):
+	if args.has("message") and (!args.has("tutorial") or args["tutorial"]): # Only players with tutorial On will receive tutorial messages
 		_send_client_message(args.message)
 	if args.has("dice_enabled"):
 		dice_button.visible = args.dice_enabled
