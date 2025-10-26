@@ -123,6 +123,7 @@ func has_resources(resources: Dictionary, cost: Dictionary) -> bool:
 	return true
 
 func buy(requester: int, structure: Board.Structure) -> bool:
+	if Debug.inf_resources: return true
 	var resources = get_player_by_id(requester).resources
 	var cost = STRUCTURE_COSTS[structure]
 	

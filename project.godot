@@ -19,6 +19,7 @@ config/icon="res://assets/icon.svg"
 
 NetworkHandler="*res://network_handler.gd"
 Shaker="*res://addons/shaker/src/Shaker.gd"
+Debug="*res://debug.gd"
 
 [display]
 
