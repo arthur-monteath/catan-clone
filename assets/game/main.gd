@@ -133,12 +133,15 @@ func buy(requester: int, structure: Board.Structure) -> bool:
 
 func _process_dice(dice: Array[int]):
 	var value: int = dice[0] + dice[1]
-	for tile in board._tiles:
-		if tile.number == value:
-			var resource_info: Dictionary = board.get_tile_resources(tile)
-			for id in resource_info.keys():
-				give_resources(id, resource_info[id])
-	update_resources_ui()
+	if value == 7:
+		send_message("Bandit!")
+	else:
+		for tile in board._tiles:
+			if tile.number == value:
+				var resource_info: Dictionary = board.get_tile_resources(tile)
+				for id in resource_info.keys():
+					give_resources(id, resource_info[id])
+		update_resources_ui()
 
 var dice_delay := 0.1
 
@@ -189,9 +192,7 @@ func _on_turn_start(turn: int):
 			if player.tutorial_mode:
 				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT], SCREEN_CENTER)
 				await get_tree().create_timer(1).timeout
-				root_ui.set_player_specific_ui.rpc_id(id, {
-					"message": "Place your first settlement!"
-				})
+				send_message("Place your first settlement!", id)
 			else:
 				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT])
 				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT])
@@ -202,9 +203,7 @@ func _on_turn_start(turn: int):
 			if player.tutorial_mode:
 				give_resources(player.id, STRUCTURE_COSTS[Board.Structure.SETTLEMENT], SCREEN_CENTER)
 				await get_tree().create_timer(1).timeout
-				root_ui.set_player_specific_ui.rpc_id(id, {
-					"message": "Place your second settlement!\nRemember, this one will immediately give you resources."
-				})
+				send_message("Place your second settlement!\nRemember, this one will immediately give you resources.", id)
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.SETTLEMENT)
 		State.ROLLING:
 			root_ui.set_player_specific_ui.rpc_id(id, {
@@ -261,23 +260,24 @@ func _on_settlement_built(pos: Vector2, id: int) -> void:
 			if get_player_by_id(id).tutorial_mode:
 				give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD], SCREEN_CENTER)
 				await get_tree().create_timer(1).timeout
-				root_ui.set_player_specific_ui.rpc_id(id, {
-					"message": "Place your first road!"
-				})
+				send_message("Place your first road!", id)
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)
 			
 		State.SECOND_SETTLEMENT:
 			await get_tree().create_timer(0.2).timeout
 			var screen_pos = get_viewport().get_canvas_transform().basis_xform(pos) + SCREEN_CENTER
-			give_resources(id, _get_resources_from_settlement(Vector2(0,0)), screen_pos)
+			give_resources(id, _get_resources_from_settlement(pos), screen_pos)
 			if get_player_by_id(id).tutorial_mode:
 				await get_tree().create_timer(0.8).timeout
-				
-				root_ui.set_player_specific_ui.rpc_id(id, {
-					"message": "Place your second road!"
-				})
+				send_message("Place your second road!", id)
 				give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD])
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)
 
-func _get_resources_from_settlement(_pos: Vector2) -> Dictionary[Res, int]:
-	return { Res.ORE: 10 }
+func _get_resources_from_settlement(pos: Vector2) -> Dictionary[Res, int]:
+	var resources = board.get_point_adjacent_tile_resources(Vector2i(pos.round()))
+	return resources
+
+func send_message(message: String, id: int = 0):
+	root_ui.set_player_specific_ui.rpc_id(id, {
+		"message": message
+	})

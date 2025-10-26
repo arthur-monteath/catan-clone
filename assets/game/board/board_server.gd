@@ -61,6 +61,7 @@ func generate_map() -> void:
 		t.pos = pos
 	
 		for point in get_points(pos):
+			t.points.append(point)
 			_points.append(point)
 		
 		var edge_dict = get_edge_lines(pos)
@@ -109,6 +110,7 @@ class Tile:
 	var type: TileType
 	var pos: Vector2i
 	var number: int
+	var points: Array[Vector2i]
 	var edges: Array[Vector2i]
 #endregion
 
@@ -184,6 +186,16 @@ func _road_has_connection(pos: Vector2) -> bool:
 	for point in line_points:
 		if _settlements.has(point): return true
 	return false
+
+func get_point_adjacent_tile_resources(settlement_pos: Vector2i) -> Dictionary[Main.Res, int]:
+	var resources: Dictionary[Main.Res, int] = {}
+	for tile in _tiles:
+		if settlement_pos in tile.points:
+			var type = tile.type
+			if resources.has(type): resources[type] += 1
+			else: resources[type] = 1
+			continue
+	return resources
 
 #region Hex Grid
 
