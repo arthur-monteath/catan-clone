@@ -128,7 +128,6 @@ func request_road(_pos: Vector2):
 		var pos: Vector2i = _pos.round()
 		var requester = multiplayer.get_remote_sender_id()
 		var valid_space: bool = _edges.has(pos) and !_roads.has(pos)
-		print("Can place? ", valid_space)
 		var has_connection: bool = _road_has_connection(pos)
 		if valid_space and has_connection and main.buy(requester, Structure.ROAD):
 			var player_info = main.get_player_client_info_by_id(requester)
@@ -141,8 +140,8 @@ func request_settlement(_pos: Vector2):
 		var pos: Vector2i = _pos.round()
 		var requester = multiplayer.get_remote_sender_id()
 		#var free_settlement: bool = main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT
-		var can_place: bool = _points.has(pos) and !_settlements.has(pos)
-		if can_place and main.buy(requester, Structure.SETTLEMENT):
+		var valid_space: bool = _points.has(pos) and !_settlements.has(pos)
+		if valid_space and main.buy(requester, Structure.SETTLEMENT):
 			var player_info = main.get_player_client_info_by_id(requester)
 			_set_settlement(pos, player_info)
 			emit_signal("on_settlement_built", pos, requester)

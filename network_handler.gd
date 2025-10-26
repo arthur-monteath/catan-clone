@@ -25,7 +25,7 @@ func _send_clients_player_information(server_info):
 	for child: NetworkPlayer in get_tree().current_scene.get_node("%PlayerList").get_children():
 		if server_info.has(int(child.name)):
 			var info = server_info[int(child.name)]
-			child.setup_player_info.rpc(info.name, info.color)
+			child.setup_player_info.rpc(info.name, info.color, info.tutorial)
 
 func start_server() -> void:
 	peer = ENetMultiplayerPeer.new()

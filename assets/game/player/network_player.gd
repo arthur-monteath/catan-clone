@@ -18,11 +18,12 @@ func _enter_tree() -> void:
 	#print("(READY)Player ID: ", multiplayer.get_unique_id(), " | name: ", player_name, " color: ", player_color)
 
 @rpc("any_peer", "reliable", "call_local")
-func setup_player_info(new_name: String, color: Color) -> void:
+func setup_player_info(new_name: String, color: Color, tutorial: bool) -> void:
 	player_name = new_name
 	get_node("%PlayerLabel").text = new_name
 	player_color = color
 	get_node("%Outline").self_modulate = color
+	tutorial_mode = tutorial
 	
 @rpc("authority", "reliable", "call_local")
 func set_outline(value: bool):
