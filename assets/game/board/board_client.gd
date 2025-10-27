@@ -33,7 +33,8 @@ func set_is_my_turn(value: bool):
 	if main.game_state == Main.State.ACTION and value:
 		action_ui.visible = true
 	else: action_ui.visible = false
-	if !value: build_mode = false
+	if !value:
+		build_mode = false
 
 @rpc("authority", "reliable", "call_local")
 func propagate_map(tile_types, number_tokens):	
