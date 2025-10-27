@@ -7,7 +7,27 @@ func set_dice_spin(i: int, dice: Array[int]):
 	dice2.rotation = (i/5.0) * PI
 	dice1.frame = dice[0]
 	dice2.frame = dice[1]
+	if i == 5: set_dice_result(dice)
 
+func set_dice_result(dice: Array[int]):
+	for t in get_tree().get_processed_tweens(): t.kill()
+	var label = dice_result
+	label.text = str(dice[0] + dice[1] + 2)
+	label.label_settings.font_color = Color.WHITE
+	label.show()
+	var tween_font = get_tree().create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC).set_parallel()
+	tween_font.tween_property(label.label_settings, "font_size", 64, 2).from(16)
+	tween_font.tween_property(label, "position:y", -128, 2).as_relative().from(label.position.y)
+	var tween_opacity = get_tree().create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	tween_opacity.tween_property(label.label_settings, "font_color:a", 0, 1).set_delay(2).from(1)
+	tween_opacity.tween_property(label.label_settings, "outline_color:a", 0, 1).from(1)
+	tween_opacity.tween_property(label.label_settings, "shadow_color:a", 0, 1).from(1)
+	tween_opacity.tween_property(label, "position:y", 64, 1).set_delay(2).as_relative()
+	tween_opacity.tween_callback(func():
+		label.hide())
+		#label.position.y += 64)
+
+@onready var dice_result: Label = %DiceResult
 @onready var dice_button: Button = %DiceButton
 @onready var dice_area: Control = %DiceArea
 @onready var dice1 = %Dice2
