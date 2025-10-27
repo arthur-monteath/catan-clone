@@ -37,7 +37,7 @@ func end_turn():
 	emit_signal("on_turn_end", turn)
 	turn += turn_increment
 	if turn >= len(main.players) or turn < 0:
-		match main.game_state:
+		match main.game_state: # Events regarding end of round (On All Players end turn)
 			Main.State.FIRST_SETTLEMENT:
 				main.game_state = Main.State.SECOND_SETTLEMENT
 				turn_increment = -1
@@ -50,7 +50,6 @@ func end_turn():
 				turn_increment = 1
 				turn = 0
 			_:
-				main.game_state = Main.State.ROLLING
 				turn = 0
 	start_turn()
 

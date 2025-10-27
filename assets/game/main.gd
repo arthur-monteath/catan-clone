@@ -11,7 +11,18 @@ enum State {
 	ACTION,
 }
 
-@export var game_state: State = State.LOBBY
+var game_state: State = State.LOBBY:
+	get: return game_state
+	set(value):
+		if multiplayer.is_server():
+			game_state = value
+			_set_game_state.rpc(value)
+		else:
+			game_state = value
+
+@rpc("authority", "reliable", "call_remote")
+func _set_game_state(value: State):
+	game_state = value
 
 enum Res {
 	ORE,
@@ -220,6 +231,7 @@ func _on_turn_end(turn: int):
 	var player: Player = players[turn]
 	#var id = player.id
 	player.node.set_outline.rpc(false)
+	if game_state == State.ACTION: game_state = State.ROLLING
 
 func get_player_by_id(id: int):
 	for player in players:
