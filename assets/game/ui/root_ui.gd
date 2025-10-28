@@ -1,6 +1,9 @@
 class_name RootUI
 extends CanvasLayer
 
+func _ready() -> void:
+	base_position = dice_result.position
+
 @rpc("authority", "reliable", "call_local")
 func set_dice_spin(i: int, dice: Array[int]):
 	dice1.rotation = -(i/5.0) * PI
@@ -9,22 +12,32 @@ func set_dice_spin(i: int, dice: Array[int]):
 	dice2.frame = dice[1]
 	if i == 5: set_dice_result(dice)
 
+var base_position: Vector2
+var result_tween: Tween
 func set_dice_result(dice: Array[int]):
-	for t in get_tree().get_processed_tweens(): t.kill()
+	if is_instance_valid(result_tween): # Cancel existing animation
+		result_tween.kill()
+		result_tween = null
 	var label = dice_result
+	label.modulate.a = 1
 	label.text = str(dice[0] + dice[1] + 2)
-	label.label_settings.font_color = Color.WHITE
 	label.show()
-	var tween_font = get_tree().create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC).set_parallel()
-	tween_font.tween_property(label.label_settings, "font_size", 64, 2).from(16)
-	tween_font.tween_property(label, "position:y", -128, 2).as_relative().from(label.position.y)
-	var tween_opacity = get_tree().create_tween().set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	tween_opacity.tween_property(label.label_settings, "font_color:a", 0, 1).set_delay(2).from(1)
-	tween_opacity.tween_property(label.label_settings, "outline_color:a", 0, 1).from(1)
-	tween_opacity.tween_property(label.label_settings, "shadow_color:a", 0, 1).from(1)
-	tween_opacity.tween_property(label, "position:y", 64, 1).set_delay(2).as_relative()
-	tween_opacity.tween_callback(func():
-		label.hide())
+	var tw := get_tree().create_tween()
+	result_tween = tw
+	tw.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+	tw.tween_interval(0.2)
+	tw.set_parallel(true)
+	tw.tween_property(label.label_settings, "font_size", 64, 1.5).from(16)
+	tw.tween_property(label, "position:y", -128, 1.8).as_relative().from(base_position.y + 96)
+	tw.set_parallel(false)
+	tw.tween_interval(1.8)
+	tw.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	tw.set_parallel(true)
+	tw.tween_property(label, "modulate:a", 0, 0.5).from(1)
+	tw.tween_property(label, "position:y", 96, 0.5).as_relative().from(base_position.y - 32)
+	tw.tween_property(label.label_settings, "font_size", 16, 0.5).from(64)
+	tw.set_parallel(false)
+	tw.tween_callback(Callable(label, "hide"))
 		#label.position.y += 64)
 
 @onready var dice_result: Label = %DiceResult

@@ -53,6 +53,13 @@ func end_turn():
 				turn = 0
 	start_turn()
 
-
-func _on_end_turn_pressed() -> void:
-	end_turn()
+@rpc("any_peer", "reliable", "call_local")
+func request_end_turn():
+	if !multiplayer.is_server(): return
+	if main.players[turn].id == multiplayer.get_remote_sender_id():
+		end_turn()
+		
+@onready var end_turn_button: Button = %EndTurnButton
+func _on_end_turn_button_pressed() -> void:
+	end_turn_button.hide()
+	request_end_turn.rpc_id(1)

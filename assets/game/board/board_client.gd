@@ -25,14 +25,16 @@ var edge_lines: Dictionary[Vector2i, Array]
 var roads: Dictionary[Vector2i, Dictionary]
 var settlements: Dictionary[Vector2i, Dictionary]
 
+@onready var end_turn_button: Button = %EndTurnButton
 @onready var action_ui: Control = $"../../RootUI/ActionUI" # TODO: Figure out where to go with this
 var is_my_turn: bool = false
 @rpc("authority", "reliable", "call_local")
 func set_is_my_turn(value: bool):
 	is_my_turn = value
 	if main.game_state == Main.State.ACTION and value:
-		action_ui.visible = true
-	else: action_ui.visible = false
+		action_ui.show()
+		end_turn_button.show()
+	else: action_ui.hide()
 	if !value:
 		build_mode = false
 
