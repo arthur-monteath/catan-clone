@@ -1,5 +1,4 @@
-class_name RootUI
-extends CanvasLayer
+class_name RootUI extends CanvasLayer
 
 func _ready() -> void:
 	base_position = dice_result.position

@@ -1,11 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://cjyllng40ahaa"]
+[gd_scene load_steps=16 format=3 uid="uid://cjyllng40ahaa"]
 
 [ext_resource type="Script" uid="uid://bnndtle2wxehs" path="res://assets/game/ui/trade_manager.gd" id="1_14fk2"]
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="1_i6hrq"]
 [ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/game/board/tiles/art/grain.png" id="2_1nyrw"]
 [ext_resource type="Texture2D" uid="uid://bjgxtjf3cvlkw" path="res://assets/game/ui/accept.png" id="3_3yvek"]
+[ext_resource type="Texture2D" uid="uid://olilj3bm2tqg" path="res://assets/icon.svg" id="4_3yvek"]
 [ext_resource type="Texture2D" uid="uid://06a6pee02k56" path="res://assets/game/ui/bank.png" id="4_waug3"]
 [ext_resource type="Texture2D" uid="uid://l2hsyqdbx4ah" path="res://assets/game/ui/reject.png" id="5_waug3"]
+[ext_resource type="Texture2D" uid="uid://bmedsxcffstm6" path="res://assets/game/ui/dots.png" id="6_lwqe6"]
 [ext_resource type="Texture2D" uid="uid://bovonst04yjvg" path="res://assets/game/ui/up_arrow.png" id="8_gotpn"]
 [ext_resource type="Texture2D" uid="uid://clfs8jyp0lsy3" path="res://assets/game/ui/down_arrow.png" id="9_ccbdu"]
 
@@ -552,7 +554,7 @@ text = "Cancel Trade"
 [node name="Button2" type="Button" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI/ButtonList"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Propose Trade to Players"
+text = "Propose Trade"
 
 [node name="PanelContainer" type="PanelContainer" parent="TradeContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -568,35 +570,84 @@ text = "Buyers"
 label_settings = SubResource("LabelSettings_waug3")
 horizontal_alignment = 1
 
-[node name="BankButton" type="Button" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList"]
-unique_name_in_owner = true
-clip_contents = true
-custom_minimum_size = Vector2(160, 48)
+[node name="Bank" type="PanelContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton"]
-layout_mode = 0
-offset_left = 7.0
-offset_top = 7.0
-offset_right = 119.0
-offset_bottom = 39.0
+[node name="HBoxContainer" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Bank"]
+layout_mode = 2
 
-[node name="Choice" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton/HBoxContainer"]
+[node name="Choice" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Bank/HBoxContainer"]
 layout_mode = 2
 texture = ExtResource("3_3yvek")
 
-[node name="ProfilePicture" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton/HBoxContainer"]
+[node name="ProfilePicture" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Bank/HBoxContainer"]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("4_waug3")
 expand_mode = 2
 
-[node name="Label" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton/HBoxContainer"]
+[node name="Label" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Bank/HBoxContainer"]
 layout_mode = 2
 text = "Bank"
 
+[node name="Player" type="PanelContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player"]
+layout_mode = 2
+
+[node name="Choice" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("6_lwqe6")
+
+[node name="ProfilePicture" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_3yvek")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player/HBoxContainer"]
+layout_mode = 2
+text = "Player1"
+
+[node name="Player2" type="PanelContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player2"]
+layout_mode = 2
+
+[node name="Choice" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player2/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("6_lwqe6")
+
+[node name="ProfilePicture" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player2/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_3yvek")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player2/HBoxContainer"]
+layout_mode = 2
+text = "Player2"
+
+[node name="Player3" type="PanelContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player3"]
+layout_mode = 2
+
+[node name="Choice" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player3/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("6_lwqe6")
+
+[node name="ProfilePicture" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player3/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_3yvek")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/Player3/HBoxContainer"]
+layout_mode = 2
+text = "Player3"
+
 [node name="TradeOffer" type="PanelContainer" parent="."]
-unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

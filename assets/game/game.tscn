@@ -410,6 +410,7 @@ label_settings = SubResource("LabelSettings_n5fxh")
 horizontal_alignment = 1
 
 [node name="TradingUI" parent="RootUI" instance=ExtResource("28_10ku1")]
+visible = false
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://by1q5dsk0j4se")
