@@ -32,13 +32,11 @@ func send_trade_suggestion(): pass
 @onready var offer_popup: PanelContainer = %TradeOffer
 @rpc("authority", "reliable", "call_local")
 func offer_trade(offer: Dictionary, request: Dictionary, owner: int):
+	if multiplayer.get_unique_id() == owner: return
 	trade_owner_id = owner
-	# Setup offer
-	# Setup X
-	# Setup Y
-	# Setup Z
-	pass
-	# Setup
+	#get_node("%OfferLabel")
+	#get_node("%OfferList"),
+	offer_popup.show()
 
 @export var player_choice_texture: Array[Texture2D]
 @rpc("any_peer", "reliable", "call_local")
@@ -46,7 +44,7 @@ func set_player_choice(choice: bool):
 	var is_trade_owner = multiplayer.get_unique_id() != trade_owner_id
 	if !multiplayer.is_server() and is_trade_owner: return
 	var choicemaker_id = multiplayer.get_remote_sender_id()
-	for player in player_list:
+	for player in player_list.get_children():
 		if player.name == str(choicemaker_id):
 			player_choices[choicemaker_id] = choice
 			if is_trade_owner:
@@ -72,30 +70,31 @@ func _on_offer_accept_pressed() -> void:
 func open_trade_ui(offer: Dictionary[Resources.Type, int] = {}, request: Dictionary[Resources.Type, int] = {}):
 	trade_offer = offer
 	trade_request = request
-	for resource in Resources.Type.values():
-		var offer_resource: TradeResourceUI = TRADE_RESOURCE.instantiate()
-		var request_resource: TradeResourceUI = TRADE_RESOURCE.instantiate()
+	
+	var offer_resource_uis := generate_resource_ui(offer)
+	for resource_ui in offer_resource_uis:
+		var type := resource_ui.resource_type
+		if offer.has(type): trade_offer[type] = offer[type]
+		resource_ui.on_resource_amount_changed.connect(on_offer_changed.bind(type))
+		trade_offer_list.add_child(resource_ui)
 		
-		offer_resource.set_icon(Resources.resource_texture[resource])
-		if offer.has(resource):
-			offer_resource.set_value(offer[resource])
-		else:
-			offer[resource] = 0
-		trade_offer[resource] = offer[resource]
-		
-		request_resource.set_icon(Resources.resource_texture[resource])
-		if request.has(resource):
-			request_resource.set_value(request[resource])
-		else:
-			request[resource] = 0
-		trade_request[resource] = request[resource]
-		
-		offer_resource.on_resource_amount_changed.connect(on_offer_changed.bind(resource))
-		request_resource.on_resource_amount_changed.connect(on_request_changed.bind(resource))
-		
-		trade_offer_list.add_child(offer_resource)
-		trade_request_list.add_child(request_resource)
+	var request_resource_uis := generate_resource_ui(request)
+	for resource_ui in request_resource_uis:
+		var type := resource_ui.resource_type
+		if request.has(type): trade_request[type] = request[type]
+		resource_ui.on_resource_amount_changed.connect(on_request_changed.bind(type))
+		trade_request_list.add_child(resource_ui)
 	trade_container.show()
+
+func generate_resource_ui(resources: Dictionary[Resources.Type, int]) -> Array[TradeResourceUI]:
+	var trade_resources: Array[TradeResourceUI]
+	for resource: Resources.Type in resources.keys():
+		var trade_resource: TradeResourceUI = TRADE_RESOURCE.instantiate()
+		trade_resource.set_icon(Resources.resource_texture[resource])
+		trade_resource.set_value(resources[resource])
+		trade_resource.set_type(resource)
+		trade_resources.append(trade_resource)
+	return trade_resources
 
 func on_offer_changed(change: int, resource: Resources.Type):
 	trade_offer[resource] += change
@@ -119,8 +118,8 @@ func _on_cancel_trade_button_pressed() -> void:
 	trade_container.hide()
 	
 	# Maybe in the future make it so this does not delete-redraw every time TradeUI is opened...
-	for child in trade_offer_list: child.queue_free()
-	for child in trade_request_list: child.queue_free()
+	for child in trade_offer_list.get_children(): child.queue_free()
+	for child in trade_request_list.get_children(): child.queue_free()
 
 func _on_propose_trade_button_pressed() -> void:
-	send_trade_request.rpc_id(1, trade_offer, trade_request)
+	propose_trade(trade_offer, trade_request)

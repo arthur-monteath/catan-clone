@@ -7,11 +7,16 @@ signal on_resource_amount_changed(change: int)
 @onready var add_button: Button = %AddButton
 @onready var subtract_button: Button = %SubtractButton
 
+var resource_type: Resources.Type
+
 func set_icon(image: Texture2D):
 	get_node("%Icon").texture = image
 
 func set_value(value: int):
 	get_node("%Amount").text = str(value)
+
+func set_type(type: Resources.Type):
+	resource_type = type
 
 func _on_subtract_button_pressed() -> void:
 	if (int(amount.text) <= 0):
