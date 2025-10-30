@@ -29,13 +29,28 @@ func send_trade_request(offer: Dictionary, request: Dictionary):
 @rpc("any_peer", "reliable", "call_remote")
 func send_trade_suggestion(): pass
 
+@onready var offer_popup_offer_list: HBoxContainer = %OfferPopupOfferList
+@onready var offer_popup_request_list: HBoxContainer = %OfferPopupRequestList
 @onready var offer_popup: PanelContainer = %TradeOffer
 @rpc("authority", "reliable", "call_local")
 func offer_trade(offer: Dictionary, request: Dictionary, owner: int):
 	if multiplayer.get_unique_id() == owner: return
+	for child in offer_popup_offer_list.get_children(): child.queue_free()
+	for child in offer_popup_request_list.get_children(): child.queue_free()
+	
 	trade_owner_id = owner
-	#get_node("%OfferLabel")
-	#get_node("%OfferList"),
+	trade_offer = offer
+	trade_request = request
+	
+	var offer_resource_uis := generate_resource_ui(offer)
+	for resource_ui in offer_resource_uis:
+		offer_popup_offer_list.add_child(resource_ui)
+		
+	var request_resource_uis := generate_resource_ui(request)
+	for resource_ui in request_resource_uis:
+		offer_popup_request_list.add_child(resource_ui)
+	
+	get_node("%OfferLabel").text = "Trade Offer from " + main.get_player_by_id(owner).name
 	offer_popup.show()
 
 @export var player_choice_texture: Array[Texture2D]
@@ -71,17 +86,19 @@ func open_trade_ui(offer: Dictionary[Resources.Type, int] = {}, request: Diction
 	trade_offer = offer
 	trade_request = request
 	
+	for resource in Resources.Type.values():
+		if !offer.has(resource): offer[resource] = 0
+		if !request.has(resource): request[resource] = 0
+	
 	var offer_resource_uis := generate_resource_ui(offer)
 	for resource_ui in offer_resource_uis:
 		var type := resource_ui.resource_type
-		if offer.has(type): trade_offer[type] = offer[type]
 		resource_ui.on_resource_amount_changed.connect(on_offer_changed.bind(type))
 		trade_offer_list.add_child(resource_ui)
 		
 	var request_resource_uis := generate_resource_ui(request)
 	for resource_ui in request_resource_uis:
 		var type := resource_ui.resource_type
-		if request.has(type): trade_request[type] = request[type]
 		resource_ui.on_resource_amount_changed.connect(on_request_changed.bind(type))
 		trade_request_list.add_child(resource_ui)
 	trade_container.show()
@@ -97,13 +114,15 @@ func generate_resource_ui(resources: Dictionary[Resources.Type, int]) -> Array[T
 	return trade_resources
 
 func on_offer_changed(change: int, resource: Resources.Type):
-	trade_offer[resource] += change
+	if trade_offer.has(resource): trade_offer[resource] += change
+	else: trade_offer[resource] = change
 
 	# Make checks to update UI such as Bank
 	pass
 
 func on_request_changed(change: int, resource: Resources.Type):
-	trade_request[resource] += change
+	if trade_request.has(resource): trade_request[resource] += change
+	else: trade_request[resource] = change
 	
 	# Make checks to update UI such as Bank
 	pass
