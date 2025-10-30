@@ -81,21 +81,21 @@ func generate_map() -> void:
 
 #region Tiles
 enum TileType {
-	BRICK = Main.Res.BRICK,
-	LUMBER = Main.Res.LUMBER,
-	ORE = Main.Res.ORE,
-	GRAIN = Main.Res.GRAIN,
-	WOOL = Main.Res.WOOL,
+	BRICK = Resources.Type.BRICK,
+	LUMBER = Resources.Type.LUMBER,
+	ORE = Resources.Type.ORE,
+	GRAIN = Resources.Type.GRAIN,
+	WOOL = Resources.Type.WOOL,
 	DESERT
 }
 
 func _tile_type_to_resource(type: TileType):
 	match type:
-		TileType.BRICK: return Main.Res.BRICK
-		TileType.LUMBER: return Main.Res.LUMBER
-		TileType.ORE: return Main.Res.ORE
-		TileType.GRAIN: return Main.Res.GRAIN
-		TileType.WOOL: return Main.Res.WOOL
+		TileType.BRICK: return Resources.Type.BRICK
+		TileType.LUMBER: return Resources.Type.LUMBER
+		TileType.ORE: return Resources.Type.ORE
+		TileType.GRAIN: return Resources.Type.GRAIN
+		TileType.WOOL: return Resources.Type.WOOL
 		TileType.DESERT: return null
 
 var tileAmounts: Dictionary[TileType, int] = {
@@ -165,7 +165,7 @@ func _set_settlement(pos: Vector2i, player: Dictionary):
 #endregion
 
 func get_tile_resources(tile: Tile) -> Dictionary:
-	var resource_type: Main.Res = _tile_type_to_resource(tile.type)
+	var resource_type: Resources.Type = _tile_type_to_resource(tile.type)
 	if resource_type == null: return {}
 	var info = {}
 	for point in get_points(tile.pos):
@@ -192,8 +192,8 @@ func _road_has_connection(pos: Vector2) -> bool:
 		if _settlements.has(point): return true
 	return false
 
-func get_point_adjacent_tile_resources(settlement_pos: Vector2i) -> Dictionary[Main.Res, int]:
-	var resources: Dictionary[Main.Res, int] = {}
+func get_point_adjacent_tile_resources(settlement_pos: Vector2i) -> Dictionary[Resources.Type, int]:
+	var resources: Dictionary[Resources.Type, int] = {}
 	for tile in _tiles:
 		if settlement_pos in tile.points and tile.type != TileType.DESERT:
 			var type = tile.type

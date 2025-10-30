@@ -57,34 +57,14 @@ visible = false
 layout_mode = 2
 theme = ExtResource("1_4tgfe")
 
-[node name="TradeButton" type="FoldableContainer" parent="VBoxContainer"]
+[node name="TradeButton" type="Button" parent="VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 theme = ExtResource("1_4tgfe")
 theme_override_constants/h_separation = 0
 theme_override_font_sizes/font_size = 32
-theme_override_icons/expanded_arrow = SubResource("CompressedTexture2D_4tgfe")
-theme_override_icons/folded_arrow = SubResource("CompressedTexture2D_iwm7g")
-folded = true
-title = "Trade"
-title_alignment = 1
-
-[node name="StructureList" type="VBoxContainer" parent="VBoxContainer/TradeButton"]
-visible = false
-layout_mode = 2
-theme = ExtResource("1_4tgfe")
-
-[node name="Button" type="Button" parent="VBoxContainer/TradeButton/StructureList"]
-layout_mode = 2
-text = "Everyone"
-
-[node name="Button2" type="Button" parent="VBoxContainer/TradeButton/StructureList"]
-layout_mode = 2
-text = "Specific Player"
-
-[node name="Button3" type="Button" parent="VBoxContainer/TradeButton/StructureList"]
-layout_mode = 2
-text = "No one"
+text = "Trade"
 
 [connection signal="folding_changed" from="VBoxContainer/BuildButton" to="." method="_on_build_button_folding_changed"]
+[connection signal="pressed" from="VBoxContainer/TradeButton" to="." method="_on_trade_button_pressed"]

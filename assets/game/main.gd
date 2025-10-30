@@ -24,17 +24,9 @@ var game_state: State = State.LOBBY:
 func _set_game_state(value: State):
 	game_state = value
 
-enum Res {
-	ORE,
-	GRAIN,
-	LUMBER,
-	BRICK,
-	WOOL,
-}
-
 const STRUCTURE_COSTS: Dictionary[Board.Structure, Dictionary] = {
-	Board.Structure.SETTLEMENT: { Res.ORE: 2, Res.BRICK: 1 },
-	Board.Structure.ROAD: { Res.LUMBER: 1, Res.BRICK: 1 },
+	Board.Structure.SETTLEMENT: { Resources.Type.ORE: 2, Resources.Type.BRICK: 1 },
+	Board.Structure.ROAD: { Resources.Type.LUMBER: 1, Resources.Type.BRICK: 1 },
 }
 
 class Player:
@@ -43,13 +35,13 @@ class Player:
 	var name: String
 	var color: Color
 	var tutorial_mode: bool
-	var resources: Dictionary[Res, int]
+	var resources: Dictionary[Resources.Type, int]
 
 var players: Array[Player]
 
 const RESOURCE_VISUAL = preload("uid://ct8mbgdghj2nn")
 
-@onready var resources_panel: Control = %ResourcesPanel
+@onready var resources_panel: ResourcesUI = %ResourcesPanel
 @onready var player_list: VBoxContainer = %PlayerList
 
 @onready var turn_manager: TurnManager = %TurnManager
@@ -102,9 +94,9 @@ func animate_resources(resources_to_add: Dictionary, pos: Vector2, cb: Callable)
 			await get_tree().create_timer(0.05).timeout
 
 @rpc("authority", "reliable", "call_local")
-func _client_animate_resources(type: Res, pos: Vector2):
+func _client_animate_resources(type: Resources.Type, pos: Vector2):
 	var resource: Sprite2D = RESOURCE_VISUAL.instantiate()
-	resource.texture = resources_panel.res[type]
+	resource.texture = Resources.resource_texture[type]
 	resource.position = pos
 	var tween_pos = get_tree().create_tween()
 	tween_pos.set_ease(Tween.EASE_IN_OUT)
@@ -287,7 +279,7 @@ func _on_settlement_built(pos: Vector2, id: int) -> void:
 				give_resources(id, STRUCTURE_COSTS[Board.Structure.ROAD])
 			client.set_client_selected_structure.rpc_id(id, Board.Structure.ROAD)
 
-func _get_resources_from_settlement(pos: Vector2) -> Dictionary[Res, int]:
+func _get_resources_from_settlement(pos: Vector2) -> Dictionary[Resources.Type, int]:
 	var resources = board.get_point_adjacent_tile_resources(Vector2i(pos.round()))
 	return resources
 

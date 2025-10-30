@@ -410,7 +410,7 @@ label_settings = SubResource("LabelSettings_n5fxh")
 horizontal_alignment = 1
 
 [node name="TradingUI" parent="RootUI" instance=ExtResource("28_10ku1")]
-visible = false
+mouse_filter = 2
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://by1q5dsk0j4se")
@@ -423,4 +423,5 @@ network_player = ExtResource("13_0fu4a")
 [connection signal="pressed" from="RootUI/StartButton" to="." method="start_game"]
 [connection signal="build_mode_changed" from="RootUI/ActionUI" to="Board/BoardClient" method="_on_action_ui_build_mode_changed"]
 [connection signal="on_structure_selected" from="RootUI/ActionUI" to="Board/BoardClient" method="_on_action_ui_on_structure_selected"]
+[connection signal="trade_button_pressed" from="RootUI/ActionUI" to="RootUI/TradingUI" method="open_trade_ui"]
 [connection signal="gui_input" from="RootUI/MessageBox" to="RootUI" method="_on_message_box_gui_input"]
