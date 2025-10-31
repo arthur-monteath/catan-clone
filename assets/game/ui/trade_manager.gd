@@ -116,16 +116,17 @@ func generate_resource_ui(resources: Dictionary[Resources.Type, int]) -> Array[T
 func on_offer_changed(change: int, resource: Resources.Type):
 	if trade_offer.has(resource): trade_offer[resource] += change
 	else: trade_offer[resource] = change
-
-	# Make checks to update UI such as Bank
+	update_trade_container_ui()
 	pass
 
 func on_request_changed(change: int, resource: Resources.Type):
 	if trade_request.has(resource): trade_request[resource] += change
 	else: trade_request[resource] = change
-	
-	# Make checks to update UI such as Bank
+	update_trade_container_ui()
 	pass
+
+func update_trade_container_ui():
+	update_bank_button()
 
 func is_offer_bank_acceptable(offer: Dictionary[Resources.Type, int], request: Dictionary[Resources.Type, int]) -> bool:
 	var offer_sum := 0.0
@@ -140,6 +141,11 @@ func is_offer_bank_acceptable(offer: Dictionary[Resources.Type, int], request: D
 		return true
 	
 	return (offer_sum / request_sum) >= 4
+	
+@onready var bank_button: Button = %BankButton
+func update_bank_button():
+	var image: TextureRect = bank_button.get_node("HBoxContainer/Choice")
+	image.texture = player_choice_texture[int(is_offer_bank_acceptable(trade_offer, trade_request))]
 
 func _on_cancel_trade_button_pressed() -> void:
 	trade_offer = {}

@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://cjyllng40ahaa"]
+[gd_scene load_steps=12 format=3 uid="uid://cjyllng40ahaa"]
 
 [ext_resource type="Script" uid="uid://bnndtle2wxehs" path="res://assets/game/ui/trade_manager.gd" id="1_14fk2"]
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="1_i6hrq"]
 [ext_resource type="Texture2D" uid="uid://bjgxtjf3cvlkw" path="res://assets/game/ui/accept.png" id="3_3yvek"]
+[ext_resource type="Texture2D" uid="uid://bmedsxcffstm6" path="res://assets/game/ui/dots.png" id="4_gotpn"]
 [ext_resource type="Texture2D" uid="uid://06a6pee02k56" path="res://assets/game/ui/bank.png" id="4_waug3"]
 [ext_resource type="Texture2D" uid="uid://l2hsyqdbx4ah" path="res://assets/game/ui/reject.png" id="5_waug3"]
 [ext_resource type="Texture2D" uid="uid://bovonst04yjvg" path="res://assets/game/ui/up_arrow.png" id="8_gotpn"]
@@ -25,6 +26,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_14fk2")
+player_choice_texture = Array[Texture2D]([ExtResource("5_waug3"), ExtResource("3_3yvek"), ExtResource("4_gotpn")])
 
 [node name="TradeContainer" type="PanelContainer" parent="."]
 unique_name_in_owner = true

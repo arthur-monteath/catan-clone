@@ -1,3 +1,3 @@
 extends Node
 
-@export var inf_resources: bool = true
+@export var inf_resources: bool = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://be2fp4tuhaso0"]
+[gd_scene load_steps=50 format=3 uid="uid://be2fp4tuhaso0"]
 
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board/board_server.gd" id="1_e2o6t"]
@@ -30,6 +30,9 @@
 [ext_resource type="Script" uid="uid://tmac7isln8xf" path="res://addons/shaker/data/Vector2/ShakerPreset2D.gd" id="25_iwd7i"]
 [ext_resource type="PackedScene" uid="uid://6r70bh3i3hcd" path="res://assets/game/ui/action_ui.tscn" id="27_iwd7i"]
 [ext_resource type="PackedScene" uid="uid://cjyllng40ahaa" path="res://assets/game/ui/trading_ui.tscn" id="28_10ku1"]
+[ext_resource type="Texture2D" uid="uid://l2hsyqdbx4ah" path="res://assets/game/ui/reject.png" id="29_ddo4g"]
+[ext_resource type="Texture2D" uid="uid://bjgxtjf3cvlkw" path="res://assets/game/ui/accept.png" id="30_l6p1s"]
+[ext_resource type="Texture2D" uid="uid://bmedsxcffstm6" path="res://assets/game/ui/dots.png" id="31_l1jga"]
 
 [sub_resource type="Gradient" id="Gradient_1ryvc"]
 colors = PackedColorArray(0.09019608, 0.1254902, 0.21960784, 1, 0.09019608, 0.1254902, 0.21960784, 1)
@@ -411,6 +414,7 @@ horizontal_alignment = 1
 
 [node name="TradingUI" parent="RootUI" instance=ExtResource("28_10ku1")]
 mouse_filter = 2
+player_choice_texture = Array[Texture2D]([ExtResource("29_ddo4g"), ExtResource("30_l6p1s"), ExtResource("31_l1jga")])
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://by1q5dsk0j4se")
