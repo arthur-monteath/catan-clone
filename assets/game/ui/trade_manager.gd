@@ -33,12 +33,12 @@ func send_trade_suggestion(): pass
 @onready var offer_popup_request_list: HBoxContainer = %OfferPopupRequestList
 @onready var offer_popup: PanelContainer = %TradeOffer
 @rpc("authority", "reliable", "call_local")
-func offer_trade(offer: Dictionary, request: Dictionary, owner: int):
-	if multiplayer.get_unique_id() == owner: return
+func offer_trade(offer: Dictionary, request: Dictionary, trade_owner: int):
+	if multiplayer.get_unique_id() == trade_owner: return
 	for child in offer_popup_offer_list.get_children(): child.queue_free()
 	for child in offer_popup_request_list.get_children(): child.queue_free()
 	
-	trade_owner_id = owner
+	trade_owner_id = trade_owner
 	trade_offer = offer
 	trade_request = request
 	
@@ -50,7 +50,7 @@ func offer_trade(offer: Dictionary, request: Dictionary, owner: int):
 	for resource_ui in request_resource_uis:
 		offer_popup_request_list.add_child(resource_ui)
 	
-	get_node("%OfferLabel").text = "Trade Offer from " + main.get_player_by_id(owner).name
+	get_node("%OfferLabel").text = "Trade Offer from " + main.get_player_by_id(trade_owner).name
 	offer_popup.show()
 
 @export var player_choice_texture: Array[Texture2D]
@@ -127,9 +127,19 @@ func on_request_changed(change: int, resource: Resources.Type):
 	# Make checks to update UI such as Bank
 	pass
 
-func is_offer_bank_acceptable(offer: Dictionary) -> bool:
-	return true
+func is_offer_bank_acceptable(offer: Dictionary[Resources.Type, int], request: Dictionary[Resources.Type, int]) -> bool:
+	var offer_sum := 0.0
+	for v in offer.values():
+		offer_sum += v
 
+	var request_sum := 0.0
+	for v in request.values():
+		request_sum += v
+	
+	if request_sum == 0: # You can give away your resources
+		return true
+	
+	return (offer_sum / request_sum) >= 4
 
 func _on_cancel_trade_button_pressed() -> void:
 	trade_offer = {}
