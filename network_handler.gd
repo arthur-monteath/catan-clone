@@ -1,14 +1,16 @@
 extends Node
 
-const MAX_CLIENTS := 8
-const PORT := 25565
-
-var peer: ENetMultiplayerPeer
-
 signal server_started
 
+var lobby_id: int = 0
+var is_host: bool = false
+var is_joining: bool = false
+var peer: SteamMultiplayerPeer
+@export var player_scene: PackedScene
+@export var spawn_path: NodePath
 var _server_player_info: Dictionary[int, Dictionary]
 
+#region player information
 func get_player_color() -> Color:
 	if _server_player_info.has(multiplayer.get_unique_id()):
 		return _server_player_info[multiplayer.get_unique_id()].color
@@ -26,17 +28,52 @@ func _send_clients_player_information(server_info):
 		if server_info.has(int(child.name)):
 			var info = server_info[int(child.name)]
 			child.setup_player_info.rpc(info.name, info.color, info.tutorial)
+#endregion
 
-func start_server() -> void:
-	peer = ENetMultiplayerPeer.new()
-	var err := peer.create_server(PORT, MAX_CLIENTS)
-	if err != OK: push_error("Server failed: %s" % err); return
-	multiplayer.multiplayer_peer = peer
-	#player_info[1] = info
-	emit_signal("server_started")
+func _ready():
+	print("Steam Initialized: ", Steam.steamInit(480, true))
+	Steam.initRelayNetworkAccess()
+	Steam.lobby_created.connect(_on_lobby_created)
+	Steam.lobby_joined.connect(_on_lobby_joined)
 
-func start_client(ip: String) -> void:
-	peer = ENetMultiplayerPeer.new()
-	var err := peer.create_client(ip, PORT)
-	if err != OK: push_error("Client failed: %s" % err); return
+func host_lobby() -> void:
+	Steam.createLobby(Steam.LOBBY_TYPE_PUBLIC, 4)
+	is_host = true
+
+func _on_lobby_created(result: int, lobby_id: int):
+	if result == Steam.RESULT_OK:
+		self.lobby_id = lobby_id
+		
+		peer = SteamMultiplayerPeer.new()
+		peer.server_relay = true
+		peer.create_host()
+		
+		multiplayer.multiplayer_peer = peer
+		multiplayer.peer_connected.connect(_add_player)
+		multiplayer.peer_disconnected.connect(_remove_player)
+		_add_player() # Creates a player for the Host
+
+func join_lobby(lobby_id: int):
+	is_joining = true
+	Steam.joinLobby(lobby_id)
+
+func _on_lobby_joined(lobby_id: int, permissions: int, locked: bool, response: int):
+	# Code that runs for everyone on lobby
+	if !is_joining: return
+	# Code that runs only on joining player
+	self.lobby_id = lobby_id
+	peer = SteamMultiplayerPeer.new()
+	peer.server_relay = true
+	peer.create_client(Steam.getLobbyOwner(lobby_id))
 	multiplayer.multiplayer_peer = peer
+	
+	is_joining = false
+
+func _add_player(id: int = 1):
+	var player = player_scene.instantiate
+	player.name = str(id)
+	get_node(spawn_path).add_child.call_deferred(player)
+
+func _remove_player(id: int):
+	if !has_node(str(id)): return
+	get_node(str(id)).queue_free()
