@@ -124,6 +124,11 @@ outline_color = Color(0.50318396, 0.7159233, 0.8750814, 1)
 [node name="Main" type="Node"]
 script = ExtResource("1_j5wjh")
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://by1q5dsk0j4se")
+spawn_path = NodePath("../RootUI/PlayerList")
+script = ExtResource("12_dcmux")
+
 [node name="TurnManager" type="Timer" parent="."]
 unique_name_in_owner = true
 wait_time = 32.0
@@ -145,7 +150,7 @@ visible = false
 texture_filter = 1
 texture = SubResource("GradientTexture2D_mfdv2")
 texture_offset = Vector2(168, 168)
-polygon = PackedVector2Array(168, 0, 84, 145.49226, -84, 145.49226, -168, 2.0574066e-14, -84, -145.49226, 84, -145.49226)
+polygon = PackedVector2Array(168, 0, 84, 145.49226, -84, 145.49226, -168, 2.0573387e-14, -84, -145.49226, 84, -145.49226)
 script = ExtResource("1_80nbo")
 radius = 168
 points_num = 6
@@ -410,11 +415,6 @@ horizontal_alignment = 1
 
 [node name="TradingUI" parent="RootUI" instance=ExtResource("28_10ku1")]
 mouse_filter = 2
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://by1q5dsk0j4se")
-spawn_path = NodePath("../RootUI/PlayerList")
-script = ExtResource("12_dcmux")
 
 [connection signal="pressed" from="RootUI/DiceArea/DiceButton" to="." method="_on_dice_button_pressed"]
 [connection signal="pressed" from="RootUI/DiceArea/EndTurnButton" to="TurnManager" method="_on_end_turn_button_pressed"]

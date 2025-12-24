@@ -54,9 +54,9 @@ const RESOURCE_VISUAL = preload("uid://ct8mbgdghj2nn")
 
 func _ready():
 	multiplayer.peer_connected.connect(_on_player_join)
-	NetworkHandler.server_started.connect(_on_server_started)
+	NetworkHandler.on_lobby_created.connect(_on_lobby_created)
 	
-func _on_server_started():
+func _on_lobby_created():
 	if multiplayer.is_server():
 		start_button.show()
 	

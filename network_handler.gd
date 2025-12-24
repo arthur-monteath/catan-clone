@@ -1,13 +1,12 @@
 extends Node
 
-signal server_started
+signal on_lobby_created
 
 var lobby_id: int = 0
 var is_host: bool = false
 var is_joining: bool = false
 var peer: SteamMultiplayerPeer
-@export var player_scene: PackedScene
-@export var spawn_path: NodePath
+const NETWORK_PLAYER: PackedScene = preload("uid://by1q5dsk0j4se")
 var _server_player_info: Dictionary[int, Dictionary]
 
 #region player information
@@ -27,7 +26,7 @@ func _send_clients_player_information(server_info):
 	for child: NetworkPlayer in get_tree().current_scene.get_node("%PlayerList").get_children():
 		if server_info.has(int(child.name)):
 			var info = server_info[int(child.name)]
-			child.setup_player_info.rpc(info.name, info.color, info.tutorial)
+			child.setup_player_info.rpc(info.name, info.color, info.tutorial, info.steam_id)
 #endregion
 
 func _ready():
@@ -52,6 +51,8 @@ func _on_lobby_created(result: int, lobby_id: int):
 		multiplayer.peer_connected.connect(_add_player)
 		multiplayer.peer_disconnected.connect(_remove_player)
 		_add_player() # Creates a player for the Host
+		
+		on_lobby_created.emit()
 
 func join_lobby(lobby_id: int):
 	is_joining = true
@@ -70,9 +71,9 @@ func _on_lobby_joined(lobby_id: int, permissions: int, locked: bool, response: i
 	is_joining = false
 
 func _add_player(id: int = 1):
-	var player = player_scene.instantiate
+	var player = NETWORK_PLAYER.instantiate()
 	player.name = str(id)
-	get_node(spawn_path).add_child.call_deferred(player)
+	get_node("/root/Main/RootUI/PlayerList").add_child.call_deferred(player)
 
 func _remove_player(id: int):
 	if !has_node(str(id)): return

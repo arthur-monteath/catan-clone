@@ -84,6 +84,3 @@ label_settings = SubResource("LabelSettings_cbfqa")
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
-
-[connection signal="pressed" from="VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
