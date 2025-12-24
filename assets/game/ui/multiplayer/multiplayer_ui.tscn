@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dihrcf515sxka"]
+[gd_scene load_steps=6 format=3 uid="uid://dihrcf515sxka"]
 
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="1_cbfqa"]
 [ext_resource type="Script" uid="uid://bkambsqo0mvv3" path="res://assets/game/ui/multiplayer/multiplayer_ui.gd" id="1_luirv"]
+[ext_resource type="PackedScene" uid="uid://b64h7q8af0b2d" path="res://assets/game/ui/spinner.tscn" id="3_b8h3t"]
+[ext_resource type="Texture2D" uid="uid://l2hsyqdbx4ah" path="res://assets/game/ui/reject.png" id="4_3hkcw"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_cbfqa"]
 font_size = 24
@@ -28,10 +30,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -22.0
-offset_top = -33.0
-offset_right = 22.0
-offset_bottom = 33.0
+offset_left = -114.5
+offset_top = -125.0
+offset_right = 114.5
+offset_bottom = 125.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_cbfqa")
@@ -84,3 +86,62 @@ label_settings = SubResource("LabelSettings_cbfqa")
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
+
+[node name="LobbyMenu" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(128, 256)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -129.0
+offset_top = -35.0
+offset_right = 129.0
+offset_bottom = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="LobbyMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LobbyMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="LobbyMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Lobbies"
+horizontal_alignment = 1
+
+[node name="Spinner" parent="LobbyMenu/MarginContainer/VBoxContainer" instance=ExtResource("3_b8h3t")]
+unique_name_in_owner = true
+layout_mode = 2
+flip_h = false
+
+[node name="RefreshLobbiesButton" type="Button" parent="LobbyMenu/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 24
+text = "Refresh"
+
+[node name="LobbyList" type="VBoxContainer" parent="LobbyMenu/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CloseLobbyMenuButton" type="TextureButton" parent="LobbyMenu/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+texture_normal = ExtResource("4_3hkcw")

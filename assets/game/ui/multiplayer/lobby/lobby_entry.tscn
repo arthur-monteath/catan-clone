@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bik6un8xolxrt"]
+
+[node name="LobbyEntry" type="Button"]
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 24
+text = "0/0 ..."

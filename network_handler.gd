@@ -36,6 +36,7 @@ func _ready():
 	Steam.lobby_joined.connect(_on_lobby_joined)
 
 func host_lobby() -> void:
+	MainSpinner.instance.show()
 	Steam.createLobby(Steam.LOBBY_TYPE_PUBLIC, 4)
 	is_host = true
 
@@ -51,6 +52,7 @@ func _on_lobby_created(result: int, lobby_id: int):
 		multiplayer.peer_connected.connect(_add_player)
 		multiplayer.peer_disconnected.connect(_remove_player)
 		_add_player() # Creates a player for the Host
+		MainSpinner.instance.hide()
 		
 		on_lobby_created.emit()
 
@@ -67,6 +69,7 @@ func _on_lobby_joined(lobby_id: int, permissions: int, locked: bool, response: i
 	peer.server_relay = true
 	peer.create_client(Steam.getLobbyOwner(lobby_id))
 	multiplayer.multiplayer_peer = peer
+	MainSpinner.instance.hide()
 	
 	is_joining = false
 
