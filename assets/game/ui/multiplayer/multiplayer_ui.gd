@@ -30,9 +30,11 @@ func _ready():
 	refresh_lobbies_button.pressed.connect(_on_join_button_pressed)
 	close_lobby_menu_button.pressed.connect(lobby_menu.hide)
 
+
 func _on_host_button_pressed() -> void:
 	NetworkHandler.host_lobby()
 	hide()
+
 
 func _on_join_button_pressed() -> void:
 	_clear_lobby_list()
@@ -41,10 +43,12 @@ func _on_join_button_pressed() -> void:
 	#var ip = "localhost" # "127.0.0.1"
 	#NetworkHandler.join_lobby()
 
+
 func _request_lobbies():
 	Steam.addRequestLobbyListDistanceFilter(Steam.LOBBY_DISTANCE_FILTER_WORLDWIDE)
 	Steam.addRequestLobbyListResultCountFilter(4)
 	Steam.requestLobbyList()
+
 
 func _on_lobby_list_fetched(lobbies: Array):
 	lobby_spinner.hide()
@@ -56,9 +60,13 @@ func _on_lobby_list_fetched(lobbies: Array):
 		var lobby_entry: Button = LOBBY_ENTRY.instantiate()
 		lobby_entry.text = players + "/4 " + lobby_name
 		
+		lobby_entry.pressed.connect(NetworkHandler.join_lobby.bind(lobby))
+		
 		lobby_list.add_child(lobby_entry)
+		
 	if lobby_list.get_children().is_empty():
 		refresh_lobbies_button.show()
+
 
 func _clear_lobby_list():
 	for child in lobby_list.get_children():

@@ -146,11 +146,20 @@ func request_settlement(_pos: Vector2):
 		var pos: Vector2i = _pos.round()
 		var requester = multiplayer.get_remote_sender_id()
 		#var free_settlement: bool = main.game_state == Main.State.FIRST_SETTLEMENT or main.game_state == Main.State.SECOND_SETTLEMENT
-		var valid_space: bool = _points.has(pos) and !_settlements.has(pos)
+		var valid_space: bool = _can_place_settlement(pos)
 		if valid_space and main.buy(requester, Structure.SETTLEMENT):
 			var player_info = main.get_player_client_info_by_id(requester)
 			_set_settlement(pos, player_info)
 			emit_signal("on_settlement_built", pos, requester)
+
+func _can_place_settlement(pos: Vector2i) -> bool:
+	var valid_space: bool = _points.has(pos) and !_settlements.has(pos)
+	if !valid_space: return false
+	for direction in Dir.values():
+		var dir_pos = Vector2i((Vector2(pos) + get_direction_vector(direction)).round())
+		if !_points.has(dir_pos): continue
+		if _settlements.has(dir_pos): return false
+	return true
 
 func _set_road(pos: Vector2i, player: Dictionary):
 	var info = { "id": player.id, "color": player.color }
