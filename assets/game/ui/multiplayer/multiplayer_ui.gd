@@ -37,11 +37,14 @@ func _on_host_button_pressed() -> void:
 
 
 func _on_join_button_pressed() -> void:
-	_clear_lobby_list()
-	lobby_menu.show()
-	_request_lobbies()
-	#var ip = "localhost" # "127.0.0.1"
-	#NetworkHandler.join_lobby()
+	if NetworkHandler.use_steam:
+		_clear_lobby_list()
+		lobby_menu.show()
+		_request_lobbies()
+	else:
+		#var ip = "localhost" # "127.0.0.1"
+		NetworkHandler.join_lobby(25565)
+		hide()
 
 
 func _request_lobbies():
@@ -60,13 +63,17 @@ func _on_lobby_list_fetched(lobbies: Array):
 		var lobby_entry: Button = LOBBY_ENTRY.instantiate()
 		lobby_entry.text = players + "/4 " + lobby_name
 		
-		lobby_entry.pressed.connect(NetworkHandler.join_lobby.bind(lobby))
+		lobby_entry.pressed.connect(_try_join_lobby.bind(lobby))
 		
 		lobby_list.add_child(lobby_entry)
 		
 	if lobby_list.get_children().is_empty():
 		refresh_lobbies_button.show()
 
+func _try_join_lobby(lobby_id: int):
+	NetworkHandler.join_lobby(lobby_id)
+	hide()
+	MainSpinner.instance.show()
 
 func _clear_lobby_list():
 	for child in lobby_list.get_children():

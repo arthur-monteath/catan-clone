@@ -93,7 +93,10 @@ func open_trade_ui(offer: Dictionary[Resources.Type, int] = {}, request: Diction
 	var offer_resource_uis := generate_resource_ui(offer)
 	for resource_ui in offer_resource_uis:
 		var type := resource_ui.resource_type
-		resource_ui.on_resource_amount_changed.connect(on_offer_changed.bind(type))
+		resource_ui.on_resource_amount_changed.connect(func(amt):
+			on_offer_changed(amt, type)
+			resource_ui.update_resource_affordances(ClientResources.get_local_resources())
+		)
 		trade_offer_list.add_child(resource_ui)
 		
 	var request_resource_uis := generate_resource_ui(request)
@@ -114,6 +117,7 @@ func generate_resource_ui(resources: Dictionary[Resources.Type, int]) -> Array[T
 	return trade_resources
 
 func on_offer_changed(change: int, resource: Resources.Type):
+	
 	if trade_offer.has(resource): trade_offer[resource] += change
 	else: trade_offer[resource] = change
 	update_trade_container_ui()
@@ -152,7 +156,7 @@ func _on_cancel_trade_button_pressed() -> void:
 	trade_request = {}
 	trade_container.hide()
 	
-	# Maybe in the future make it so this does not delete-redraw every time TradeUI is opened...
+	# TODO - Maybe in the future make it so this does not delete-redraw every time TradeUI is opened...
 	for child in trade_offer_list.get_children(): child.queue_free()
 	for child in trade_request_list.get_children(): child.queue_free()
 

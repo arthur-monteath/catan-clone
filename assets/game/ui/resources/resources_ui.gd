@@ -18,6 +18,7 @@ func _ready():
 
 @rpc("authority","reliable","call_local")
 func set_resources(resource_inventory: Dictionary[Resources.Type, int]):
+	ClientResources.update_local_resources(resource_inventory)
 	for resource in resource_inventory.keys():
 		resource_labels[resource].text = str(resource_inventory[resource])
 

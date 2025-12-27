@@ -2,12 +2,23 @@ class_name TradeResourceUI extends PanelContainer
 
 signal on_resource_amount_changed(change: int)
 
+var main: Main
+
 @onready var amount: Label = %Amount
 
 @onready var add_button: Button = %AddButton
 @onready var subtract_button: Button = %SubtractButton
 
 var resource_type: Resources.Type
+
+func update_resource_affordances(resources: Dictionary):
+	if (int(amount.text) == 0):
+		subtract_button.disabled = true
+	else: subtract_button.disabled = false
+	
+	if (int(amount.text) >= resources[resource_type]):
+		add_button.disabled = true
+	else: add_button.disabled = false
 
 func set_icon(image: Texture2D):
 	get_node("%Icon").texture = image
