@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://ltem0vjldnni"]
 
 [ext_resource type="Texture2D" uid="uid://dolrfcws1hupa" path="res://assets/game/structures/road.png" id="1_ddock"]
-[ext_resource type="Texture2D" uid="uid://d4nhhqjglkno1" path="res://assets/game/smoke.png" id="1_p0ctb"]
+[ext_resource type="Texture2D" uid="uid://d4nhhqjglkno1" path="res://assets/game/structures/smoke.png" id="1_p0ctb"]
 [ext_resource type="Script" uid="uid://bqu2ijmnk0wic" path="res://assets/game/structures/auto_play_particle.gd" id="2_e1gft"]
 [ext_resource type="Script" uid="uid://be8cxug0qewuf" path="res://addons/shaker/src/Vector2/shaker_component2D.gd" id="3_akn7h"]
 [ext_resource type="Script" uid="uid://b5xe0r01pq405" path="res://addons/shaker/data/Vector2/BaseShakerType2D.gd" id="4_rcwq3"]

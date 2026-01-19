@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://d2isay3vvq3on" path="res://addons/shaker/data/Vector2/ShakerTypeSineWave2D.gd" id="4_5kwsq"]
 [ext_resource type="Script" uid="uid://bdcxjnn815gah" path="res://addons/shaker/data/Vector2/ShakerTypeCurve2D.gd" id="5_sjo0g"]
 [ext_resource type="Script" uid="uid://tmac7isln8xf" path="res://addons/shaker/data/Vector2/ShakerPreset2D.gd" id="6_k3bgg"]
-[ext_resource type="Texture2D" uid="uid://d4nhhqjglkno1" path="res://assets/game/smoke.png" id="8_yvabg"]
+[ext_resource type="Texture2D" uid="uid://d4nhhqjglkno1" path="res://assets/game/structures/smoke.png" id="8_yvabg"]
 [ext_resource type="Script" uid="uid://bqu2ijmnk0wic" path="res://assets/game/structures/auto_play_particle.gd" id="9_5kwsq"]
 
 [sub_resource type="Curve" id="Curve_yvabg"]

@@ -13,13 +13,12 @@ config_version=5
 config/name="catan-clone"
 run/main_scene="uid://be2fp4tuhaso0"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://assets/icon.svg"
 
 [autoload]
 
-NetworkHandler="*res://network_handler.gd"
+NetworkHandler="*res://assets/game/globals/network_handler.gd"
 Shaker="*res://addons/shaker/src/Shaker.gd"
-Debug="*res://debug.gd"
+Debug="*res://assets/game/globals/debug.gd"
 
 [display]
 
@@ -30,6 +29,27 @@ window/stretch/mode="viewport"
 
 enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg", "res://addons/shaker/plugin.cfg")
 
+[file_customization]
+
+folder_colors={
+"res://assets/": "gray",
+"res://assets/dice/": "yellow",
+"res://assets/game/": "green",
+"res://assets/game/board/": "purple",
+"res://assets/game/globals/": "yellow",
+"res://assets/game/player/": "blue",
+"res://assets/game/structures/": "gray",
+"res://assets/ui/": "purple",
+"res://scenes/": "blue"
+}
+
 [global_group]
 
 MultiplayerUI=""
+
+[steam]
+
+initialization/app_id=0
+initialization/initialize_on_startup=false
+initialization/embed_callbacks=false
+multiplayer_peer/max_channels=4

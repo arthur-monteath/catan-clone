@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://by1q5dsk0j4se"]
 
 [ext_resource type="Script" uid="uid://djfjiqgkrxevb" path="res://assets/game/player/network_player.gd" id="1_e0wq5"]
-[ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/game/ui/game_theme.tres" id="1_txluh"]
-[ext_resource type="Texture2D" uid="uid://olilj3bm2tqg" path="res://assets/icon.svg" id="2_fesle"]
+[ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/ui/game_theme.tres" id="1_txluh"]
+[ext_resource type="Texture2D" uid="uid://be8c3g2lr53td" path="res://assets/ui/icon.svg" id="3_txluh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fesle"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -68,7 +68,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 theme = ExtResource("1_txluh")
-texture = ExtResource("2_fesle")
+texture = ExtResource("3_txluh")
 expand_mode = 1
 
 [node name="PlayerLabel" type="Label" parent="Panel/Margin/HBox"]

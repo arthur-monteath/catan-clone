@@ -1,0 +1,443 @@
+[gd_scene load_steps=48 format=3 uid="uid://be2fp4tuhaso0"]
+
+[ext_resource type="Script" uid="uid://ct68henogcw0q" path="res://assets/game/globals/main.gd" id="1_qouja"]
+[ext_resource type="Script" uid="uid://evbhvjxn7kpo" path="res://assets/game/player/player_spawner.gd" id="2_wljb1"]
+[ext_resource type="Script" uid="uid://c7vmt5xpdpsc1" path="res://assets/game/globals/turn_manager.gd" id="3_v2yb1"]
+[ext_resource type="Texture2D" uid="uid://b4fvv2sx4p01o" path="res://assets/game/board/ocean.png" id="4_js0lu"]
+[ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="5_gxtfn"]
+[ext_resource type="Texture2D" uid="uid://df8wectmf10hk" path="res://assets/game/board/land.png" id="6_twgab"]
+[ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board/board_server.gd" id="7_02fa5"]
+[ext_resource type="Script" uid="uid://bqq7e5btewd8e" path="res://assets/game/board/board_client.gd" id="8_nepv3"]
+[ext_resource type="Texture2D" uid="uid://dpo1tsm4hi7rh" path="res://assets/game/board/tiles/art/ore.png" id="9_7025r"]
+[ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/game/board/tiles/art/grain.png" id="10_m4url"]
+[ext_resource type="Texture2D" uid="uid://34ej43vr0l7h" path="res://assets/game/board/tiles/art/lumber.png" id="11_8ool0"]
+[ext_resource type="Texture2D" uid="uid://o18pbrdgyip2" path="res://assets/game/board/tiles/art/brick.png" id="12_pr1ej"]
+[ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://assets/game/board/tiles/art/wool.png" id="13_05nbr"]
+[ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/game/board/tiles/art/desert.png" id="14_0sl42"]
+[ext_resource type="Script" uid="uid://madr0j4n87b8" path="res://assets/game/globals/overlays.gd" id="15_oaba0"]
+[ext_resource type="Script" uid="uid://be8cxug0qewuf" path="res://addons/shaker/src/Vector2/shaker_component2D.gd" id="16_458eo"]
+[ext_resource type="Script" uid="uid://b5xe0r01pq405" path="res://addons/shaker/data/Vector2/BaseShakerType2D.gd" id="17_h3rex"]
+[ext_resource type="Script" uid="uid://b3albiqgruwbo" path="res://addons/shaker/data/Vector2/ShakerTypeNoiseShake2D.gd" id="18_fedci"]
+[ext_resource type="Script" uid="uid://dvq271w1r8fr2" path="res://addons/shaker/data/Single/BaseShakerType1D.gd" id="19_8qswn"]
+[ext_resource type="Script" uid="uid://d2isay3vvq3on" path="res://addons/shaker/data/Vector2/ShakerTypeSineWave2D.gd" id="20_rm0al"]
+[ext_resource type="Script" uid="uid://tmac7isln8xf" path="res://addons/shaker/data/Vector2/ShakerPreset2D.gd" id="21_i4re6"]
+[ext_resource type="Texture2D" uid="uid://ch1tb8vwg4ph6" path="res://assets/game/board/robber.png" id="22_pf7vy"]
+[ext_resource type="Script" uid="uid://dnwjj5gjp8bye" path="res://assets/ui/root_ui.gd" id="23_o8ni1"]
+[ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/ui/game_theme.tres" id="24_3hbvx"]
+[ext_resource type="Texture2D" uid="uid://dmj41lyg0mur0" path="res://assets/dice/dice_faces.png" id="25_q8j3a"]
+[ext_resource type="PackedScene" uid="uid://dihrcf515sxka" path="res://assets/ui/multiplayer/multiplayer_ui.tscn" id="26_ms3bu"]
+[ext_resource type="PackedScene" uid="uid://cwv4tga2lnu8k" path="res://assets/ui/resources/resources_ui.tscn" id="27_7ixpq"]
+[ext_resource type="PackedScene" uid="uid://6r70bh3i3hcd" path="res://assets/ui/action_ui.tscn" id="28_bk1p3"]
+[ext_resource type="PackedScene" uid="uid://cjyllng40ahaa" path="res://assets/ui/trading/trading_ui.tscn" id="29_n8ral"]
+[ext_resource type="PackedScene" uid="uid://b64h7q8af0b2d" path="res://assets/ui/spinner.tscn" id="30_yd4ix"]
+[ext_resource type="Script" uid="uid://qov026h7trwl" path="res://assets/ui/main_spinner.gd" id="31_66xif"]
+
+[sub_resource type="Gradient" id="Gradient_1ryvc"]
+colors = PackedColorArray(0.09019608, 0.1254902, 0.21960784, 1, 0.09019608, 0.1254902, 0.21960784, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_dcmux"]
+gradient = SubResource("Gradient_1ryvc")
+width = 572
+height = 324
+
+[sub_resource type="Gradient" id="Gradient_hve3p"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.5555556, 0.6231884, 1)
+colors = PackedColorArray(0.16078432, 0.6156863, 0.12156863, 1, 0.5027697, 0.7360863, 0.3706299, 1, 0.8755618, 0.8673321, 0.6421272, 1, 0.9332319, 0.88763565, 0.68412715, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mfdv2"]
+gradient = SubResource("Gradient_hve3p")
+width = 336
+height = 336
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_lfqfg"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qpusx"]
+width = 16
+height = 16
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_lfqfg")
+seamless = true
+
+[sub_resource type="Resource" id="Resource_iwd7i"]
+script = ExtResource("18_fedci")
+noise_texture = SubResource("NoiseTexture2D_qpusx")
+amplitude = Vector2(150, 150)
+metadata/_custom_type_script = "uid://b3albiqgruwbo"
+
+[sub_resource type="Resource" id="Resource_10ku1"]
+script = ExtResource("20_rm0al")
+amplitude = Vector2(0.5, 0.75)
+metadata/_custom_type_script = "uid://d2isay3vvq3on"
+
+[sub_resource type="Resource" id="Resource_i7gvd"]
+script = ExtResource("21_i4re6")
+PositionShake = Array[ExtResource("17_h3rex")]([SubResource("Resource_iwd7i")])
+ScaleShake = Array[ExtResource("17_h3rex")]([SubResource("Resource_10ku1")])
+metadata/_custom_type_script = "uid://tmac7isln8xf"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fu4a"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3ud2"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hve3p"]
+bg_color = Color(0.12156863, 0.14117648, 0.20392157, 0.42745098)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.16470589, 0.27058825, 0.39607844, 0.5058824)
+
+[sub_resource type="LabelSettings" id="LabelSettings_iwd7i"]
+font_size = 64
+outline_size = 8
+shadow_size = 12
+shadow_color = Color(0.2183367, 0.66926515, 0.99999994, 0.4745098)
+shadow_offset = Vector2(2, 1)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_y3ud2"]
+properties/0/path = NodePath("TurnBar:value")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath("TurnBar:visible")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gxh0"]
+bg_color = Color(0, 0.037333336, 0.08, 0.7254902)
+
+[sub_resource type="LabelSettings" id="LabelSettings_n5fxh"]
+font_size = 24
+outline_size = 4
+outline_color = Color(0.50318396, 0.7159233, 0.8750814, 1)
+
+[node name="Main" type="Node"]
+script = ExtResource("1_qouja")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://by1q5dsk0j4se")
+spawn_path = NodePath("../RootUI/PlayerList")
+script = ExtResource("2_wljb1")
+
+[node name="TurnManager" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 32.0
+script = ExtResource("3_v2yb1")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+texture_filter = 1
+zoom = Vector2(2, 2)
+
+[node name="Sprite2D" type="Sprite2D" parent="Camera2D"]
+texture = SubResource("GradientTexture2D_dcmux")
+
+[node name="Ocean" type="Sprite2D" parent="Camera2D"]
+position = Vector2(-16, 0)
+texture = ExtResource("4_js0lu")
+
+[node name="Land" type="Polygon2D" parent="Camera2D"]
+visible = false
+texture_filter = 1
+texture = SubResource("GradientTexture2D_mfdv2")
+texture_offset = Vector2(168, 168)
+polygon = PackedVector2Array(168, 0, 84, 145.49226, -84, 145.49226, -168, 2.0573387e-14, -84, -145.49226, 84, -145.49226)
+script = ExtResource("5_gxtfn")
+radius = 168
+points_num = 6
+
+[node name="Land2" type="Sprite2D" parent="Camera2D"]
+position = Vector2(-24, 0)
+texture = ExtResource("6_twgab")
+
+[node name="Board" type="Node2D" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+script = ExtResource("7_02fa5")
+
+[node name="BoardClient" type="Node2D" parent="Board"]
+unique_name_in_owner = true
+script = ExtResource("8_nepv3")
+textures = Dictionary[int, Texture2D]({
+0: ExtResource("9_7025r"),
+1: ExtResource("10_m4url"),
+2: ExtResource("11_8ool0"),
+3: ExtResource("12_pr1ej"),
+4: ExtResource("13_05nbr"),
+5: ExtResource("14_0sl42")
+})
+metadata/_custom_type_script = "uid://bqq7e5btewd8e"
+
+[node name="Overlays" type="Node2D" parent="Board"]
+script = ExtResource("15_oaba0")
+
+[node name="Robber" type="Node2D" parent="."]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+scale = Vector2(0.928, 1)
+
+[node name="ShakerComponent2D" type="Node2D" parent="Robber"]
+script = ExtResource("16_458eo")
+AutoPlay = true
+intensity = 0.05
+shake_speed = 0.5
+shakerPreset = SubResource("Resource_i7gvd")
+metadata/_custom_type_script = "uid://be8cxug0qewuf"
+
+[node name="Sprite2D" type="Sprite2D" parent="Robber"]
+texture = ExtResource("22_pf7vy")
+
+[node name="RootUI" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+script = ExtResource("23_o8ni1")
+
+[node name="TurnBar" type="ProgressBar" parent="RootUI"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(256, 8)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -58.0
+offset_top = 8.0
+offset_right = 58.0
+offset_bottom = 16.0
+grow_horizontal = 2
+theme = ExtResource("24_3hbvx")
+theme_override_styles/background = SubResource("StyleBoxFlat_0fu4a")
+theme_override_styles/fill = SubResource("StyleBoxFlat_y3ud2")
+max_value = 1.0
+value = 0.7
+show_percentage = false
+
+[node name="DiceArea" type="Control" parent="RootUI"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("24_3hbvx")
+
+[node name="DiceButton" type="Button" parent="RootUI/DiceArea"]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 903.0
+offset_top = 436.0
+offset_right = 1080.0
+offset_bottom = 576.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("24_3hbvx")
+theme_override_styles/normal = SubResource("StyleBoxFlat_hve3p")
+text = "Click to Roll Dice!
+
+
+
+"
+
+[node name="EndTurnButton" type="Button" parent="RootUI/DiceArea"]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 903.0
+offset_top = 436.0
+offset_right = 1080.0
+offset_bottom = 576.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("24_3hbvx")
+theme_override_styles/normal = SubResource("StyleBoxFlat_hve3p")
+text = "Click to End Turn!
+
+
+
+"
+
+[node name="Dice1" type="Sprite2D" parent="RootUI/DiceArea"]
+unique_name_in_owner = true
+texture_filter = 1
+position = Vector2(993, 560)
+texture = ExtResource("25_q8j3a")
+hframes = 6
+
+[node name="Dice2" type="Sprite2D" parent="RootUI/DiceArea"]
+unique_name_in_owner = true
+texture_filter = 1
+position = Vector2(1071, 560)
+texture = ExtResource("25_q8j3a")
+hframes = 6
+
+[node name="DiceResult" type="Label" parent="RootUI/DiceArea"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 975.0
+offset_top = 426.0
+offset_right = 1048.0
+offset_bottom = 514.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "2"
+label_settings = SubResource("LabelSettings_iwd7i")
+horizontal_alignment = 1
+
+[node name="MultiplayerUI" parent="RootUI" groups=["MultiplayerUI"] instance=ExtResource("26_ms3bu")]
+unique_name_in_owner = true
+
+[node name="PlayerList" type="VBoxContainer" parent="RootUI"]
+unique_name_in_owner = true
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 32.0
+offset_top = -20.0
+offset_right = 72.0
+offset_bottom = 20.0
+grow_vertical = 2
+theme = ExtResource("24_3hbvx")
+theme_override_constants/separation = 88
+alignment = 1
+
+[node name="ResourcesPanel" parent="RootUI" instance=ExtResource("27_7ixpq")]
+unique_name_in_owner = true
+texture_filter = 1
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 1
+grow_vertical = 1
+theme = ExtResource("24_3hbvx")
+
+[node name="StartButton" type="Button" parent="RootUI"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(220, 80)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -41.5
+offset_top = -26.5
+offset_right = 41.5
+offset_bottom = 26.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("24_3hbvx")
+theme_override_font_sizes/font_size = 32
+text = "Start"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="RootUI"]
+replication_config = SubResource("SceneReplicationConfig_y3ud2")
+
+[node name="ActionUI" parent="RootUI" instance=ExtResource("28_bk1p3")]
+unique_name_in_owner = true
+
+[node name="MessageBox" type="Panel" parent="RootUI"]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("24_3hbvx")
+theme_override_styles/panel = SubResource("StyleBoxFlat_8gxh0")
+
+[node name="PanelContainer" type="PanelContainer" parent="RootUI/MessageBox"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.5
+offset_top = -20.0
+offset_right = 48.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("24_3hbvx")
+
+[node name="MarginContainer" type="MarginContainer" parent="RootUI/MessageBox/PanelContainer"]
+layout_mode = 2
+theme = ExtResource("24_3hbvx")
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="MessageLabel" type="Label" parent="RootUI/MessageBox/PanelContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("24_3hbvx")
+text = "MessageBox"
+label_settings = SubResource("LabelSettings_n5fxh")
+horizontal_alignment = 1
+
+[node name="TradingUI" parent="RootUI" instance=ExtResource("29_n8ral")]
+mouse_filter = 2
+
+[node name="Spinner" parent="RootUI" instance=ExtResource("30_yd4ix")]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+flip_h = false
+script = ExtResource("31_66xif")
+
+[connection signal="pressed" from="RootUI/DiceArea/DiceButton" to="." method="_on_dice_button_pressed"]
+[connection signal="pressed" from="RootUI/DiceArea/EndTurnButton" to="TurnManager" method="_on_end_turn_button_pressed"]
+[connection signal="pressed" from="RootUI/StartButton" to="." method="start_game"]
+[connection signal="build_mode_changed" from="RootUI/ActionUI" to="Board/BoardClient" method="_on_action_ui_build_mode_changed"]
+[connection signal="on_structure_selected" from="RootUI/ActionUI" to="Board/BoardClient" method="_on_action_ui_on_structure_selected"]
+[connection signal="trade_button_pressed" from="RootUI/ActionUI" to="RootUI/TradingUI" method="open_trade_ui"]
+[connection signal="gui_input" from="RootUI/MessageBox" to="RootUI" method="_on_message_box_gui_input"]
