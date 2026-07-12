@@ -167,6 +167,7 @@ func _press_dice_request() -> void:
 	game_state = State.ACTION
 	board._set_turn(turn_manager.turn) # TODO - Remove this and make this rely instead on a on_game_state_change rpc sent to clients
 
+
 func start_game():
 	if !multiplayer.is_server(): return
 	start_button.hide()
@@ -187,7 +188,9 @@ func start_game():
 	game_state = State.FIRST_SETTLEMENT
 	
 	turn_manager.start_turn()
-	%ActionUI._update_actions_cards_ui([{"title":"teste"},{},{},{},{"title":"last"}])
+	var ca: ActionCard = load("res://assets/game/action_cards/steal_all_resources.tres")
+	%ActionUI._update_actions_cards_ui([{"title":"teste"},{},{},{},{"title":ca.title,"icon":ca.icon}])
+
 
 func _on_turn_start(turn: int):
 	var player: Player = players[turn]

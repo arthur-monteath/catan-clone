@@ -21,14 +21,17 @@ var player_info:
 	}
 
 func _ready():
+	
 	host_button.pressed.connect(_on_host_button_pressed)
-	_player_name.placeholder_text = Steam.getPersonaName()
 	
 	join_button.pressed.connect(_on_join_button_pressed)
-	Steam.lobby_match_list.connect(_on_lobby_list_fetched)
 	
 	refresh_lobbies_button.pressed.connect(_on_join_button_pressed)
 	close_lobby_menu_button.pressed.connect(lobby_menu.hide)
+	
+	if NetworkHandler.use_steam:
+		_player_name.placeholder_text = Steam.getPersonaName()
+		Steam.lobby_match_list.connect(_on_lobby_list_fetched)
 
 
 func _on_host_button_pressed() -> void:

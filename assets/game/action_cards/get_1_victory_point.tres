@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ActionCard" load_steps=5 format=3 uid="uid://ccol7iiidg76a"]
+
+[ext_resource type="Texture2D" uid="uid://c404ko3lhqwbf" path="res://assets/game/action_cards/icons/trophy.png" id="1_2uvxj"]
+[ext_resource type="Script" uid="uid://bjehfumgprqyp" path="res://assets/game/action_cards/actions/get_victory_points.gd" id="1_ukgbl"]
+[ext_resource type="Script" uid="uid://80xhb34g1m0g" path="res://assets/game/action_cards/action_card.gd" id="2_ukgbl"]
+
+[sub_resource type="Resource" id="Resource_b3eka"]
+script = ExtResource("1_ukgbl")
+metadata/_custom_type_script = "uid://bjehfumgprqyp"
+
+[resource]
+script = ExtResource("2_ukgbl")
+title = "+1 VP"
+icon = ExtResource("1_2uvxj")
+action = SubResource("Resource_b3eka")
+metadata/_custom_type_script = "uid://80xhb34g1m0g"

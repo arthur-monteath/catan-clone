@@ -1,12 +1,20 @@
 extends Control
 class_name ResourcesUI
 
-@onready var grid: GridContainer = $PanelContainer/MarginContainer/Grid
+@onready var resources_display: PanelContainer = %ResourcesDisplay
+@onready var manage_resources_button: Button = %ManageResourcesButton
+@onready var manage_resources_panel: PanelContainer = %ManageResourcesPanel
+@onready var grid: GridContainer = %DisplayGrid
 const RESOURCE_TEMPLATE = preload("uid://dbuvbml0vr4ip")
 
 var resource_labels: Dictionary[Resources.Type, Label]
 
 func _ready():
+	manage_resources_button.pressed.connect(func():
+		resources_display.hide()
+		manage_resources_panel.show()
+	)
+	
 	for resource in Resources.Type.values():
 		var res_ui = RESOURCE_TEMPLATE.instantiate()
 		resource_labels[resource] = res_ui.get_node("Label")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cjyllng40ahaa"]
+[gd_scene format=3 uid="uid://cjyllng40ahaa"]
 
 [ext_resource type="Script" uid="uid://bnndtle2wxehs" path="res://assets/ui/trading/trade_manager.gd" id="1_14fk2"]
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/ui/game_theme.tres" id="1_i6hrq"]
@@ -18,7 +18,7 @@ outline_color = Color(7.460266e-07, 0.326396, 0.37259033, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_14fk2"]
 font_size = 24
 
-[node name="TradingUI" type="Control"]
+[node name="TradingUI" type="Control" unique_id=1868680757]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,7 +28,7 @@ grow_vertical = 2
 script = ExtResource("1_14fk2")
 player_choice_texture = Array[Texture2D]([ExtResource("5_waug3"), ExtResource("3_3yvek"), ExtResource("4_gotpn")])
 
-[node name="TradeContainer" type="PanelContainer" parent="."]
+[node name="TradeContainer" type="PanelContainer" parent="." unique_id=1109569537]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -45,7 +45,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_i6hrq")
 
-[node name="MarginContainer" type="MarginContainer" parent="TradeContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="TradeContainer" unique_id=1177201850]
 layout_mode = 2
 theme = ExtResource("1_i6hrq")
 theme_override_constants/margin_left = 16
@@ -53,17 +53,17 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TradeContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TradeContainer/MarginContainer" unique_id=1293482118]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="TradeUI" type="VBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer"]
+[node name="TradeUI" type="VBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer" unique_id=1817629063]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_i6hrq")
 theme_override_constants/separation = 16
 
-[node name="GiveLabel" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI"]
+[node name="GiveLabel" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI" unique_id=936321213]
 layout_mode = 2
 theme = ExtResource("1_i6hrq")
 text = "You give:"
@@ -71,13 +71,13 @@ label_settings = SubResource("LabelSettings_1nyrw")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TradeOfferList" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI"]
+[node name="TradeOfferList" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI" unique_id=1051432640]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_i6hrq")
 theme_override_constants/separation = 8
 
-[node name="GetLabel" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI"]
+[node name="GetLabel" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI" unique_id=454183667]
 layout_mode = 2
 theme = ExtResource("1_i6hrq")
 text = "You Get:"
@@ -85,70 +85,70 @@ label_settings = SubResource("LabelSettings_1nyrw")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TradeRequestList" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI"]
+[node name="TradeRequestList" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI" unique_id=1007405520]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_i6hrq")
 theme_override_constants/separation = 8
 
-[node name="ButtonList" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI"]
+[node name="ButtonList" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI" unique_id=578989744]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="CancelTradeButton" type="Button" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI/ButtonList"]
+[node name="CancelTradeButton" type="Button" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI/ButtonList" unique_id=13813791]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Cancel Trade"
 
-[node name="ProposeTradeButton" type="Button" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI/ButtonList"]
+[node name="ProposeTradeButton" type="Button" parent="TradeContainer/MarginContainer/HBoxContainer/TradeUI/ButtonList" unique_id=1631976274]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Propose Trade to Players"
 
-[node name="PanelContainer" type="PanelContainer" parent="TradeContainer/MarginContainer/HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="TradeContainer/MarginContainer/HBoxContainer" unique_id=973533406]
 layout_mode = 2
 
-[node name="PlayerList" type="VBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer"]
+[node name="PlayerList" type="VBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer" unique_id=1190668732]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList"]
+[node name="Label" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList" unique_id=28441073]
 layout_mode = 2
 text = "Buyers"
 label_settings = SubResource("LabelSettings_waug3")
 horizontal_alignment = 1
 
-[node name="BankButton" type="Button" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList"]
+[node name="BankButton" type="Button" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList" unique_id=1983807407]
 unique_name_in_owner = true
 clip_contents = true
 custom_minimum_size = Vector2(160, 48)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton" unique_id=859823897]
 layout_mode = 0
 offset_left = 7.0
 offset_top = 7.0
 offset_right = 119.0
 offset_bottom = 39.0
 
-[node name="Choice" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton/HBoxContainer"]
+[node name="Choice" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton/HBoxContainer" unique_id=164255333]
 layout_mode = 2
 texture = ExtResource("3_3yvek")
 
-[node name="ProfilePicture" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton/HBoxContainer"]
+[node name="ProfilePicture" type="TextureRect" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton/HBoxContainer" unique_id=1554951515]
 texture_filter = 1
 layout_mode = 2
 texture = ExtResource("4_waug3")
 expand_mode = 2
 
-[node name="Label" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton/HBoxContainer"]
+[node name="Label" type="Label" parent="TradeContainer/MarginContainer/HBoxContainer/PanelContainer/PlayerList/BankButton/HBoxContainer" unique_id=688302415]
 layout_mode = 2
 text = "Bank"
 
-[node name="TradeOffer" type="PanelContainer" parent="."]
+[node name="TradeOffer" type="PanelContainer" parent="." unique_id=1730894997]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -165,56 +165,56 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_i6hrq")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TradeOffer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TradeOffer" unique_id=1660098476]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="OfferLabel" type="Label" parent="TradeOffer/VBoxContainer"]
+[node name="OfferLabel" type="Label" parent="TradeOffer/VBoxContainer" unique_id=1264472197]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Trade Offer from {Player}"
 label_settings = SubResource("LabelSettings_14fk2")
 horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TradeOffer/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="TradeOffer/VBoxContainer" unique_id=1069717778]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="OfferPopupOfferList" type="HBoxContainer" parent="TradeOffer/VBoxContainer/VBoxContainer"]
+[node name="OfferPopupOfferList" type="HBoxContainer" parent="TradeOffer/VBoxContainer/VBoxContainer" unique_id=298657723]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="DownArrow" type="TextureRect" parent="TradeOffer/VBoxContainer/VBoxContainer/OfferPopupOfferList"]
+[node name="DownArrow" type="TextureRect" parent="TradeOffer/VBoxContainer/VBoxContainer/OfferPopupOfferList" unique_id=1365300508]
 layout_mode = 2
 texture = ExtResource("8_gotpn")
 
-[node name="OfferPopupRequestList" type="HBoxContainer" parent="TradeOffer/VBoxContainer/VBoxContainer"]
+[node name="OfferPopupRequestList" type="HBoxContainer" parent="TradeOffer/VBoxContainer/VBoxContainer" unique_id=665635156]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="UpArrow" type="TextureRect" parent="TradeOffer/VBoxContainer/VBoxContainer/OfferPopupRequestList"]
+[node name="UpArrow" type="TextureRect" parent="TradeOffer/VBoxContainer/VBoxContainer/OfferPopupRequestList" unique_id=199413488]
 layout_mode = 2
 texture = ExtResource("9_ccbdu")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TradeOffer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TradeOffer/VBoxContainer" unique_id=99566921]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="Reject" type="Button" parent="TradeOffer/VBoxContainer/HBoxContainer"]
+[node name="Reject" type="Button" parent="TradeOffer/VBoxContainer/HBoxContainer" unique_id=1771153630]
 layout_mode = 2
 icon = ExtResource("5_waug3")
 
-[node name="Modify" type="Button" parent="TradeOffer/VBoxContainer/HBoxContainer"]
+[node name="Modify" type="Button" parent="TradeOffer/VBoxContainer/HBoxContainer" unique_id=1667954866]
 layout_mode = 2
 text = "Modify"
 
-[node name="Accept" type="Button" parent="TradeOffer/VBoxContainer/HBoxContainer"]
+[node name="Accept" type="Button" parent="TradeOffer/VBoxContainer/HBoxContainer" unique_id=468651802]
 layout_mode = 2
 icon = ExtResource("3_3yvek")
 

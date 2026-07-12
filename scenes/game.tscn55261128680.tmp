@@ -404,7 +404,6 @@ label_settings = SubResource("LabelSettings_n5fxh")
 horizontal_alignment = 1
 
 [node name="TradingUI" parent="RootUI" unique_id=386812207 instance=ExtResource("29_n8ral")]
-visible = false
 mouse_filter = 2
 
 [node name="Spinner" parent="RootUI" unique_id=1674216942 instance=ExtResource("30_yd4ix")]

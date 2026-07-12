@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://6r70bh3i3hcd"]
+[gd_scene load_steps=6 format=3 uid="uid://6r70bh3i3hcd"]
 
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/ui/game_theme.tres" id="1_4tgfe"]
 [ext_resource type="Script" uid="uid://dv2ej1bvlu3ys" path="res://assets/ui/action_ui.gd" id="2_iwm7g"]
+[ext_resource type="PackedScene" uid="uid://bth4cfg4mtpid" path="res://assets/ui/action_cards/action_card_prompt.tscn" id="3_33npc"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_4tgfe"]
 
@@ -73,6 +74,11 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
 theme_override_constants/separation = -24
+
+[node name="ActionCardPrompt" parent="MarginContainer" instance=ExtResource("3_33npc")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
 
 [connection signal="folding_changed" from="MarginContainer/VBoxContainer/BuildButton" to="." method="_on_build_button_folding_changed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/TradeButton" to="." method="_on_trade_button_pressed"]

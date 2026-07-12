@@ -83,7 +83,7 @@ func join_lobby(lobby_id: int):
 		multiplayer.peer_disconnected.connect(_remove_player)
 
 
-func _on_lobby_joined(lobby_id: int, permissions: int, locked: bool, response: int):
+func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, _response: int):
 	# Code that runs for everyone on lobby
 	if !is_joining: return
 	# Code that runs only on joining player
