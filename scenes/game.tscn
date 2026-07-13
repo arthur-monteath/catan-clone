@@ -15,12 +15,6 @@
 [ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://assets/game/board/tiles/art/wool.png" id="13_05nbr"]
 [ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/game/board/tiles/art/desert.png" id="14_0sl42"]
 [ext_resource type="Script" uid="uid://madr0j4n87b8" path="res://assets/game/globals/overlays.gd" id="15_oaba0"]
-[ext_resource type="Script" uid="uid://be8cxug0qewuf" path="res://addons/shaker/src/Vector2/shaker_component2D.gd" id="16_458eo"]
-[ext_resource type="Script" uid="uid://b5xe0r01pq405" path="res://addons/shaker/data/Vector2/BaseShakerType2D.gd" id="17_h3rex"]
-[ext_resource type="Script" uid="uid://b3albiqgruwbo" path="res://addons/shaker/data/Vector2/ShakerTypeNoiseShake2D.gd" id="18_fedci"]
-[ext_resource type="Script" uid="uid://dvq271w1r8fr2" path="res://addons/shaker/data/Single/BaseShakerType1D.gd" id="19_8qswn"]
-[ext_resource type="Script" uid="uid://d2isay3vvq3on" path="res://addons/shaker/data/Vector2/ShakerTypeSineWave2D.gd" id="20_rm0al"]
-[ext_resource type="Script" uid="uid://tmac7isln8xf" path="res://addons/shaker/data/Vector2/ShakerPreset2D.gd" id="21_i4re6"]
 [ext_resource type="Texture2D" uid="uid://ch1tb8vwg4ph6" path="res://assets/game/board/robber.png" id="22_pf7vy"]
 [ext_resource type="Script" uid="uid://dnwjj5gjp8bye" path="res://assets/ui/root_ui.gd" id="23_o8ni1"]
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/ui/game_theme.tres" id="24_3hbvx"]
@@ -51,32 +45,6 @@ width = 336
 height = 336
 fill = 1
 fill_from = Vector2(0.5, 0.5)
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_lfqfg"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_qpusx"]
-width = 16
-height = 16
-generate_mipmaps = false
-noise = SubResource("FastNoiseLite_lfqfg")
-seamless = true
-
-[sub_resource type="Resource" id="Resource_iwd7i"]
-script = ExtResource("18_fedci")
-noise_texture = SubResource("NoiseTexture2D_qpusx")
-amplitude = Vector2(150, 150)
-metadata/_custom_type_script = "uid://b3albiqgruwbo"
-
-[sub_resource type="Resource" id="Resource_10ku1"]
-script = ExtResource("20_rm0al")
-amplitude = Vector2(0.5, 0.75)
-metadata/_custom_type_script = "uid://d2isay3vvq3on"
-
-[sub_resource type="Resource" id="Resource_i7gvd"]
-script = ExtResource("21_i4re6")
-PositionShake = Array[ExtResource("17_h3rex")]([SubResource("Resource_iwd7i")])
-ScaleShake = Array[ExtResource("17_h3rex")]([SubResource("Resource_10ku1")])
-metadata/_custom_type_script = "uid://tmac7isln8xf"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fu4a"]
 bg_color = Color(0, 0, 0, 1)
@@ -187,14 +155,6 @@ unique_name_in_owner = true
 visible = false
 texture_filter = 1
 scale = Vector2(0.928, 1)
-
-[node name="ShakerComponent2D" type="Node2D" parent="Robber" unique_id=314694473]
-script = ExtResource("16_458eo")
-AutoPlay = true
-intensity = 0.05
-shake_speed = 0.5
-shakerPreset = SubResource("Resource_i7gvd")
-metadata/_custom_type_script = "uid://be8cxug0qewuf"
 
 [node name="Sprite2D" type="Sprite2D" parent="Robber" unique_id=1823494867]
 texture = ExtResource("22_pf7vy")

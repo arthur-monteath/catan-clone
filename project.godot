@@ -22,8 +22,9 @@ config/icon="uid://df8wectmf10hk"
 [autoload]
 
 NetworkHandler="*res://assets/game/globals/network_handler.gd"
-Shaker="*uid://dmxt4lntt38lu"
 Debug="*res://assets/game/globals/debug.gd"
+Server="*uid://wnvagd7ultri"
+Client="*uid://dhpl8p1om3u8k"
 
 [debug]
 
@@ -43,7 +44,7 @@ project/assembly_name="catan-clone"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg", "res://addons/shaker/plugin.cfg")
+enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
 
 [file_customization]
 
