@@ -1,30 +1,30 @@
 [gd_scene format=3 uid="uid://be2fp4tuhaso0"]
 
-[ext_resource type="Script" uid="uid://ct68henogcw0q" path="res://assets/game/globals/main.gd" id="1_qouja"]
-[ext_resource type="Script" uid="uid://evbhvjxn7kpo" path="res://assets/game/player/player_spawner.gd" id="2_wljb1"]
-[ext_resource type="Script" uid="uid://c7vmt5xpdpsc1" path="res://assets/game/globals/turn_manager.gd" id="3_v2yb1"]
-[ext_resource type="Texture2D" uid="uid://b4fvv2sx4p01o" path="res://assets/game/board/ocean.png" id="4_js0lu"]
+[ext_resource type="Script" uid="uid://ct68henogcw0q" path="res://art/game/globals/main.gd" id="1_qouja"]
+[ext_resource type="Script" uid="uid://evbhvjxn7kpo" path="res://art/game/player/player_spawner.gd" id="2_wljb1"]
+[ext_resource type="Script" uid="uid://c7vmt5xpdpsc1" path="res://art/game/globals/turn_manager.gd" id="3_v2yb1"]
+[ext_resource type="Texture2D" uid="uid://b4fvv2sx4p01o" path="res://art/game/board/ocean.png" id="4_js0lu"]
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="5_gxtfn"]
-[ext_resource type="Texture2D" uid="uid://df8wectmf10hk" path="res://assets/game/board/land.png" id="6_twgab"]
-[ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://assets/game/board/board_server.gd" id="7_02fa5"]
-[ext_resource type="Script" uid="uid://bqq7e5btewd8e" path="res://assets/game/board/board_client.gd" id="8_nepv3"]
-[ext_resource type="Texture2D" uid="uid://dpo1tsm4hi7rh" path="res://assets/game/board/tiles/art/ore.png" id="9_7025r"]
-[ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://assets/game/board/tiles/art/grain.png" id="10_m4url"]
-[ext_resource type="Texture2D" uid="uid://34ej43vr0l7h" path="res://assets/game/board/tiles/art/lumber.png" id="11_8ool0"]
-[ext_resource type="Texture2D" uid="uid://o18pbrdgyip2" path="res://assets/game/board/tiles/art/brick.png" id="12_pr1ej"]
-[ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://assets/game/board/tiles/art/wool.png" id="13_05nbr"]
-[ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://assets/game/board/tiles/art/desert.png" id="14_0sl42"]
-[ext_resource type="Script" uid="uid://madr0j4n87b8" path="res://assets/game/globals/overlays.gd" id="15_oaba0"]
-[ext_resource type="Texture2D" uid="uid://ch1tb8vwg4ph6" path="res://assets/game/board/robber.png" id="22_pf7vy"]
-[ext_resource type="Script" uid="uid://dnwjj5gjp8bye" path="res://assets/ui/root_ui.gd" id="23_o8ni1"]
-[ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://assets/ui/game_theme.tres" id="24_3hbvx"]
-[ext_resource type="Texture2D" uid="uid://dmj41lyg0mur0" path="res://assets/dice/dice_faces.png" id="25_q8j3a"]
-[ext_resource type="PackedScene" uid="uid://dihrcf515sxka" path="res://assets/ui/multiplayer/multiplayer_ui.tscn" id="26_ms3bu"]
-[ext_resource type="PackedScene" uid="uid://cwv4tga2lnu8k" path="res://assets/ui/resources/resources_ui.tscn" id="27_7ixpq"]
-[ext_resource type="PackedScene" uid="uid://6r70bh3i3hcd" path="res://assets/ui/action_ui.tscn" id="28_bk1p3"]
-[ext_resource type="PackedScene" uid="uid://cjyllng40ahaa" path="res://assets/ui/trading/trading_ui.tscn" id="29_n8ral"]
-[ext_resource type="PackedScene" uid="uid://b64h7q8af0b2d" path="res://assets/ui/spinner.tscn" id="30_yd4ix"]
-[ext_resource type="Script" uid="uid://qov026h7trwl" path="res://assets/ui/main_spinner.gd" id="31_66xif"]
+[ext_resource type="Texture2D" uid="uid://df8wectmf10hk" path="res://art/game/board/land.png" id="6_twgab"]
+[ext_resource type="Script" uid="uid://4fbwty18d14u" path="res://art/game/board/board_server.gd" id="7_02fa5"]
+[ext_resource type="Script" uid="uid://bqq7e5btewd8e" path="res://art/game/board/board_client.gd" id="8_nepv3"]
+[ext_resource type="Texture2D" uid="uid://dpo1tsm4hi7rh" path="res://art/game/board/tiles/ore.png" id="9_7025r"]
+[ext_resource type="Texture2D" uid="uid://ci51nt8puxdik" path="res://art/game/board/tiles/grain.png" id="10_m4url"]
+[ext_resource type="Texture2D" uid="uid://34ej43vr0l7h" path="res://art/game/board/tiles/lumber.png" id="11_8ool0"]
+[ext_resource type="Texture2D" uid="uid://o18pbrdgyip2" path="res://art/game/board/tiles/brick.png" id="12_pr1ej"]
+[ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://art/game/board/tiles/wool.png" id="13_05nbr"]
+[ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://art/game/board/tiles/desert.png" id="14_0sl42"]
+[ext_resource type="Script" uid="uid://madr0j4n87b8" path="res://art/game/globals/overlays.gd" id="15_oaba0"]
+[ext_resource type="Texture2D" uid="uid://ch1tb8vwg4ph6" path="res://art/game/board/robber.png" id="22_pf7vy"]
+[ext_resource type="Script" uid="uid://dnwjj5gjp8bye" path="res://art/ui/root_ui.gd" id="23_o8ni1"]
+[ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://art/ui/game_theme.tres" id="24_3hbvx"]
+[ext_resource type="Texture2D" uid="uid://dmj41lyg0mur0" path="res://art/ui/dice/dice_faces.png" id="25_q8j3a"]
+[ext_resource type="PackedScene" uid="uid://dihrcf515sxka" path="res://art/ui/multiplayer/multiplayer_ui.tscn" id="26_ms3bu"]
+[ext_resource type="PackedScene" uid="uid://cwv4tga2lnu8k" path="res://art/ui/resources/resources_ui.tscn" id="27_7ixpq"]
+[ext_resource type="PackedScene" uid="uid://6r70bh3i3hcd" path="res://art/ui/action_ui.tscn" id="28_bk1p3"]
+[ext_resource type="PackedScene" uid="uid://cjyllng40ahaa" path="res://art/ui/trading/trading_ui.tscn" id="29_n8ral"]
+[ext_resource type="PackedScene" uid="uid://b64h7q8af0b2d" path="res://art/ui/spinner.tscn" id="30_yd4ix"]
+[ext_resource type="Script" uid="uid://qov026h7trwl" path="res://art/ui/main_spinner.gd" id="31_66xif"]
 
 [sub_resource type="Gradient" id="Gradient_1ryvc"]
 colors = PackedColorArray(0.09019608, 0.1254902, 0.21960784, 1, 0.09019608, 0.1254902, 0.21960784, 1)
@@ -95,7 +95,6 @@ outline_color = Color(0.50318396, 0.7159233, 0.8750814, 1)
 script = ExtResource("1_qouja")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1662104199]
-_spawnable_scenes = PackedStringArray("uid://by1q5dsk0j4se")
 spawn_path = NodePath("../RootUI/PlayerList")
 script = ExtResource("2_wljb1")
 
@@ -145,7 +144,6 @@ textures = Dictionary[int, Texture2D]({
 4: ExtResource("13_05nbr"),
 5: ExtResource("14_0sl42")
 })
-metadata/_custom_type_script = "uid://bqq7e5btewd8e"
 
 [node name="Overlays" type="Node2D" parent="Board" unique_id=933634614]
 script = ExtResource("15_oaba0")
@@ -381,7 +379,7 @@ offset_right = 32.0
 offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
-flip_h = false
+texture = null
 script = ExtResource("31_66xif")
 
 [connection signal="pressed" from="RootUI/DiceArea/DiceButton" to="." method="_on_dice_button_pressed"]

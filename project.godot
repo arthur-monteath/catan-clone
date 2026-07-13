@@ -21,8 +21,8 @@ config/icon="uid://df8wectmf10hk"
 
 [autoload]
 
-NetworkHandler="*res://assets/game/globals/network_handler.gd"
-Debug="*res://assets/game/globals/debug.gd"
+NetworkHandler="*res://art/game/globals/network_handler.gd"
+Debug="*res://art/game/globals/debug.gd"
 Server="*uid://wnvagd7ultri"
 Client="*uid://dhpl8p1om3u8k"
 
@@ -49,15 +49,17 @@ enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
 [file_customization]
 
 folder_colors={
-"res://assets/": "gray",
-"res://assets/dice/": "yellow",
-"res://assets/game/": "green",
-"res://assets/game/board/": "purple",
-"res://assets/game/globals/": "yellow",
-"res://assets/game/player/": "blue",
-"res://assets/game/structures/": "gray",
-"res://assets/ui/": "purple",
-"res://scenes/": "blue"
+"res://art/": "gray",
+"res://art/game/": "green",
+"res://art/game/board/": "purple",
+"res://art/game/globals/": "yellow",
+"res://art/game/player/": "blue",
+"res://art/game/structures/": "gray",
+"res://art/ui/": "purple",
+"res://art/ui/dice/": "yellow",
+"res://scenes/": "blue",
+"res://src/main/": "green",
+"res://src/structures/": "gray"
 }
 
 [global_group]
@@ -73,9 +75,6 @@ select_action_card={
 ]
 }
 
-[steam]
+[rendering]
 
-initialization/app_id=0
-initialization/initialize_on_startup=false
-initialization/embed_callbacks=false
-multiplayer_peer/max_channels=4
+textures/canvas_textures/default_texture_filter=0

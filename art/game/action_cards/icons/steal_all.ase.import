@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://do7o7l4y0126h"
+path="res://.godot/imported/steal_all.ase-77ea7512a28b709b200cc19b0dc9c0cb.res"
+
+[deps]
+
+source_file="res://art/game/action_cards/icons/steal_all.ase"
+dest_files=["res://.godot/imported/steal_all.ase-77ea7512a28b709b200cc19b0dc9c0cb.res"]
+
+[params]
+
