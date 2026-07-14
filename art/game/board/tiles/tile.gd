@@ -14,3 +14,4 @@ var outline_color: Color:
 
 func set_highlighted(v: bool = true):
 	outline_color = Color.WHITE if v else sand_color
+	outline_sprite.z_index = -1 if v else -2

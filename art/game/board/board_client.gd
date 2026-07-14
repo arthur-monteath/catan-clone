@@ -21,6 +21,7 @@ var tiles: Array
 var points: Array[Vector2i]
 var edges: Array[Vector2i]
 var edge_lines: Dictionary[Vector2i, Array]
+var tiles_by_point: Dictionary[Vector2i, Array]
 
 var roads: Dictionary[Vector2i, Dictionary]
 var settlements: Dictionary[Vector2i, Dictionary]
@@ -37,6 +38,7 @@ func set_is_my_turn(value: bool):
 	else: action_ui.hide()
 	if !value:
 		build_mode = false
+		preview_pos = Vector2i.MAX
 
 @rpc("authority", "reliable", "call_local")
 func propagate_map(tile_types, number_tokens):	
@@ -61,6 +63,8 @@ func propagate_map(tile_types, number_tokens):
 		
 		for point in HexGrid.corners(pos):
 			points.append(point)
+			if tiles_by_point.has(point): tiles_by_point[point].append(t)
+			else: tiles_by_point[point] = [t]
 		
 		var edge_dict = HexGrid.edges(pos)
 		for edge in edge_dict.keys():
@@ -134,8 +138,14 @@ func set_client_selected_structure(structure: Board.Structure):
 var selected_structure: Board.Structure = Board.Structure.SETTLEMENT
 #endregion
 
-var preview_pos: Vector2i = Vector2i.MAX
 var build_mode: bool = false
+var highlighted_tiles: Array
+var preview_pos: Vector2i = Vector2i.MAX:
+	set(value):
+		if value == preview_pos: return
+		preview_pos = value
+		_refresh_settlement_highlight()
+
 func _unhandled_input(_event: InputEvent) -> void:
 	if !is_my_turn: return
 	var mouse = get_global_mouse_position()
@@ -176,6 +186,13 @@ func _unhandled_input(_event: InputEvent) -> void:
 	#draw_circle(point2, 2, Color.RED)
 #endregion
 
+func _refresh_settlement_highlight() -> void:
+	for tile in highlighted_tiles:
+		tile.set_highlighted(false)
+	highlighted_tiles = tiles_by_point.get(preview_pos, [])
+	for tile in highlighted_tiles:
+		tile.set_highlighted(true)
+
 func get_point(pos: Vector2, max_dist: float = 20.0) -> Vector2i:
 	var lowest_distance = INF
 	var found_point: Vector2i
@@ -202,6 +219,7 @@ func get_edge(pos: Vector2) -> Vector2i:
 
 func _on_action_ui_build_mode_changed(_build_mode: bool) -> void:
 	build_mode = _build_mode
+	if !_build_mode: preview_pos = Vector2i.MAX
 
 func _on_action_ui_on_structure_selected(structure: Board.Structure) -> void:
 	selected_structure = structure
