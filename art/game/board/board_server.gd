@@ -150,13 +150,14 @@ func request_settlement(_pos: Vector2):
 			emit_signal("on_settlement_built", pos, requester)
 
 func _can_place_settlement(pos: Vector2i) -> bool:
-	var valid_space: bool = _points.has(pos) and !_settlements.has(pos)
-	if !valid_space: return false
-	for direction in HexGrid.Dir.values():
-		var dir_pos = Vector2i((Vector2(pos) + HexGrid.direction_vector(direction)).round())
-		if !_points.has(dir_pos): continue
-		if _settlements.has(dir_pos): return false
+	if !_points.has(pos) or _settlements.has(pos): return false
+	for endpoints in _edge_lines.values():
+		var a := Vector2i(endpoints[0].round())
+		var b := Vector2i(endpoints[1].round())
+		if pos == a and _settlements.has(b): return false
+		if pos == b and _settlements.has(a): return false
 	return true
+
 
 func _set_road(pos: Vector2i, player: Dictionary):
 	var info = { "id": player.id, "color": player.color }
