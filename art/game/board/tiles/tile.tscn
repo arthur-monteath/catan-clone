@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c550qcbfp3yii" path="res://art/game/board/tiles/tile.gd" id="1_iwhfu"]
 [ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://art/game/board/tiles/desert.png" id="2_1ne16"]
+[ext_resource type="Texture2D" uid="uid://dsl8uxxrdv6i2" path="res://art/game/board/tiles/base_tile.png" id="3_dmk4i"]
 [ext_resource type="Script" uid="uid://2jjeuai7ss65" path="res://addons/simple_shapes/shapes/CircleShape.gd" id="3_obqv1"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_iwhfu"]
@@ -12,13 +13,12 @@ shadow_size = 4
 shadow_color = Color(0, 0, 0, 0.4)
 shadow_offset = Vector2(2, 2)
 
-[node name="Tile" type="Node2D"]
-rotation = 1.5707964
+[node name="Tile" type="Node2D" unique_id=2057520818]
 script = ExtResource("1_iwhfu")
 
-[node name="Outline" type="Polygon2D" parent="."]
-color = Color(1, 1, 1, 0.60784316)
-texture = ExtResource("2_1ne16")
+[node name="Outline" type="Polygon2D" parent="." unique_id=531215030]
+rotation = 1.5707964
+color = Color(0.91, 0.8554, 0.5824, 1)
 texture_offset = Vector2(32, 32)
 texture_rotation = 1.5707964
 polygon = PackedVector2Array(36, 0, 18, 31.176914, -18, 31.176914, -36, 4.408583e-15, -18, -31.176914, 18, -31.176914)
@@ -26,29 +26,33 @@ script = ExtResource("3_obqv1")
 radius = 36
 points_num = 6
 
-[node name="Hex" type="Polygon2D" parent="."]
-texture = ExtResource("2_1ne16")
-texture_offset = Vector2(32, 32)
-texture_rotation = 1.5707964
-polygon = PackedVector2Array(32, 0, 16, 27.712812, -16, 27.712812, -32, 3.9187403e-15, -16, -27.712812, 16, -27.712812)
-script = ExtResource("3_obqv1")
-radius = 32
-points_num = 6
+[node name="OutlineSprite" type="Sprite2D" parent="." unique_id=1196152815]
+unique_name_in_owner = true
+visible = false
+texture = ExtResource("3_dmk4i")
 
-[node name="Number" type="Label" parent="."]
+[node name="HexSprite" type="Sprite2D" parent="." unique_id=860579761]
+unique_name_in_owner = true
+z_index = 5
+texture = ExtResource("2_1ne16")
+
+[node name="Number" type="Label" parent="." unique_id=771513547]
+z_index = 10
 texture_filter = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -31.999998
-offset_top = 28.000002
-offset_right = 24.000002
-offset_bottom = 92.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -28.0
+offset_top = -32.0
+offset_right = 28.0
+offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
-rotation = -1.5707964
 size_flags_horizontal = 0
 size_flags_vertical = 8
+text = "2"
 label_settings = SubResource("LabelSettings_iwhfu")
 horizontal_alignment = 1
 vertical_alignment = 1

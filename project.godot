@@ -33,10 +33,11 @@ gdscript/warnings/integer_division=0
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=960
+window/size/viewport_height=540
 window/size/resizable=false
-window/stretch/mode="canvas_items"
+window/stretch/mode="viewport"
+window/stretch/scale_mode="integer"
 
 [dotnet]
 
@@ -59,7 +60,8 @@ folder_colors={
 "res://art/ui/dice/": "yellow",
 "res://scenes/": "blue",
 "res://src/main/": "green",
-"res://src/structures/": "gray"
+"res://src/structures/": "gray",
+"res://src/ui/": "yellow"
 }
 
 [global_group]

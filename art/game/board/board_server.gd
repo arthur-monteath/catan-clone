@@ -83,9 +83,9 @@ func generate_map() -> void:
 enum TileType {
 	BRICK = Resources.Type.BRICK,
 	LUMBER = Resources.Type.LUMBER,
-	ORE = Resources.Type.ORE,
+	ROCK = Resources.Type.ROCK,
 	GRAIN = Resources.Type.GRAIN,
-	WOOL = Resources.Type.WOOL,
+	SHEEP = Resources.Type.SHEEP,
 	DESERT
 }
 
@@ -93,17 +93,17 @@ func _tile_type_to_resource(type: TileType):
 	match type:
 		TileType.BRICK: return Resources.Type.BRICK
 		TileType.LUMBER: return Resources.Type.LUMBER
-		TileType.ORE: return Resources.Type.ORE
+		TileType.ROCK: return Resources.Type.ROCK
 		TileType.GRAIN: return Resources.Type.GRAIN
-		TileType.WOOL: return Resources.Type.WOOL
+		TileType.SHEEP: return Resources.Type.SHEEP
 		TileType.DESERT: return null
 
 var tileAmounts: Dictionary[TileType, int] = {
 	TileType.LUMBER: 4,
 	TileType.GRAIN: 4,
-	TileType.WOOL: 4,
+	TileType.SHEEP: 4,
 	TileType.BRICK: 3,
-	TileType.ORE: 3,
+	TileType.ROCK: 3,
 	TileType.DESERT: 1,
 }
 

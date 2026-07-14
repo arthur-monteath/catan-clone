@@ -135,7 +135,6 @@ script = ExtResource("7_02fa5")
 
 [node name="BoardClient" type="Node2D" parent="Board" unique_id=1696777690]
 unique_name_in_owner = true
-scale = Vector2(0.5, 0.5)
 script = ExtResource("8_nepv3")
 textures = Dictionary[int, Texture2D]({
 0: ExtResource("9_7025r"),

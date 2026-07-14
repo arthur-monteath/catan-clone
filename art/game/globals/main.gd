@@ -25,7 +25,7 @@ func _set_game_state(value: State):
 	game_state = value
 
 const STRUCTURE_COSTS: Dictionary[Board.Structure, Dictionary] = {
-	Board.Structure.SETTLEMENT: { Resources.Type.ORE: 2, Resources.Type.BRICK: 1 },
+	Board.Structure.SETTLEMENT: { Resources.Type.ROCK: 2, Resources.Type.BRICK: 1 },
 	Board.Structure.ROAD: { Resources.Type.LUMBER: 1, Resources.Type.BRICK: 1 },
 }
 
@@ -188,7 +188,7 @@ func start_game():
 	game_state = State.FIRST_SETTLEMENT
 	
 	turn_manager.start_turn()
-	var ca: ActionCard = load("res://assets/game/action_cards/steal_all_resources.tres")
+	var ca: ActionCard = load("res://art/game/action_cards/steal_all_resources.tres")
 	%ActionUI._update_actions_cards_ui([{"title":"teste"},{},{},{},{"title":ca.title,"icon":ca.icon}])
 
 

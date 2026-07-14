@@ -42,8 +42,8 @@ func set_is_my_turn(value: bool):
 func propagate_map(tile_types, number_tokens):	
 	for i in range(0, len(tile_types)):
 		var t = TILE.instantiate()
-		t.get_node("Hex").texture = textures[tile_types[i]]
-		t.get_node("Outline").texture = textures[tile_types[i]]
+		t.get_node("%HexSprite").texture = textures[tile_types[i]]
+		#t.get_node("Outline").texture = textures[tile_types[i]]
 		
 		var pos = board.get_hex_position(i)
 		t.global_position = pos
@@ -52,7 +52,12 @@ func propagate_map(tile_types, number_tokens):
 			robber.position = t.global_position
 			robber.visible = true
 		else:
-			t.get_node("Number").text = String.num_int64(number_tokens.pop_front())
+			var number = number_tokens.pop_front()
+			if number == 6 or number == 8:
+				var st = (t.get_node("Number") as Label).label_settings
+				(t.get_node("Number") as Label).label_settings = st.duplicate()
+				(t.get_node("Number") as Label).label_settings.outline_color = Color.from_string("972232", "ffffff")
+			t.get_node("Number").text = String.num_int64(number)
 		
 		for point in board.get_points(pos):
 			points.append(point)

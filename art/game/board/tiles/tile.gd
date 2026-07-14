@@ -1,3 +1,3 @@
 extends Node2D
 
-@onready var hex: Polygon2D = $Hex
+@onready var hex: Sprite2D = %HexSprite

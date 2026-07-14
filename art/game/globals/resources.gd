@@ -1,23 +1,23 @@
 class_name Resources extends Node
 
 enum Type {
-	ORE,
+	ROCK,
 	GRAIN,
 	LUMBER,
 	BRICK,
-	WOOL,
+	SHEEP,
 }
 
-const ORE: Texture2D = preload("uid://dpo1tsm4hi7rh")
-const GRAIN: Texture2D = preload("uid://ci51nt8puxdik")
-const LUMBER: Texture2D = preload("uid://34ej43vr0l7h")
-const BRICK: Texture2D = preload("uid://o18pbrdgyip2")
-const WOOL: Texture2D = preload("uid://cpyu3swdqn4k3")
+const BRICK_RES = preload("uid://cdu4eeivvpwur")
+const GRAIN_RES = preload("uid://libiqm35tqh8")
+const LUMBER_RES = preload("uid://bcyyypljqiaae")
+const ROCK_RES = preload("uid://pqt0babio2su")
+const SHEEP_RES = preload("uid://d0gx5knbx7me4")
 
 static var resource_texture: Dictionary[Type, Texture2D] = {
-	Type.ORE: ORE,
-	Type.GRAIN: GRAIN,
-	Type.LUMBER: LUMBER,
-	Type.BRICK: BRICK,
-	Type.WOOL: WOOL,
+	Type.ROCK: ROCK_RES,
+	Type.GRAIN: GRAIN_RES,
+	Type.LUMBER: LUMBER_RES,
+	Type.BRICK: BRICK_RES,
+	Type.SHEEP: SHEEP_RES,
 }
