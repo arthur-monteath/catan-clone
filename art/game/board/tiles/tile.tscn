@@ -30,15 +30,15 @@ points_num = 6
 [node name="OutlineSprite" type="Sprite2D" parent="." unique_id=1196152815]
 unique_name_in_owner = true
 self_modulate = Color(0.9098039, 0.85490197, 0.58431375, 1)
+z_index = -1
 texture = ExtResource("3_dmk4i")
 
 [node name="HexSprite" type="Sprite2D" parent="." unique_id=860579761]
 unique_name_in_owner = true
-z_index = 5
 texture = ExtResource("2_1ne16")
 
 [node name="Number" type="Label" parent="." unique_id=771513547]
-z_index = 10
+z_index = 1
 texture_filter = 1
 anchors_preset = 8
 anchor_left = 0.5

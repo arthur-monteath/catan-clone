@@ -1,26 +1,25 @@
 class_name HexGrid
 
-# Pointy-top hex geometry snapped to an integer lattice. A regular hex needs an
-# apothem of RADIUS * sqrt(3) / 2, which is irrational and forces rounding, so
-# corners never sit on exact pixels and a corner shared by two tiles can round
-# to two different keys. Snapping APOTHEM to an even integer keeps hexes
-# near-regular while making every centre, corner and edge midpoint an exact,
-# evenly spaced pixel.
-const RADIUS: int = 34
-const APOTHEM: int = 30
-const ROW_HEIGHT: int = 54 # RADIUS * 1.5
+# Hex placement lattice, sized to the sprites rather than to a true regular hex.
+# The three offsets below are read straight off the artwork. Adjacent rows share
+# their corners exactly when CAP + SIDE == ROW_HEIGHT, so SIDE is derived from the
+# other two to keep that guarantee no matter what the sprites need.
+const APOTHEM: int = 30  # centre to a left/right vertex (half the sprite width)
+const CAP: int = 34  # centre to the top/bottom vertex (half the sprite height)
+const ROW_HEIGHT: int = 54  # vertical spacing between rows, matched to the sprites
+const SIDE: int = ROW_HEIGHT - CAP  # centre to a slanted vertex; closes the alignment
 const ROW_SIZES: Array[int] = [3, 4, 5, 4, 3]
 
 enum Dir { TOP, RIGHT_UP, RIGHT_DOWN, BOTTOM, LEFT_DOWN, LEFT_UP }
 
 static func direction_vector(dir: Dir) -> Vector2:
 	match dir:
-		Dir.TOP: return Vector2(0, -RADIUS)
-		Dir.RIGHT_UP: return Vector2(APOTHEM, -RADIUS / 2.0)
-		Dir.RIGHT_DOWN: return Vector2(APOTHEM, RADIUS / 2.0)
-		Dir.BOTTOM: return Vector2(0, RADIUS)
-		Dir.LEFT_DOWN: return Vector2(-APOTHEM, RADIUS / 2.0)
-		Dir.LEFT_UP: return Vector2(-APOTHEM, -RADIUS / 2.0)
+		Dir.TOP: return Vector2(0, -CAP)
+		Dir.RIGHT_UP: return Vector2(APOTHEM, -SIDE)
+		Dir.RIGHT_DOWN: return Vector2(APOTHEM, SIDE)
+		Dir.BOTTOM: return Vector2(0, CAP)
+		Dir.LEFT_DOWN: return Vector2(-APOTHEM, SIDE)
+		Dir.LEFT_UP: return Vector2(-APOTHEM, -SIDE)
 		_: return Vector2.ZERO
 
 static func hex_position(index: int) -> Vector2:
@@ -32,7 +31,7 @@ static func hex_position(index: int) -> Vector2:
 		col -= size
 		row += 1
 	var indent := 1 + absi(2 - row)
-	var offset := Vector2(APOTHEM * 5, RADIUS * 3)
+	var offset := Vector2(APOTHEM * 5, ROW_HEIGHT * 2)
 	return Vector2((indent + 2 * col) * APOTHEM, row * ROW_HEIGHT) - offset
 
 static func corners(center: Vector2) -> Array[Vector2i]:

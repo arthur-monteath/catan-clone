@@ -103,17 +103,25 @@ unique_name_in_owner = true
 wait_time = 32.0
 script = ExtResource("3_v2yb1")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=343420504]
-texture_filter = 1
+[node name="Background" type="Node2D" parent="." unique_id=853784628]
 
-[node name="Sprite2D" type="Sprite2D" parent="Camera2D" unique_id=1703422198]
+[node name="SolidBg" type="Sprite2D" parent="Background" unique_id=1703422198]
+z_index = -10
+scale = Vector2(1.2867134, 1.4074074)
 texture = SubResource("GradientTexture2D_dcmux")
 
-[node name="Ocean" type="Sprite2D" parent="Camera2D" unique_id=965646975]
-position = Vector2(-16, 0)
+[node name="Ocean" type="Sprite2D" parent="Background" unique_id=965646975]
+z_index = -10
+position = Vector2(-15.999998, 0)
+scale = Vector2(0.9999999, 0.9999999)
 texture = ExtResource("4_js0lu")
 
-[node name="Land" type="Polygon2D" parent="Camera2D" unique_id=871437686]
+[node name="Land2" type="Sprite2D" parent="Background" unique_id=506179772]
+z_index = -5
+position = Vector2(-24, 0)
+texture = ExtResource("6_twgab")
+
+[node name="Land" type="Polygon2D" parent="Background" unique_id=871437686]
 visible = false
 texture_filter = 1
 texture = SubResource("GradientTexture2D_mfdv2")
@@ -123,9 +131,8 @@ script = ExtResource("5_gxtfn")
 radius = 168
 points_num = 6
 
-[node name="Land2" type="Sprite2D" parent="Camera2D" unique_id=506179772]
-position = Vector2(-24, 0)
-texture = ExtResource("6_twgab")
+[node name="Camera2D" type="Camera2D" parent="." unique_id=343420504]
+texture_filter = 1
 
 [node name="Board" type="Node2D" parent="." unique_id=945483128]
 unique_name_in_owner = true
