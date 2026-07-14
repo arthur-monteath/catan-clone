@@ -45,7 +45,7 @@ func propagate_map(tile_types, number_tokens):
 		t.get_node("%HexSprite").texture = textures[tile_types[i]]
 		#t.get_node("Outline").texture = textures[tile_types[i]]
 		
-		var pos = board.get_hex_position(i)
+		var pos = HexGrid.hex_position(i)
 		t.global_position = pos
 		
 		if tile_types[i] == Board.TileType.DESERT:
@@ -59,10 +59,10 @@ func propagate_map(tile_types, number_tokens):
 				(t.get_node("Number") as Label).label_settings.outline_color = Color.from_string("972232", "ffffff")
 			t.get_node("Number").text = String.num_int64(number)
 		
-		for point in board.get_points(pos):
+		for point in HexGrid.corners(pos):
 			points.append(point)
 		
-		var edge_dict = board.get_edge_lines(pos)
+		var edge_dict = HexGrid.edges(pos)
 		for edge in edge_dict.keys():
 			if not edges.has(edge):
 				edge_lines[edge] = edge_dict[edge]

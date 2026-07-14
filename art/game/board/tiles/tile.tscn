@@ -17,6 +17,7 @@ shadow_offset = Vector2(2, 2)
 script = ExtResource("1_iwhfu")
 
 [node name="Outline" type="Polygon2D" parent="." unique_id=531215030]
+visible = false
 rotation = 1.5707964
 color = Color(0.91, 0.8554, 0.5824, 1)
 texture_offset = Vector2(32, 32)
@@ -28,7 +29,7 @@ points_num = 6
 
 [node name="OutlineSprite" type="Sprite2D" parent="." unique_id=1196152815]
 unique_name_in_owner = true
-visible = false
+self_modulate = Color(0.9098039, 0.85490197, 0.58431375, 1)
 texture = ExtResource("3_dmk4i")
 
 [node name="HexSprite" type="Sprite2D" parent="." unique_id=860579761]

@@ -1,5 +1,4 @@
-class_name Board
-extends Node2D
+class_name Board extends Node2D
 
 @onready var main: Main = $".."
 @onready var client: BoardClient = $BoardClient
@@ -61,14 +60,14 @@ func generate_map() -> void:
 			t.number = n_tokens.pop_front()
 		_tiles.append(t)
 		
-		var pos = get_hex_position(i)
+		var pos = HexGrid.hex_position(i)
 		t.pos = pos
 	
-		for point in get_points(pos):
+		for point in HexGrid.corners(pos):
 			t.points.append(point)
 			_points.append(point)
 		
-		var edge_dict = get_edge_lines(pos)
+		var edge_dict = HexGrid.edges(pos)
 		for edge in edge_dict.keys():
 			if not _edges.has(edge):
 				_edge_lines[edge] = edge_dict[edge]
@@ -106,8 +105,6 @@ var tileAmounts: Dictionary[TileType, int] = {
 	TileType.ROCK: 3,
 	TileType.DESERT: 1,
 }
-
-# TODO - MAKE KEYS RELIABLE THROUGH Vector2i
 
 class Tile:
 	var node: Node2D
@@ -155,8 +152,8 @@ func request_settlement(_pos: Vector2):
 func _can_place_settlement(pos: Vector2i) -> bool:
 	var valid_space: bool = _points.has(pos) and !_settlements.has(pos)
 	if !valid_space: return false
-	for direction in Dir.values():
-		var dir_pos = Vector2i((Vector2(pos) + get_direction_vector(direction)).round())
+	for direction in HexGrid.Dir.values():
+		var dir_pos = Vector2i((Vector2(pos) + HexGrid.direction_vector(direction)).round())
 		if !_points.has(dir_pos): continue
 		if _settlements.has(dir_pos): return false
 	return true
@@ -177,7 +174,7 @@ func get_tile_resources(tile: Tile) -> Dictionary:
 	var resource_type: Resources.Type = _tile_type_to_resource(tile.type)
 	if resource_type == null: return {}
 	var info = {}
-	for point in get_points(tile.pos):
+	for point in HexGrid.corners(tile.pos):
 		if _settlements.has(point):
 			if info.has(_settlements[point].id): info[_settlements[point].id][resource_type] += 1
 			else: info[_settlements[point].id] = { resource_type: 1 }
@@ -211,71 +208,6 @@ func get_point_adjacent_tile_resources(settlement_pos: Vector2i) -> Dictionary[R
 			continue
 	return resources
 
-#region Hex Grid
-
-const GRID_SIZE: int = 5
-const HEX_RADIUS: float = 36
-var HEX_APOTHEM: float = HEX_RADIUS * sqrt(3.0) / 2.0
-var HEIGHT_DIFF: float = HEX_RADIUS + HEX_APOTHEM
-
-func get_hex_position(index: int):
-	var pos = Vector2(0,0)
-	if index < 3:
-		pos.x = (3 + 2*index) * HEX_APOTHEM
-		pos.y = 0
-	elif index < 7:
-		pos.x = (2 + 2*(index-3)) * HEX_APOTHEM
-		pos.y = HEX_RADIUS*1.5
-	elif index < 12:
-		pos.x = (1 + 2*(index-7)) * HEX_APOTHEM
-		pos.y = HEX_RADIUS*3
-	elif index < 16:
-		pos.x = (2 + 2*(index-12)) * HEX_APOTHEM
-		pos.y = HEX_RADIUS*4.5
-	elif index < 19:
-		pos.x = (3 + 2*(index-16)) * HEX_APOTHEM
-		pos.y = HEX_RADIUS*6
-	pos -= Vector2(HEX_APOTHEM*5, HEX_RADIUS*3)
-	return pos
-
-enum Dir {
-	TOP,
-	RIGHT_UP,
-	RIGHT_DOWN,
-	BOTTOM,
-	LEFT_DOWN,
-	LEFT_UP
-}
-
-func get_direction_vector(point:Dir) -> Vector2:
-	match point:
-		Dir.TOP: return Vector2(0, -HEX_RADIUS)
-		Dir.RIGHT_UP: return Vector2(HEX_APOTHEM, -HEX_RADIUS/2.0)
-		Dir.RIGHT_DOWN: return Vector2(HEX_APOTHEM, HEX_RADIUS / 2.0)
-		Dir.BOTTOM: return Vector2(0, HEX_RADIUS)
-		Dir.LEFT_DOWN: return Vector2(-HEX_APOTHEM, HEX_RADIUS / 2.0)
-		Dir.LEFT_UP: return Vector2(-HEX_APOTHEM, -HEX_RADIUS / 2.0)
-		_: return Vector2.ZERO
-
-func get_points(pos: Vector2) -> Array[Vector2i]:
-	var p: Array[Vector2i] = []
-	for dir in Dir.values():
-		p.append(Vector2i(Vector2(pos + get_direction_vector(dir)).round()))
-	return p
-
-# Returns the UNROUNDED, vector2 positions in the array
-func get_edge_lines(pos: Vector2) -> Dictionary[Vector2i, Array]:
-	var e: Dictionary[Vector2i, Array]
-	var p = get_points(pos)
-	
-	for i in range(p.size()):
-		var a: Vector2 = p[i]
-		var b: Vector2 = p[(i + 1) % p.size()]
-		var mid: Vector2i = ((a + b) / 2.0).round()
-		e[mid] = [a,b]
-	
-	return e
-	
 func _get_tile(pos: Vector2) -> Tile:
 	var lowest_distance = INF
 	var found_tile
@@ -285,19 +217,3 @@ func _get_tile(pos: Vector2) -> Tile:
 			lowest_distance = dist
 			found_tile = tile
 	return found_tile
-
-#func get_key(pos: Vector2) -> Vector2:
-	#var point: Vector2 = get_point(pos)
-	#var edge: Vector2 = get_edge(pos)
-	#if point != Vector2.INF: return point
-	#if edge != Vector2.INF: return edge
-	#return Vector2.INF
-	#
-#func get_key_unnocupied(pos: Vector2) -> Vector2:
-	#var point: Vector2 = get_point(pos)
-	#var edge: Vector2 = get_edge(pos)
-	#if !_settlements.has(point) and point != Vector2.INF: return point
-	#if edge != Vector2.INF: return edge
-	#return Vector2.INF
-
-#endregion
