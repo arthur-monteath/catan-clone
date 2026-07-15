@@ -11,7 +11,7 @@ shadow_size = 4
 shadow_color = Color(0, 0, 0, 0.39215687)
 shadow_offset = Vector2(2, 1)
 
-[node name="MultiplayerUI" type="Control"]
+[node name="MultiplayerUI" type="Control" unique_id=929670236]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -23,7 +23,7 @@ grow_vertical = 2
 theme = ExtResource("1_cbfqa")
 script = ExtResource("1_luirv")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1029990634]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -39,32 +39,33 @@ grow_vertical = 2
 theme = ExtResource("1_cbfqa")
 theme_override_constants/separation = 8
 
-[node name="HostButton" type="Button" parent="VBoxContainer"]
+[node name="HostButton" type="Button" parent="VBoxContainer" unique_id=1112700798]
 custom_minimum_size = Vector2(220, 80)
 layout_mode = 2
 theme = ExtResource("1_cbfqa")
 theme_override_font_sizes/font_size = 32
 text = "Host"
 
-[node name="JoinButton" type="Button" parent="VBoxContainer"]
+[node name="JoinButton" type="Button" parent="VBoxContainer" unique_id=794429901]
 custom_minimum_size = Vector2(220, 80)
 layout_mode = 2
 theme = ExtResource("1_cbfqa")
 theme_override_font_sizes/font_size = 32
 text = "Join"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1602992826]
 layout_mode = 2
 theme = ExtResource("1_cbfqa")
 theme_override_constants/separation = 8
 
-[node name="PlayerName" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="PlayerName" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=2090563876]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_cbfqa")
+alignment = 1
 
-[node name="PlayerColorPicker" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer"]
+[node name="PlayerColorPicker" type="ColorPickerButton" parent="VBoxContainer/HBoxContainer" unique_id=1796465156]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -72,22 +73,22 @@ theme = ExtResource("1_cbfqa")
 color = Color(1, 1, 1, 1)
 edit_intensity = false
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=550665454]
 layout_mode = 2
 theme = ExtResource("1_cbfqa")
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=1800409682]
 layout_mode = 2
 text = "Tutorial mode?"
 label_settings = SubResource("LabelSettings_cbfqa")
 
-[node name="TutorialMode" type="CheckButton" parent="VBoxContainer/HBoxContainer2"]
+[node name="TutorialMode" type="CheckButton" parent="VBoxContainer/HBoxContainer2" unique_id=612306911]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 
-[node name="LobbyMenu" type="PanelContainer" parent="."]
+[node name="LobbyMenu" type="PanelContainer" parent="." unique_id=887500665]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(128, 256)
@@ -104,29 +105,28 @@ offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="LobbyMenu"]
+[node name="MarginContainer" type="MarginContainer" parent="LobbyMenu" unique_id=693317893]
 layout_mode = 2
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="LobbyMenu/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="LobbyMenu/MarginContainer" unique_id=61687617]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="LobbyMenu/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="LobbyMenu/MarginContainer/VBoxContainer" unique_id=1144550594]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Lobbies"
 horizontal_alignment = 1
 
-[node name="Spinner" parent="LobbyMenu/MarginContainer/VBoxContainer" instance=ExtResource("3_b8h3t")]
+[node name="Spinner" parent="LobbyMenu/MarginContainer/VBoxContainer" unique_id=686344304 instance=ExtResource("3_b8h3t")]
 unique_name_in_owner = true
 layout_mode = 2
-flip_h = false
 
-[node name="RefreshLobbiesButton" type="Button" parent="LobbyMenu/MarginContainer/VBoxContainer"]
+[node name="RefreshLobbiesButton" type="Button" parent="LobbyMenu/MarginContainer/VBoxContainer" unique_id=581472356]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -135,11 +135,11 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 24
 text = "Refresh"
 
-[node name="LobbyList" type="VBoxContainer" parent="LobbyMenu/MarginContainer/VBoxContainer"]
+[node name="LobbyList" type="VBoxContainer" parent="LobbyMenu/MarginContainer/VBoxContainer" unique_id=684753319]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="CloseLobbyMenuButton" type="TextureButton" parent="LobbyMenu/MarginContainer"]
+[node name="CloseLobbyMenuButton" type="TextureButton" parent="LobbyMenu/MarginContainer" unique_id=2097295296]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8

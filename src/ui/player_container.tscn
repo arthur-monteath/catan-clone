@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://cv1l06m4do1li"]
+
+[ext_resource type="Texture2D" uid="uid://be8c3g2lr53td" path="res://art/ui/icon.svg" id="1_51pyi"]
+[ext_resource type="Texture2D" uid="uid://ctdh3j75q0fiu" path="res://art/game/player/crown.png" id="2_3i01v"]
+
+[node name="PlayerContainer" type="MarginContainer" unique_id=1942192895]
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="PlayerInfoContainer" type="HBoxContainer" parent="." unique_id=1067242574]
+layout_mode = 2
+
+[node name="PlayerAvatar" type="TextureRect" parent="PlayerInfoContainer" unique_id=973799845]
+layout_mode = 2
+texture = ExtResource("1_51pyi")
+expand_mode = 2
+
+[node name="Label" type="RichTextLabel" parent="PlayerInfoContainer" unique_id=314685866]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "Thucatrindade1
+[img]res://art/ui/resources/resources.png[/img] 8  [img]res://art/ui/action_cards/action_card_icon.png[/img] 4  [img]res://art/ui/trophy_icon.png[/img] 2"
+fit_content = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="Crown" type="TextureRect" parent="." unique_id=547942396]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -16)
+texture = ExtResource("2_3i01v")
+stretch_mode = 3

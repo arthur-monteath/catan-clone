@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://cpyu3swdqn4k3" path="res://art/game/board/tiles/wool.png" id="13_05nbr"]
 [ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://art/game/board/tiles/desert.png" id="14_0sl42"]
 [ext_resource type="Script" uid="uid://madr0j4n87b8" path="res://art/game/globals/overlays.gd" id="15_oaba0"]
+[ext_resource type="PackedScene" uid="uid://cv1l06m4do1li" path="res://src/ui/player_container.tscn" id="21_bhx41"]
 [ext_resource type="Texture2D" uid="uid://ch1tb8vwg4ph6" path="res://art/game/board/robber.png" id="22_pf7vy"]
 [ext_resource type="Script" uid="uid://dnwjj5gjp8bye" path="res://art/ui/root_ui.gd" id="23_o8ni1"]
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://art/ui/game_theme.tres" id="24_3hbvx"]
@@ -75,6 +76,10 @@ shadow_size = 12
 shadow_color = Color(0.2183367, 0.66926515, 0.99999994, 0.4745098)
 shadow_offset = Vector2(2, 1)
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_sww3w"]
+color = Color(1, 1, 1, 1)
+thickness = 2
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_y3ud2"]
 properties/0/path = NodePath("TurnBar:value")
 properties/0/spawn = true
@@ -95,7 +100,7 @@ outline_color = Color(0.50318396, 0.7159233, 0.8750814, 1)
 script = ExtResource("1_qouja")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1662104199]
-spawn_path = NodePath("../RootUI/PlayerList")
+spawn_path = NodePath("../RootUI/PlayerListContainer/PanelContainer/PlayerList")
 script = ExtResource("2_wljb1")
 
 [node name="TurnManager" type="Timer" parent="." unique_id=1517501972]
@@ -188,11 +193,16 @@ show_percentage = false
 
 [node name="DiceArea" type="Control" parent="RootUI" unique_id=2103053574]
 unique_name_in_owner = true
-visible = false
 layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
 theme = ExtResource("24_3hbvx")
 
 [node name="DiceButton" type="Button" parent="RootUI/DiceArea" unique_id=12935052]
@@ -205,73 +215,92 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 903.0
-offset_top = 436.0
-offset_right = 1080.0
-offset_bottom = 576.0
+offset_left = -185.0
+offset_top = -108.0
+offset_right = -8.0
+offset_bottom = -8.0
 grow_horizontal = 0
 grow_vertical = 0
+pivot_offset_ratio = Vector2(1, 1)
 theme = ExtResource("24_3hbvx")
 theme_override_styles/normal = SubResource("StyleBoxFlat_hve3p")
-text = "Click to Roll Dice!
+text = "
 
 
 
 "
 
-[node name="EndTurnButton" type="Button" parent="RootUI/DiceArea" unique_id=509383573]
+[node name="RollDiceLabel" type="Label" parent="RootUI/DiceArea/DiceButton" unique_id=1995389833]
 unique_name_in_owner = true
-visible = false
-texture_filter = 1
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 903.0
-offset_top = 436.0
-offset_right = 1080.0
-offset_bottom = 576.0
-grow_horizontal = 0
-grow_vertical = 0
-theme = ExtResource("24_3hbvx")
-theme_override_styles/normal = SubResource("StyleBoxFlat_hve3p")
-text = "Click to End Turn!
-
-
-
-"
-
-[node name="Dice1" type="Sprite2D" parent="RootUI/DiceArea" unique_id=10380675]
-unique_name_in_owner = true
-texture_filter = 1
-position = Vector2(993, 560)
-texture = ExtResource("25_q8j3a")
-hframes = 6
-
-[node name="Dice2" type="Sprite2D" parent="RootUI/DiceArea" unique_id=335095501]
-unique_name_in_owner = true
-texture_filter = 1
-position = Vector2(1071, 560)
-texture = ExtResource("25_q8j3a")
-hframes = 6
-
-[node name="DiceResult" type="Label" parent="RootUI/DiceArea" unique_id=124548257]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 975.0
-offset_top = 426.0
-offset_right = 1048.0
-offset_bottom = 514.0
+offset_left = -73.5
+offset_top = -26.0
+offset_right = 73.5
+offset_bottom = -3.0
 grow_horizontal = 2
-grow_vertical = 2
+pivot_offset_ratio = Vector2(0, 1)
+text = "Click to Roll Dice!"
+horizontal_alignment = 1
+
+[node name="EndTurnLabel" type="Label" parent="RootUI/DiceArea/DiceButton" unique_id=251886135]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -73.5
+offset_top = -26.0
+offset_right = 73.5
+offset_bottom = -3.0
+grow_horizontal = 2
+pivot_offset_ratio = Vector2(0, 1)
+text = "Click to End Turn!"
+horizontal_alignment = 1
+
+[node name="DiceContainer" type="HBoxContainer" parent="RootUI/DiceArea/DiceButton" unique_id=1755991770]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Dice1" type="Sprite2D" parent="RootUI/DiceArea/DiceButton/DiceContainer" unique_id=10380675]
+unique_name_in_owner = true
+texture_filter = 1
+position = Vector2(-17, -10)
+texture = ExtResource("25_q8j3a")
+hframes = 6
+frame = 5
+
+[node name="Dice2" type="Sprite2D" parent="RootUI/DiceArea/DiceButton/DiceContainer" unique_id=335095501]
+unique_name_in_owner = true
+texture_filter = 1
+position = Vector2(57, -10)
+texture = ExtResource("25_q8j3a")
+hframes = 6
+
+[node name="DiceResult" type="Label" parent="RootUI/DiceArea/DiceButton" unique_id=124548257]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -36.5
+offset_right = 36.5
+offset_bottom = 88.0
+grow_horizontal = 2
 text = "2"
 label_settings = SubResource("LabelSettings_iwd7i")
 horizontal_alignment = 1
@@ -279,19 +308,31 @@ horizontal_alignment = 1
 [node name="MultiplayerUI" parent="RootUI" unique_id=1215049760 groups=["MultiplayerUI"] instance=ExtResource("26_ms3bu")]
 unique_name_in_owner = true
 
-[node name="PlayerList" type="VBoxContainer" parent="RootUI" unique_id=1503533523]
+[node name="PlayerListContainer" type="MarginContainer" parent="RootUI" unique_id=164256333]
 unique_name_in_owner = true
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 32.0
-offset_top = -20.0
-offset_right = 72.0
-offset_bottom = 20.0
-grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="PanelContainer" type="PanelContainer" parent="RootUI/PlayerListContainer" unique_id=670754295]
+layout_mode = 2
 theme = ExtResource("24_3hbvx")
-theme_override_constants/separation = 88
-alignment = 1
+
+[node name="PlayerList" type="VBoxContainer" parent="RootUI/PlayerListContainer/PanelContainer" unique_id=1503533523]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("24_3hbvx")
+theme_override_constants/separation = 4
+
+[node name="PlayerContainer" parent="RootUI/PlayerListContainer/PanelContainer/PlayerList" unique_id=1942192895 instance=ExtResource("21_bhx41")]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="RootUI/PlayerListContainer/PanelContainer/PlayerList" unique_id=229695989]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_sww3w")
 
 [node name="ResourcesPanel" parent="RootUI" unique_id=1869458100 instance=ExtResource("27_7ixpq")]
 unique_name_in_owner = true
@@ -391,7 +432,6 @@ texture = null
 script = ExtResource("31_66xif")
 
 [connection signal="pressed" from="RootUI/DiceArea/DiceButton" to="." method="_on_dice_button_pressed"]
-[connection signal="pressed" from="RootUI/DiceArea/EndTurnButton" to="TurnManager" method="_on_end_turn_button_pressed"]
 [connection signal="pressed" from="RootUI/StartButton" to="." method="start_game"]
 [connection signal="build_mode_changed" from="RootUI/ActionUI" to="Board/BoardClient" method="_on_action_ui_build_mode_changed"]
 [connection signal="on_structure_selected" from="RootUI/ActionUI" to="Board/BoardClient" method="_on_action_ui_on_structure_selected"]

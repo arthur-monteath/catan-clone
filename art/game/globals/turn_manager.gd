@@ -58,7 +58,11 @@ func request_end_turn():
 	if !multiplayer.is_server(): return
 	if main.players[turn].id == multiplayer.get_remote_sender_id():
 		end_turn()
-		
+
+
+@onready var roll_dice_label = %RollDiceLabel
+@onready var end_turn_label = %EndTurnLabel
+
 @onready var end_turn_button: Button = %EndTurnButton
 func _on_end_turn_button_pressed() -> void:
 	end_turn_button.hide()
