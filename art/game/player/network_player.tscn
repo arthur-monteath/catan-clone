@@ -21,7 +21,7 @@ properties/0/path = NodePath(".:visible")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
-[node name="NetworkPlayer" type="Control"]
+[node name="NetworkPlayer" type="Control" unique_id=235096595]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
@@ -32,7 +32,7 @@ grow_vertical = 2
 theme = ExtResource("1_txluh")
 script = ExtResource("1_e0wq5")
 
-[node name="Panel" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="." unique_id=31269518]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -43,14 +43,14 @@ offset_bottom = 40.0
 grow_vertical = 2
 theme = ExtResource("1_txluh")
 
-[node name="Outline" type="PanelContainer" parent="Panel"]
+[node name="Outline" type="PanelContainer" parent="Panel" unique_id=904653800]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme = ExtResource("1_txluh")
 theme_override_styles/panel = SubResource("StyleBoxFlat_fesle")
 
-[node name="Margin" type="MarginContainer" parent="Panel"]
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=507800654]
 layout_mode = 2
 theme = ExtResource("1_txluh")
 theme_override_constants/margin_left = 8
@@ -58,12 +58,12 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBox" type="HBoxContainer" parent="Panel/Margin"]
+[node name="HBox" type="HBoxContainer" parent="Panel/Margin" unique_id=191062965]
 layout_mode = 2
 theme = ExtResource("1_txluh")
 theme_override_constants/separation = 8
 
-[node name="PlayerImage" type="TextureRect" parent="Panel/Margin/HBox"]
+[node name="PlayerImage" type="TextureRect" parent="Panel/Margin/HBox" unique_id=1414257094]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -71,11 +71,11 @@ theme = ExtResource("1_txluh")
 texture = ExtResource("3_txluh")
 expand_mode = 1
 
-[node name="PlayerLabel" type="Label" parent="Panel/Margin/HBox"]
+[node name="PlayerLabel" type="Label" parent="Panel/Margin/HBox" unique_id=1349183257]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_txluh")
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Panel"]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="Panel" unique_id=2009002150]
 root_path = NodePath("../Outline")
 replication_config = SubResource("SceneReplicationConfig_fesle")

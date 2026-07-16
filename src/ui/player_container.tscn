@@ -13,11 +13,13 @@ theme_override_constants/margin_bottom = 0
 layout_mode = 2
 
 [node name="PlayerAvatar" type="TextureRect" parent="PlayerInfoContainer" unique_id=973799845]
+unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("1_51pyi")
 expand_mode = 2
 
 [node name="Label" type="RichTextLabel" parent="PlayerInfoContainer" unique_id=314685866]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
@@ -28,6 +30,7 @@ autowrap_mode = 0
 vertical_alignment = 1
 
 [node name="Crown" type="TextureRect" parent="." unique_id=547942396]
+unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 0

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://be2fp4tuhaso0"]
 
 [ext_resource type="Script" uid="uid://ct68henogcw0q" path="res://art/game/globals/main.gd" id="1_qouja"]
+[ext_resource type="Script" uid="uid://bstfd2lu41swj" path="res://src/main/player_manager.gd" id="2_sww3w"]
 [ext_resource type="Script" uid="uid://evbhvjxn7kpo" path="res://art/game/player/player_spawner.gd" id="2_wljb1"]
 [ext_resource type="Script" uid="uid://c7vmt5xpdpsc1" path="res://art/game/globals/turn_manager.gd" id="3_v2yb1"]
 [ext_resource type="Texture2D" uid="uid://b4fvv2sx4p01o" path="res://art/game/board/ocean.png" id="4_js0lu"]
@@ -16,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://b6mvlxpwik28m" path="res://art/game/board/tiles/desert.png" id="14_0sl42"]
 [ext_resource type="Script" uid="uid://madr0j4n87b8" path="res://art/game/globals/overlays.gd" id="15_oaba0"]
 [ext_resource type="PackedScene" uid="uid://cv1l06m4do1li" path="res://src/ui/player_container.tscn" id="21_bhx41"]
+[ext_resource type="Script" uid="uid://chwwodjt6q37w" path="res://src/ui/player_list.gd" id="21_qnb83"]
 [ext_resource type="Texture2D" uid="uid://ch1tb8vwg4ph6" path="res://art/game/board/robber.png" id="22_pf7vy"]
 [ext_resource type="Script" uid="uid://dnwjj5gjp8bye" path="res://art/ui/root_ui.gd" id="23_o8ni1"]
 [ext_resource type="Theme" uid="uid://cquy46qi6nrmx" path="res://art/ui/game_theme.tres" id="24_3hbvx"]
@@ -98,6 +100,9 @@ outline_color = Color(0.50318396, 0.7159233, 0.8750814, 1)
 
 [node name="Main" type="Node" unique_id=657657962]
 script = ExtResource("1_qouja")
+
+[node name="PlayerManager" type="Node" parent="." unique_id=1346015249]
+script = ExtResource("2_sww3w")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=1662104199]
 spawn_path = NodePath("../RootUI/PlayerListContainer/PanelContainer/PlayerList")
@@ -307,9 +312,11 @@ horizontal_alignment = 1
 
 [node name="MultiplayerUI" parent="RootUI" unique_id=1215049760 groups=["MultiplayerUI"] instance=ExtResource("26_ms3bu")]
 unique_name_in_owner = true
+visible = false
 
 [node name="PlayerListContainer" type="MarginContainer" parent="RootUI" unique_id=164256333]
 unique_name_in_owner = true
+visible = false
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_constants/margin_left = 8
@@ -326,6 +333,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("24_3hbvx")
 theme_override_constants/separation = 4
+script = ExtResource("21_qnb83")
 
 [node name="PlayerContainer" parent="RootUI/PlayerListContainer/PanelContainer/PlayerList" unique_id=1942192895 instance=ExtResource("21_bhx41")]
 layout_mode = 2
