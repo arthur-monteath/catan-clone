@@ -61,8 +61,6 @@ func request_end_turn():
 
 
 @onready var roll_dice_label = %RollDiceLabel
-@onready var end_turn_label = %EndTurnLabel
-
 @onready var end_turn_button: Button = %EndTurnButton
 func _on_end_turn_button_pressed() -> void:
 	end_turn_button.hide()

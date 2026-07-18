@@ -1,18 +1,11 @@
 class_name PlayerManager
 extends Node
 
-signal player_registered(player: NetworkPlayer)
-signal player_unregistered(id: int)
+# NetworkHandler owns the connection and spawns/frees these player nodes as our
+# children. This manager never touches peer lifecycle; it is the one place their
+# data is read (get_player / players) and synced. Views can watch the built-in
+# child_entered_tree / child_exiting_tree signals to track the roster.
 
-func _ready() -> void:
-	multiplayer.peer_connected.connect(_ensure_registered)
-	multiplayer.peer_disconnected.connect(unregister)
-	if multiplayer.has_multiplayer_peer():
-		_ensure_registered(multiplayer.get_unique_id())
-		for id in multiplayer.get_peers():
-			_ensure_registered(id)
-
-#region Registry
 func get_player(id: int) -> NetworkPlayer:
 	return get_node_or_null(str(id)) as NetworkPlayer
 
@@ -22,25 +15,8 @@ func players() -> Array[NetworkPlayer]:
 		result.append(child)
 	return result
 
-func _ensure_registered(id: int) -> void:
-	if get_player(id) != null: return
-	var player := NetworkPlayer.new()
-	player.name = str(id)
-	player.id = id
-	add_child(player)
-	player_registered.emit(player)
-	if id == multiplayer.get_unique_id():
-		_submit_local_identity()
-
-func unregister(id: int) -> void:
-	var player := get_player(id)
-	if player == null: return
-	player.queue_free()
-	player_unregistered.emit(id)
-#endregion
-
-#region Identity (client -> server -> all)
-func _submit_local_identity() -> void:
+#region Identity (local client -> server -> all)
+func submit_local_identity() -> void:
 	var info = get_tree().current_scene.get_node("%MultiplayerUI").player_info
 	var nickname: String = info.name
 	var steam_id := 0
